@@ -1,5 +1,7 @@
 package mainApp;
 
+import java.awt.Graphics2D;
+
 public class GameObject {
 	private int xCent;
 	private int yCent;
@@ -10,6 +12,10 @@ public class GameObject {
 	}
 	public void DrawOn() {
 		//TODO draw the things
+	}
+	public void drawOn(Graphics2D g2) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
