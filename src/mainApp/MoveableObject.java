@@ -2,8 +2,8 @@ package mainApp;
 
 public class MoveableObject extends GameObject {
 
-	public MoveableObject() {
-		// TODO Auto-generated constructor stub
+	public MoveableObject(int xCent, int yCent) {
+		super(xCent, yCent);
 	}
 
 }

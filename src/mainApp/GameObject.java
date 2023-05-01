@@ -16,4 +16,20 @@ public class GameObject {
 		
 	}
 
+	public int getXCent() {
+		return xCent;
+	}
+
+	public void setXCent(int xCent) {
+		this.xCent = xCent;
+	}
+
+	public int getYCent() {
+		return yCent;
+	}
+
+	public void setYCent(int yCent) {
+		this.yCent = yCent;
+	}
+
 }
