@@ -1,11 +1,26 @@
 package mainApp;
 
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.util.ArrayList;
+
 import javax.swing.JComponent;
 
+import graphics.Flower;
+
+
 public class GameComponent extends JComponent {
-
+	private ArrayList<GameObject> GameObjects = new ArrayList<GameObject>();
 	public GameComponent() {
-		// TODO Auto-generated constructor stub
-	}
 
+	}
+	protected void paintComponent(Graphics g) {
+		Graphics2D g2 = (Graphics2D) g;
+
+		//TODO add/modify code as needed
+		
+		for (GameObject gO: this.GameObjects) {
+			gO.drawOn(g2);
+		}
+}
 }
