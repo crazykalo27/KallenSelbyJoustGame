@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 import javax.swing.JComponent;
 
-import graphics.Flower;
 
 
 public class GameComponent extends JComponent {
