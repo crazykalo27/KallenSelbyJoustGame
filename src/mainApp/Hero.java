@@ -6,20 +6,18 @@ import java.awt.geom.Rectangle2D;
 
 public class Hero extends MoveableObject {
 
-	private int x;
-	private int y;
 	private int width;
 	private int height;
 	
-	public Hero(int x, int y, int width, int height) {
-		// TODO Auto-generated constructor stub
+	public Hero(int xCent, int yCent, int width, int height) {
+		super(xCent, yCent);
+		this.width = width;
+		this.height = height;
 	}
 
-	public void drawOn(Graphics g) {
-		Graphics2D g2 = (Graphics2D)g;
-		
-		g2.translate(x, y);
-		g2.fill(new Rectangle2D.Double(0,0,this.width,this.height));
-		g2.translate(-x, -y);
+	public void drawOn(Graphics2D g2) {
+		g2.translate(this.getXCent(), this.getYCent());
+		g2.fill(new Rectangle2D.Double(-this.width/2,-this.height/2,this.width,this.height));
+		g2.translate(-this.getXCent(), -this.getYCent());
 	}
 }
