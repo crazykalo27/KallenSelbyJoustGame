@@ -10,9 +10,7 @@ public class GameObject {
 			this.xCent = xCord;
 			this.yCent = yCord;
 	}
-	public void DrawOn() {
-		//TODO draw the things
-	}
+
 	public void drawOn(Graphics2D g2) {
 		// TODO Auto-generated method stub
 		
