@@ -6,6 +6,10 @@ public class GameObject {
 	private int xCent;
 	private int yCent;
 	
+	public GameObject() {
+		
+	}
+	
 	public GameObject(int xCord,int yCord) {
 			this.xCent = xCord;
 			this.yCent = yCord;
