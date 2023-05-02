@@ -2,8 +2,8 @@ package mainApp;
 
 public class Platform extends GameObject {
 
-	public Platform() {
-		// TODO Auto-generated constructor stub
+	public Platform(int xCord,int yCord) {
+		super(xCord, yCord);
 	}
 
 }
