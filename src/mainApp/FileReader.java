@@ -15,8 +15,8 @@ public class FileReader {
 	FileReader() {
 
 	}
-	//think ab JFileChooser for promting for a fiel
-	//Print writer to write to a file
+	// think ab JFileChooser for promting for a fiel
+	// Print writer to write to a file
 
 	public static void main(String[] args) {
 		FileReader bruh = new FileReader();
@@ -24,9 +24,20 @@ public class FileReader {
 		ArrayList<ArrayList<String>> yes = bruh.readFile("firstfile");
 		bruh.printLists(yes);
 
-		ArrayList<ArrayList<GameObject>> yes1 = bruh.convertToObjects(yes);
+		ArrayList<ArrayList<GameObject>> yes1 = null;
 
-		yes = bruh.convertToStrings(yes1);
+		try {
+			yes1 = bruh.convertToObjects(yes);
+		} catch (InvalidLevelFormatException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			yes = bruh.convertToStrings(yes1);
+		} catch (InvalidLevelFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		System.out.println("--------------------------");
 		bruh.printLists(yes);
@@ -75,25 +86,25 @@ public class FileReader {
 
 	// converts 2d array of strings to 2d array of gameobjects corresponding to the
 	// strings
-	public ArrayList<ArrayList<GameObject>> convertToObjects(ArrayList<ArrayList<String>> change) {
+	public ArrayList<ArrayList<GameObject>> convertToObjects(ArrayList<ArrayList<String>> change)
+			throws InvalidLevelFormatException {
 		ArrayList<ArrayList<GameObject>> ans = new ArrayList<ArrayList<GameObject>>();
 
-		try {
-			for (ArrayList<String> a : change) {
-				ArrayList<GameObject> line = new ArrayList<GameObject>();
-				for (String s : a) {
-					if (s.equals(FileReader.AIR_STRING)) {
-						line.add(null);
-					} else if (s.equals(FileReader.PLATFORM_STRING)) {
-						line.add(new Platform());
-					} else if (s.equals(FileReader.HERO_STRING)) {
-						line.add(new Hero(0, 0, 0, 0));
-					}
+		for (ArrayList<String> a : change) {
+			ArrayList<GameObject> line = new ArrayList<GameObject>();
+			for (String s : a) {
+				if (s.equals(FileReader.AIR_STRING)) {
+					line.add(null);
+				} else if (s.equals(FileReader.PLATFORM_STRING)) {
+					line.add(new Platform());
+				} else if (s.equals(FileReader.HERO_STRING)) {
+					line.add(new Hero(0, 0, 0, 0));
+				} else {
+					throw new InvalidLevelFormatException("Text file to load a level is not in the proper format");
+
 				}
-				ans.add(line);
 			}
-		} catch (InvalidLevelFormatException e) {
-			System.out.println("The text file to load a level is not in the proper format.");
+			ans.add(line);
 		}
 
 		return ans;
@@ -101,7 +112,8 @@ public class FileReader {
 
 	// converts 2d array of gameobjects to a 2d array of strings corresponding to
 	// the gameobjects
-	public ArrayList<ArrayList<String>> convertToStrings(ArrayList<ArrayList<GameObject>> change) {
+	public ArrayList<ArrayList<String>> convertToStrings(ArrayList<ArrayList<GameObject>> change)
+			throws InvalidLevelFormatException {
 		ArrayList<ArrayList<String>> ans = new ArrayList<ArrayList<String>>();
 
 		for (ArrayList<GameObject> a : change) {
@@ -113,6 +125,9 @@ public class FileReader {
 					line.add(FileReader.HERO_STRING);
 				} else if (s.getClass().equals(new Platform().getClass())) {
 					line.add(FileReader.PLATFORM_STRING);
+				} else {
+					throw new InvalidLevelFormatException("File of gameobjects is not correctly set up");
+
 				}
 			}
 			ans.add(line);
