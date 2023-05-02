@@ -15,6 +15,8 @@ public class FileReader {
 	FileReader() {
 
 	}
+	//think ab JFileChooser for promting for a fiel
+	//Print writer to write to a file
 
 	public static void main(String[] args) {
 		FileReader bruh = new FileReader();
