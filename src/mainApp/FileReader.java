@@ -76,18 +76,22 @@ public class FileReader {
 	public ArrayList<ArrayList<GameObject>> convertToObjects(ArrayList<ArrayList<String>> change) {
 		ArrayList<ArrayList<GameObject>> ans = new ArrayList<ArrayList<GameObject>>();
 
-		for (ArrayList<String> a : change) {
-			ArrayList<GameObject> line = new ArrayList<GameObject>();
-			for (String s : a) {
-				if (s.equals(FileReader.AIR_STRING)) {
-					line.add(null);
-				} else if (s.equals(FileReader.PLATFORM_STRING)) {
-					line.add(new Platform());
-				} else if (s.equals(FileReader.HERO_STRING)) {
-					line.add(new Hero(0, 0, 0, 0));
+		try {
+			for (ArrayList<String> a : change) {
+				ArrayList<GameObject> line = new ArrayList<GameObject>();
+				for (String s : a) {
+					if (s.equals(FileReader.AIR_STRING)) {
+						line.add(null);
+					} else if (s.equals(FileReader.PLATFORM_STRING)) {
+						line.add(new Platform());
+					} else if (s.equals(FileReader.HERO_STRING)) {
+						line.add(new Hero(0, 0, 0, 0));
+					}
 				}
+				ans.add(line);
 			}
-			ans.add(line);
+		} catch (InvalidLevelFormatException e) {
+			System.out.println("The text file to load a level is not in the proper format.");
 		}
 
 		return ans;
