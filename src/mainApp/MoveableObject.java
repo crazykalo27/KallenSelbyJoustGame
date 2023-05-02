@@ -13,6 +13,7 @@ public class MoveableObject extends GameObject {
 	
 	@Override
 	public void update() {
+		super.update();
 		this.setXCent(this.getXCent() + this.getXVelocity());
 		this.setYCent(this.getYCent() + this.getYVelocity());
 	}

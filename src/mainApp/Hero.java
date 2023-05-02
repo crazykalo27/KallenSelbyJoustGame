@@ -4,6 +4,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
 
 public class Hero extends MoveableObject implements KeyListener {
@@ -26,26 +28,29 @@ public class Hero extends MoveableObject implements KeyListener {
 	@Override
 	public void update() {
 		super.update();
-		System.out.println("xCent: " + this.getXCent());
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_A) {
-			this.setXVelocity(5);
+			this.setXVelocity(-3);
+		} else if (e.getKeyCode() == KeyEvent.VK_D) {
+			this.setXVelocity(3);
+		} else if (e.getKeyCode() == KeyEvent.VK_W) {
+			this.setYVelocity(-3);
 		}
-		
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
+		this.setXVelocity(0);
+		this.setYVelocity(0);
 	}
+
+
 }
