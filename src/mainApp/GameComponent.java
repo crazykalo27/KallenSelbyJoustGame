@@ -17,16 +17,25 @@ public class GameComponent extends JComponent {
 	}
 	
 	protected void paintComponent(Graphics g) {
+		
 		Graphics2D g2 = (Graphics2D) g;
-
-		this.addGameObject(new Hero(200, 200, 50, 50));
 		
 		for (GameObject gO: this.GameObjects) {
 			gO.drawOn(g2);
 		}
 	}
 	
-	private void addGameObject(GameObject gameObject) {
+	public void updateObjects() {
+		for (GameObject gO: this.GameObjects) {
+			gO.update();
+		}
+	}
+	
+	public void drawScreen() {
+		this.repaint();
+	}
+	
+	public void addGameObject(GameObject gameObject) {
 		this.GameObjects.add(gameObject);
 	}
 }

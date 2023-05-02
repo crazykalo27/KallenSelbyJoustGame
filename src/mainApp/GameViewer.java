@@ -4,8 +4,13 @@ import java.awt.Component;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.Timer;
+
+import gameEventLoop.GameAdvanceListener;
 
 public class GameViewer {
+	
+	public static final int DELAY=50;
 
 	public void viewerMain() {
 		final String frameTitle = "CSSE220 Final Project - Joust";
@@ -20,7 +25,15 @@ public class GameViewer {
 		frame.setLocation(frameXLoc, frameYLoc);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		JComponent gameComponent = new GameComponent();
+		GameComponent gameComponent = new GameComponent();
+		Hero hero = new Hero(100, 100, 50, 50);
+		gameComponent.addGameObject(hero);
+		gameComponent.addKeyListener(hero);
+		
+		GameAdvanceListener advanceListener = new GameAdvanceListener(gameComponent);
+		Timer timer = new Timer(DELAY, advanceListener);
+		timer.start();
+		
 		frame.add(gameComponent);
 		frame.setVisible(true);
 	}
