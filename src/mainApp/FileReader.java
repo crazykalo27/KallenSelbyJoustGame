@@ -18,14 +18,14 @@ public class FileReader {
 
 	public static void main(String[] args) {
 		FileReader bruh = new FileReader();
-		
+
 		ArrayList<ArrayList<String>> yes = bruh.readFile("firstfile");
 		bruh.printLists(yes);
-		
+
 		ArrayList<ArrayList<GameObject>> yes1 = bruh.convertToObjects(yes);
-		
+
 		yes = bruh.convertToStrings(yes1);
-		
+
 		System.out.println("--------------------------");
 		bruh.printLists(yes);
 	}
@@ -71,10 +71,12 @@ public class FileReader {
 		}
 	}
 
-	public ArrayList<ArrayList<GameObject>> convertToObjects(ArrayList<ArrayList<String>> cum) {
+	// converts 2d array of strings to 2d array of gameobjects corresponding to the
+	// strings
+	public ArrayList<ArrayList<GameObject>> convertToObjects(ArrayList<ArrayList<String>> change) {
 		ArrayList<ArrayList<GameObject>> ans = new ArrayList<ArrayList<GameObject>>();
 
-		for (ArrayList<String> a : cum) {
+		for (ArrayList<String> a : change) {
 			ArrayList<GameObject> line = new ArrayList<GameObject>();
 			for (String s : a) {
 				if (s.equals(FileReader.AIR_STRING)) {
@@ -91,10 +93,12 @@ public class FileReader {
 		return ans;
 	}
 
-	public ArrayList<ArrayList<String>> convertToStrings(ArrayList<ArrayList<GameObject>> Ahh) {
+	// converts 2d array of gameobjects to a 2d array of strings corresponding to
+	// the gameobjects
+	public ArrayList<ArrayList<String>> convertToStrings(ArrayList<ArrayList<GameObject>> change) {
 		ArrayList<ArrayList<String>> ans = new ArrayList<ArrayList<String>>();
 
-		for (ArrayList<GameObject> a : Ahh) {
+		for (ArrayList<GameObject> a : change) {
 			ArrayList<String> line = new ArrayList<String>();
 			for (GameObject s : a) {
 				if (s == null) {
@@ -107,7 +111,7 @@ public class FileReader {
 			}
 			ans.add(line);
 		}
-		
+
 		return ans;
 	}
 
