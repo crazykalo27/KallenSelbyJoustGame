@@ -6,7 +6,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
-import gameEventLoop.GameAdvanceListener;
+import mainApp.GameAdvanceListener;
 
 public class GameViewer {
 	
@@ -28,7 +28,7 @@ public class GameViewer {
 		GameComponent gameComponent = new GameComponent();
 		Hero hero = new Hero(100, 100, 50, 50);
 		gameComponent.addGameObject(hero);
-		gameComponent.addKeyListener(hero);
+		frame.addKeyListener(hero);
 		
 		GameAdvanceListener advanceListener = new GameAdvanceListener(gameComponent);
 		Timer timer = new Timer(DELAY, advanceListener);
