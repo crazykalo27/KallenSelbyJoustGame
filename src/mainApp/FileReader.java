@@ -8,9 +8,10 @@ import java.util.Scanner;
 public class FileReader {
 	// read file, return array list of gameObjects
 
-	public static final String AIR_STRING = ".";
-	public static final String PLATFORM_STRING = "o";
-	public static final String HERO_STRING = "h";
+	private static final String AIR_STRING = ".";
+	private static final String PLATFORM_STRING = "o";
+	private static final String HERO_STRING = "h";
+	private static final int COORDINATE_SCALE = 100;
 
 	FileReader() {
 
@@ -135,12 +136,14 @@ public class FileReader {
 
 		for(int i = 0; i < change.size(); i++) {
 			for(int j = 0; j < change.get(i).size(); j++) {
+				int y = i * COORDINATE_SCALE;
+				int x = j * COORDINATE_SCALE;
 				if (change.get(i).get(j).equals(FileReader.AIR_STRING)) {
 					ans.add(null);
 				} else if (change.get(i).get(j).equals(FileReader.PLATFORM_STRING)) {
-					ans.add(new Platform(i, j));
+					ans.add(new Platform(x, y));
 				} else if (change.get(i).get(j).equals(FileReader.HERO_STRING)) {
-					ans.add(new Hero(i, j, 0, 0));
+					ans.add(new Hero(x, y, 0, 0));
 				} else {
 					throw new InvalidLevelFormatException("Text file to load a level is not in the proper format");
 				}
