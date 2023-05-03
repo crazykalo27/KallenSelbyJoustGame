@@ -2,8 +2,8 @@ package mainApp;
 
 public class MoveableObject extends GameObject {
 
-	private int xVelocity;
-	private int yVelocity;
+	private double xVelocity;
+	private double yVelocity;
 	
 	public MoveableObject(int xCent, int yCent) {
 		super(xCent, yCent);
@@ -18,19 +18,19 @@ public class MoveableObject extends GameObject {
 		this.setYCent(this.getYCent() + this.getYVelocity());
 	}
 
-	public int getXVelocity() {
+	public double getXVelocity() {
 		return xVelocity;
 	}
 
-	public void setXVelocity(int xVelocity) {
-		this.xVelocity = xVelocity;
+	public void setXVelocity(double speed) {
+		this.xVelocity = speed;
 	}
 
-	public int getYVelocity() {
+	public double getYVelocity() {
 		return yVelocity;
 	}
 
-	public void setYVelocity(int yVelocity) {
+	public void setYVelocity(double yVelocity) {
 		this.yVelocity = yVelocity;
 	}
 
