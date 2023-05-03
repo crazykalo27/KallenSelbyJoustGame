@@ -1,5 +1,6 @@
 package mainApp;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
@@ -42,6 +43,7 @@ public class Hero extends MoveableObject implements KeyListener {
 	}
 
 	public void drawOn(Graphics2D g2) {
+		g2.setColor(Color.BLACK);
 		g2.translate(this.getXCent(), this.getYCent());
 		g2.fill(new Rectangle2D.Double(-this.width/2,-this.height/2,this.width,this.height));
 		g2.translate(-this.getXCent(), -this.getYCent());
