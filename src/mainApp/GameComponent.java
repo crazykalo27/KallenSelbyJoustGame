@@ -12,12 +12,16 @@ import javax.swing.JComponent;
 
 public class GameComponent extends JComponent implements KeyListener{
 	
-	private ArrayList<GameObject> GameObjects = new ArrayList<GameObject>();
-	private int levelNum = 1;
+	private ArrayList<GameObject> GameObjects;
+	private Hero hero;
+	private int levelNum;
 	private FileReader fileReader;
 	
 	public GameComponent() {
-		fileReader = new FileReader();
+		this.GameObjects = new ArrayList<GameObject>();
+		this.hero = null;
+		this.levelNum = 1;
+		this.fileReader = new FileReader();
 	}
 	
 	protected void paintComponent(Graphics g) {
@@ -51,6 +55,22 @@ public class GameComponent extends JComponent implements KeyListener{
 		this.GameObjects = array;
 	}
 	
+	public void loadLevel(int levelNumberToLoad) {
+		ArrayList<GameObject> objects = fileReader.getObjectsFromFile(Integer.toString(levelNumberToLoad) + "level");
+		this.setGameObjectsArray(objects);
+		this.hero = findHeroInArray();
+	}
+	
+	public Hero findHeroInArray() {
+		for (GameObject gO : this.GameObjects) {
+			if (gO instanceof Hero) {
+				return (Hero) gO;
+			}
+		}
+		
+		return null;
+	}
+	
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
@@ -58,17 +78,19 @@ public class GameComponent extends JComponent implements KeyListener{
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		ArrayList<GameObject> objects = new ArrayList<GameObject>();
+		boolean shouldUpdateLevel = false;
 		
 		if (e.getKeyCode() == KeyEvent.VK_U) {
 			this.levelNum++;
-			objects = fileReader.getObjectsFromFile(Integer.toString(this.levelNum) + "level");
+			shouldUpdateLevel = true;
 		} else if (e.getKeyCode() == KeyEvent.VK_D) {
 			this.levelNum--;
-			objects = fileReader.getObjectsFromFile(Integer.toString(this.levelNum) + "level");
+			shouldUpdateLevel = true;
 		}
 		
-		this.setGameObjectsArray(objects);
+		if (shouldUpdateLevel) {
+			this.loadLevel(this.levelNum);
+		}
 	}
 
 	@Override
