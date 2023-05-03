@@ -29,6 +29,7 @@ public class GameViewer {
 		Hero hero = new Hero(100, 100, 50, 50, 5);
 		gameComponent.addGameObject(hero);
 		frame.addKeyListener(hero);
+		frame.addKeyListener(gameComponent);
 		
 		GameAdvanceListener advanceListener = new GameAdvanceListener(gameComponent);
 		Timer timer = new Timer(DELAY, advanceListener);
