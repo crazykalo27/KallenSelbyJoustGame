@@ -11,17 +11,15 @@ import java.awt.geom.Rectangle2D;
 
 public class Hero extends MoveableObject implements KeyListener {
 
-	private int width;
-	private int height;
+	private final int WIDTH = 100;
+	private final int HEIGHT = 100;
 	private boolean rightKeyHeld;
 	private boolean leftKeyHeld;
 	private boolean upKeyHeld;
 	private double speed;
 	
-	public Hero(int xCent, int yCent, int width, int height, double speed) {
+	public Hero(int xCent, int yCent, double speed) {
 		super(xCent, yCent);
-		this.width = width;
-		this.height = height;
 		this.speed = speed;
 		this.rightKeyHeld = false;
 		this.leftKeyHeld = false;
@@ -31,7 +29,7 @@ public class Hero extends MoveableObject implements KeyListener {
 	public void drawOn(Graphics2D g2) {
 		g2.setColor(Color.BLACK);
 		g2.translate(this.getXCent(), this.getYCent());
-		g2.fill(new Rectangle2D.Double(-this.width/2,-this.height/2,this.width,this.height));
+		g2.fill(new Rectangle2D.Double(-WIDTH/2,-HEIGHT/2,WIDTH,HEIGHT));
 		g2.translate(-this.getXCent(), -this.getYCent());
 	}
 	
