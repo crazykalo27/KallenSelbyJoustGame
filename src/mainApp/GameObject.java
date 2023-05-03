@@ -3,10 +3,10 @@ package mainApp;
 import java.awt.Graphics2D;
 
 public class GameObject {
-	private int xCent;
-	private int yCent;
+	private double xCent;
+	private double yCent;
 	
-	public GameObject(int xCord,int yCord) {
+	public GameObject(double xCord, double yCord) {
 			this.xCent = xCord;
 			this.yCent = yCord;
 	}
@@ -20,19 +20,19 @@ public class GameObject {
 		
 	}
 
-	public int getXCent() {
+	public double getXCent() {
 		return xCent;
 	}
 
-	public void setXCent(int xCent) {
-		this.xCent = xCent;
+	public void setXCent(double d) {
+		this.xCent = d;
 	}
 
-	public int getYCent() {
+	public double getYCent() {
 		return yCent;
 	}
 
-	public void setYCent(int yCent) {
+	public void setYCent(double yCent) {
 		this.yCent = yCent;
 	}
 

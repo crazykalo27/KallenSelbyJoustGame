@@ -12,11 +12,33 @@ public class Hero extends MoveableObject implements KeyListener {
 
 	private int width;
 	private int height;
+	private boolean rightKeyHeld;
+	private boolean leftKeyHeld;
+	private boolean upKeyHeld;
+	private double speed;
 	
+	public Hero(int xCent, int yCent, int width, int height, double speed) {
+		super(xCent, yCent);
+		this.width = width;
+		this.height = height;
+		this.speed = speed;
+		this.rightKeyHeld = false;
+		this.leftKeyHeld = false;
+		this.upKeyHeld = false;
+	}
+	
+	//THIS IS TEMPORARY DO NOT KEEP THIS
+	//SERIOUSLY, DELETE IT
+	//IM PUTTING 3 COMMENTS SO I NOTICE IT AGAIN LATER
+	//THIS IS REALLY IMPORTANT JUST GET RID OF IT
 	public Hero(int xCent, int yCent, int width, int height) {
 		super(xCent, yCent);
 		this.width = width;
 		this.height = height;
+		this.speed = 5f;
+		this.rightKeyHeld = false;
+		this.leftKeyHeld = false;
+		this.upKeyHeld = false;
 	}
 
 	public void drawOn(Graphics2D g2) {
@@ -27,7 +49,16 @@ public class Hero extends MoveableObject implements KeyListener {
 	
 	@Override
 	public void update() {
+		if (this.rightKeyHeld) {
+			this.setXVelocity(this.speed);
+		} else if (this.leftKeyHeld) {
+			this.setXVelocity(-this.speed);
+		} else if (this.upKeyHeld) {
+			this.setYVelocity(-this.speed);
+		}
 		super.update();
+		this.setXVelocity(0);
+		this.setYVelocity(0);
 	}
 
 	@Override
@@ -38,18 +69,23 @@ public class Hero extends MoveableObject implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_A) {
-			this.setXVelocity(-3);
+			this.leftKeyHeld = true;
 		} else if (e.getKeyCode() == KeyEvent.VK_D) {
-			this.setXVelocity(3);
+			this.rightKeyHeld = true;
 		} else if (e.getKeyCode() == KeyEvent.VK_W) {
-			this.setYVelocity(-3);
+			this.upKeyHeld = true;
 		}
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		this.setXVelocity(0);
-		this.setYVelocity(0);
+		if (e.getKeyCode() == KeyEvent.VK_A) {
+			this.leftKeyHeld = false;
+		} else if (e.getKeyCode() == KeyEvent.VK_D) {
+			this.rightKeyHeld = false;
+		} else if (e.getKeyCode() == KeyEvent.VK_W) {
+			this.upKeyHeld = false;
+		}
 	}
 
 

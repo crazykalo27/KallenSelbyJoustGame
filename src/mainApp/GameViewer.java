@@ -26,7 +26,7 @@ public class GameViewer {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		GameComponent gameComponent = new GameComponent();
-		Hero hero = new Hero(100, 100, 50, 50);
+		Hero hero = new Hero(100, 100, 50, 50, 5);
 		gameComponent.addGameObject(hero);
 		frame.addKeyListener(hero);
 		
