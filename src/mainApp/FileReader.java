@@ -15,9 +15,11 @@ public class FileReader {
 	FileReader() {
 
 	}
+	
 	// think ab JFileChooser for promting for a fiel
 	// Print writer to write to a file
 
+	/*
 	public static void main(String[] args) {
 		FileReader bruh = new FileReader();
 
@@ -33,18 +35,29 @@ public class FileReader {
 		}
 
 		//Not sure if we need this?
-		//Causes errors so leaving it commented out for now
-		/*
 		try {
 			yes = bruh.convertToStrings(yes1);
 		} catch (InvalidLevelFormatException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		*/
+		
 
 		System.out.println("--------------------------");
 		bruh.printLists(yes);
+	}
+	*/
+	
+	public ArrayList<GameObject> getObjectsFromFile(String filename) {
+		ArrayList<ArrayList<String>> levelStringArray = this.readFile(filename);
+		ArrayList<GameObject> objects;
+		try {
+			objects = this.convertStringsToObjects(levelStringArray);
+			return objects;
+		} catch (InvalidLevelFormatException e) {
+			e.printStackTrace();
+			return new ArrayList<GameObject>();
+		}
 	}
 
 	// creates a 2d arrayList of every character in the file in its correct place
@@ -116,7 +129,7 @@ public class FileReader {
 	}
 	*/
 	
-	public ArrayList<GameObject> convertToObjects(ArrayList<ArrayList<String>> change)
+	public ArrayList<GameObject> convertStringsToObjects(ArrayList<ArrayList<String>> change)
 			throws InvalidLevelFormatException {
 		ArrayList<GameObject> ans = new ArrayList<GameObject>();
 
