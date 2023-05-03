@@ -59,6 +59,7 @@ public class GameComponent extends JComponent implements KeyListener{
 		ArrayList<GameObject> objects = fileReader.getObjectsFromFile(Integer.toString(levelNumberToLoad) + "level");
 		this.setGameObjectsArray(objects);
 		this.hero = findHeroInArray();
+		
 	}
 	
 	public Hero findHeroInArray() {
@@ -78,6 +79,19 @@ public class GameComponent extends JComponent implements KeyListener{
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		
+		//TODO: Find a better system for movement
+		//Hero Movement
+		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+			hero.toggleLeftKeyHeld();
+		} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+			hero.toggleRightKeyHeld();
+		} else if (e.getKeyCode() == KeyEvent.VK_UP) {
+			hero.toggleUpKeyHeld();
+		}
+		
+		
+		//Level Loading
 		boolean shouldUpdateLevel = false;
 		
 		if (e.getKeyCode() == KeyEvent.VK_U) {
@@ -95,7 +109,13 @@ public class GameComponent extends JComponent implements KeyListener{
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
+		//Hero Movement
+		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+			hero.toggleLeftKeyHeld();
+		} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+			hero.toggleRightKeyHeld();
+		} else if (e.getKeyCode() == KeyEvent.VK_UP) {
+			hero.toggleUpKeyHeld();
+		}
 	}
 }

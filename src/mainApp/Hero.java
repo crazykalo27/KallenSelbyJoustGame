@@ -9,7 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
 
-public class Hero extends MoveableObject implements KeyListener {
+public class Hero extends MoveableObject {
 
 	private final int WIDTH = 100;
 	private final int HEIGHT = 100;
@@ -46,33 +46,16 @@ public class Hero extends MoveableObject implements KeyListener {
 		this.setXVelocity(0);
 		this.setYVelocity(0);
 	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		
+	
+	public void toggleRightKeyHeld() {
+		this.rightKeyHeld = !this.rightKeyHeld;
 	}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-			this.leftKeyHeld = true;
-		} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			this.rightKeyHeld = true;
-		} else if (e.getKeyCode() == KeyEvent.VK_UP) {
-			this.upKeyHeld = true;
-		}
+	
+	public void toggleLeftKeyHeld() {
+		this.leftKeyHeld = !this.leftKeyHeld;
 	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-			this.leftKeyHeld = false;
-		} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			this.rightKeyHeld = false;
-		} else if (e.getKeyCode() == KeyEvent.VK_UP) {
-			this.upKeyHeld = false;
-		}
+	
+	public void toggleUpKeyHeld() {
+		this.upKeyHeld = !this.upKeyHeld;
 	}
-
-
 }
