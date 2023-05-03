@@ -130,14 +130,15 @@ public class FileReader {
 	}
 	*/
 	
+	//TODO: Stop bottom and right side of level getting cut off
 	public ArrayList<GameObject> convertStringsToObjects(ArrayList<ArrayList<String>> change)
 			throws InvalidLevelFormatException {
 		ArrayList<GameObject> ans = new ArrayList<GameObject>();
 
 		for(int i = 0; i < change.size(); i++) {
 			for(int j = 0; j < change.get(i).size(); j++) {
-				int y = i * COORDINATE_SCALE;
-				int x = j * COORDINATE_SCALE;
+				int y = i * COORDINATE_SCALE + COORDINATE_SCALE/2;
+				int x = j * COORDINATE_SCALE + COORDINATE_SCALE/2;
 				if (change.get(i).get(j).equals(FileReader.AIR_STRING)) {
 					ans.add(null);
 				} else if (change.get(i).get(j).equals(FileReader.PLATFORM_STRING)) {
