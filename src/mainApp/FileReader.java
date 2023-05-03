@@ -90,22 +90,22 @@ public class FileReader {
 			throws InvalidLevelFormatException {
 		ArrayList<ArrayList<GameObject>> ans = new ArrayList<ArrayList<GameObject>>();
 
-		for (ArrayList<String> a : change) {
+		for(int i = 0; i < change.size(); i++) {
 			ArrayList<GameObject> line = new ArrayList<GameObject>();
-			for (String s : a) {
-				if (s.equals(FileReader.AIR_STRING)) {
+			for(int j = 0; j < change.get(i).size(); j++) {
+				if (change.get(i).get(j).equals(FileReader.AIR_STRING)) {
 					line.add(null);
-				} else if (s.equals(FileReader.PLATFORM_STRING)) {
-					line.add(new Platform());
-				} else if (s.equals(FileReader.HERO_STRING)) {
-					line.add(new Hero(0, 0, 0, 0));
+				} else if (change.get(i).get(j).equals(FileReader.PLATFORM_STRING)) {
+					line.add(new Platform(i, j));
+				} else if (change.get(i).get(j).equals(FileReader.HERO_STRING)) {
+					line.add(new Hero(i, j, 0, 0));
 				} else {
 					throw new InvalidLevelFormatException("Text file to load a level is not in the proper format");
-
 				}
 			}
 			ans.add(line);
 		}
+
 
 		return ans;
 	}
@@ -123,7 +123,7 @@ public class FileReader {
 					line.add(FileReader.AIR_STRING);
 				} else if (s.getClass().equals(new Hero(0, 0, 0, 0).getClass())) {
 					line.add(FileReader.HERO_STRING);
-				} else if (s.getClass().equals(new Platform().getClass())) {
+				} else if (s.getClass().equals(new Platform(0,0).getClass())) {
 					line.add(FileReader.PLATFORM_STRING);
 				} else {
 					throw new InvalidLevelFormatException("File of gameobjects is not correctly set up");
