@@ -144,7 +144,7 @@ public class FileReader {
 				} else if (change.get(i).get(j).equals(FileReader.PLATFORM_STRING)) {
 					ans.add(new Platform(x, y));
 				} else if (change.get(i).get(j).equals(FileReader.HERO_STRING)) {
-					ans.add(new Hero(x, y, 0, 0));
+					ans.add(new Hero(x, y, 0, 0, 5));
 				} else {
 					throw new InvalidLevelFormatException("Text file to load a level is not in the proper format");
 				}
@@ -164,7 +164,7 @@ public class FileReader {
 			for (GameObject s : a) {
 				if (s == null) {
 					line.add(FileReader.AIR_STRING);
-				} else if (s.getClass().equals(new Hero(0, 0, 0, 0).getClass())) {
+				} else if (s.getClass().equals(new Hero(0, 0, 0, 0, 5).getClass())) {
 					line.add(FileReader.HERO_STRING);
 				} else if (s.getClass().equals(new Platform(0,0).getClass())) {
 					line.add(FileReader.PLATFORM_STRING);
