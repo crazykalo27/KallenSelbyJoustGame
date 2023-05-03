@@ -24,7 +24,7 @@ public class FileReader {
 		ArrayList<ArrayList<String>> yes = bruh.readFile("firstfile");
 		bruh.printLists(yes);
 
-		ArrayList<ArrayList<GameObject>> yes1 = null;
+		ArrayList<GameObject> yes1 = null;
 
 		try {
 			yes1 = bruh.convertToObjects(yes);
@@ -32,12 +32,16 @@ public class FileReader {
 			e.printStackTrace();
 		}
 
+		//Not sure if we need this?
+		//Causes errors so leaving it commented out for now
+		/*
 		try {
 			yes = bruh.convertToStrings(yes1);
 		} catch (InvalidLevelFormatException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		*/
 
 		System.out.println("--------------------------");
 		bruh.printLists(yes);
@@ -84,6 +88,7 @@ public class FileReader {
 		}
 	}
 
+	/*
 	// converts 2d array of strings to 2d array of gameobjects corresponding to the
 	// strings
 	public ArrayList<ArrayList<GameObject>> convertToObjects(ArrayList<ArrayList<String>> change)
@@ -107,6 +112,27 @@ public class FileReader {
 		}
 
 
+		return ans;
+	}
+	*/
+	
+	public ArrayList<GameObject> convertToObjects(ArrayList<ArrayList<String>> change)
+			throws InvalidLevelFormatException {
+		ArrayList<GameObject> ans = new ArrayList<GameObject>();
+
+		for(int i = 0; i < change.size(); i++) {
+			for(int j = 0; j < change.get(i).size(); j++) {
+				if (change.get(i).get(j).equals(FileReader.AIR_STRING)) {
+					ans.add(null);
+				} else if (change.get(i).get(j).equals(FileReader.PLATFORM_STRING)) {
+					ans.add(new Platform(i, j));
+				} else if (change.get(i).get(j).equals(FileReader.HERO_STRING)) {
+					ans.add(new Hero(i, j, 0, 0));
+				} else {
+					throw new InvalidLevelFormatException("Text file to load a level is not in the proper format");
+				}
+			}
+		}
 		return ans;
 	}
 
