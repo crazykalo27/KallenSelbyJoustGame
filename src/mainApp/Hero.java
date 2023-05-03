@@ -68,22 +68,22 @@ public class Hero extends MoveableObject implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_A) {
+		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 			this.leftKeyHeld = true;
-		} else if (e.getKeyCode() == KeyEvent.VK_D) {
+		} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 			this.rightKeyHeld = true;
-		} else if (e.getKeyCode() == KeyEvent.VK_W) {
+		} else if (e.getKeyCode() == KeyEvent.VK_UP) {
 			this.upKeyHeld = true;
 		}
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_A) {
+		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 			this.leftKeyHeld = false;
-		} else if (e.getKeyCode() == KeyEvent.VK_D) {
+		} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 			this.rightKeyHeld = false;
-		} else if (e.getKeyCode() == KeyEvent.VK_W) {
+		} else if (e.getKeyCode() == KeyEvent.VK_UP) {
 			this.upKeyHeld = false;
 		}
 	}
