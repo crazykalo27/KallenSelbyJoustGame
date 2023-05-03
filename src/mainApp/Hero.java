@@ -27,20 +27,6 @@ public class Hero extends MoveableObject implements KeyListener {
 		this.leftKeyHeld = false;
 		this.upKeyHeld = false;
 	}
-	
-	//THIS IS TEMPORARY DO NOT KEEP THIS
-	//SERIOUSLY, DELETE IT
-	//IM PUTTING 3 COMMENTS SO I NOTICE IT AGAIN LATER
-	//THIS IS REALLY IMPORTANT JUST GET RID OF IT
-	public Hero(int xCent, int yCent, int width, int height) {
-		super(xCent, yCent);
-		this.width = width;
-		this.height = height;
-		this.speed = 5f;
-		this.rightKeyHeld = false;
-		this.leftKeyHeld = false;
-		this.upKeyHeld = false;
-	}
 
 	public void drawOn(Graphics2D g2) {
 		g2.setColor(Color.BLACK);
