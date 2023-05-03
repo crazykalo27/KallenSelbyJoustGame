@@ -15,16 +15,18 @@ public class FileReader {
 	FileReader() {
 
 	}
+	
 	// think ab JFileChooser for promting for a fiel
 	// Print writer to write to a file
 
+	/*
 	public static void main(String[] args) {
 		FileReader bruh = new FileReader();
 
 		ArrayList<ArrayList<String>> yes = bruh.readFile("firstfile");
 		bruh.printLists(yes);
 
-		ArrayList<ArrayList<GameObject>> yes1 = null;
+		ArrayList<GameObject> yes1 = null;
 
 		try {
 			yes1 = bruh.convertToObjects(yes);
@@ -32,15 +34,30 @@ public class FileReader {
 			e.printStackTrace();
 		}
 
+		//Not sure if we need this?
 		try {
 			yes = bruh.convertToStrings(yes1);
 		} catch (InvalidLevelFormatException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 
 		System.out.println("--------------------------");
 		bruh.printLists(yes);
+	}
+	*/
+	
+	public ArrayList<GameObject> getObjectsFromFile(String filename) {
+		ArrayList<ArrayList<String>> levelStringArray = this.readFile(filename);
+		ArrayList<GameObject> objects;
+		try {
+			objects = this.convertStringsToObjects(levelStringArray);
+			return objects;
+		} catch (InvalidLevelFormatException e) {
+			e.printStackTrace();
+			return new ArrayList<GameObject>();
+		}
 	}
 
 	// creates a 2d arrayList of every character in the file in its correct place
@@ -84,6 +101,7 @@ public class FileReader {
 		}
 	}
 
+	/*
 	// converts 2d array of strings to 2d array of gameobjects corresponding to the
 	// strings
 	public ArrayList<ArrayList<GameObject>> convertToObjects(ArrayList<ArrayList<String>> change)
@@ -107,6 +125,27 @@ public class FileReader {
 		}
 
 
+		return ans;
+	}
+	*/
+	
+	public ArrayList<GameObject> convertStringsToObjects(ArrayList<ArrayList<String>> change)
+			throws InvalidLevelFormatException {
+		ArrayList<GameObject> ans = new ArrayList<GameObject>();
+
+		for(int i = 0; i < change.size(); i++) {
+			for(int j = 0; j < change.get(i).size(); j++) {
+				if (change.get(i).get(j).equals(FileReader.AIR_STRING)) {
+					ans.add(null);
+				} else if (change.get(i).get(j).equals(FileReader.PLATFORM_STRING)) {
+					ans.add(new Platform(i, j));
+				} else if (change.get(i).get(j).equals(FileReader.HERO_STRING)) {
+					ans.add(new Hero(i, j, 0, 0));
+				} else {
+					throw new InvalidLevelFormatException("Text file to load a level is not in the proper format");
+				}
+			}
+		}
 		return ans;
 	}
 
