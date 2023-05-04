@@ -1,4 +1,14 @@
 package mainApp;
+/**
+ * Class: FileReader
+ * @author Team 303
+ * <br>Purpose: Read input files and turn them into arrays of GameObjects
+ * <br>Restrictions: input files need to be in the proper format
+ * <br>For example: 
+ * <pre>
+ *    FileReader r = new FileReader();
+ * </pre>
+ */
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -6,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class FileReader {
+	//TODO could be static class oh my goodness
 	// read file, return array list of gameObjects
 
 	private static final String AIR_STRING = ".";
