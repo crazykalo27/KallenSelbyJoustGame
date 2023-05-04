@@ -83,11 +83,11 @@ public class GameComponent extends JComponent implements KeyListener{
 		//TODO: Find a better system for movement
 		//Hero Movement
 		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-			hero.toggleLeftKeyHeld();
+			hero.setLeftKeyHeld(true);
 		} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			hero.toggleRightKeyHeld();
+			hero.setRightKeyHeld(true);
 		} else if (e.getKeyCode() == KeyEvent.VK_UP) {
-			hero.toggleUpKeyHeld();
+			hero.setUpKeyHeld(true);
 		}
 		
 		
@@ -111,11 +111,11 @@ public class GameComponent extends JComponent implements KeyListener{
 	public void keyReleased(KeyEvent e) {
 		//Hero Movement
 		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-			hero.toggleLeftKeyHeld();
+			hero.setLeftKeyHeld(false);
 		} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			hero.toggleRightKeyHeld();
+			hero.setRightKeyHeld(false);
 		} else if (e.getKeyCode() == KeyEvent.VK_UP) {
-			hero.toggleUpKeyHeld();
+			hero.setUpKeyHeld(false);
 		}
 	}
 }
