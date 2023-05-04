@@ -47,15 +47,15 @@ public class Hero extends MoveableObject {
 		this.setYVelocity(0);
 	}
 	
-	public void toggleRightKeyHeld() {
-		this.rightKeyHeld = !this.rightKeyHeld;
+	public void setRightKeyHeld(boolean state) {
+		this.rightKeyHeld = state;
 	}
 	
-	public void toggleLeftKeyHeld() {
-		this.leftKeyHeld = !this.leftKeyHeld;
+	public void setLeftKeyHeld(boolean state) {
+		this.leftKeyHeld = state;
 	}
 	
-	public void toggleUpKeyHeld() {
-		this.upKeyHeld = !this.upKeyHeld;
+	public void setUpKeyHeld(boolean state) {
+		this.upKeyHeld = state;
 	}
 }
