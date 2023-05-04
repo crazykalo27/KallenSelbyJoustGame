@@ -1,5 +1,15 @@
 package mainApp;
-
+/**
+ * Class: Hero
+ * @author Team 303
+ * <br>Purpose: Hero --> MoveableObject --> GameObject there is one moveable hero in the game that the player
+ * controls and is used to defeat baddies and accomplish other tasks
+ * <br>Restrictions: Needs to be given a x pos y pos and speed 
+ * <br>For example: 
+ * <pre>
+ *    Hero h = new Hero(10, 10, 10);
+ * </pre>
+ */
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;

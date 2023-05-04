@@ -1,4 +1,14 @@
 package mainApp;
+/**
+ * Class: GameViewer
+ * @author Team 303
+ * <br>Purpose: Creates the actual frame and its properties to display the game
+ * <br>Restrictions: needs to be given proper levels to load
+ * <br>For example: 
+ * <pre>
+ *    GameViewer v = new GameViewer();
+ * </pre>
+ */
 
 import java.awt.Component;
 
