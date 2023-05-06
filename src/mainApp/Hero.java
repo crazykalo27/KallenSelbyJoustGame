@@ -21,8 +21,9 @@ import java.awt.geom.Rectangle2D;
 
 public class Hero extends MoveableObject {
 
-	private final int WIDTH = 100;
-	private final int HEIGHT = 100;
+	private static final int WIDTH = 100;
+	private static final int HEIGHT = 100;
+	
 	private boolean rightKeyHeld;
 	private boolean leftKeyHeld;
 	private boolean upKeyHeld;
@@ -46,15 +47,15 @@ public class Hero extends MoveableObject {
 	@Override
 	public void update() {
 		if (this.rightKeyHeld) {
-			this.setXVelocity(this.speed);
-		} else if (this.leftKeyHeld) {
-			this.setXVelocity(-this.speed);
-		} else if (this.upKeyHeld) {
-			this.setYVelocity(-this.speed);
+			this.addXVelocity(this.speed);
+		}
+		if (this.leftKeyHeld) {
+			this.addXVelocity(-this.speed);
+		}
+		if (this.upKeyHeld) {
+			this.addYVelocity(-12);
 		}
 		super.update();
-		this.setXVelocity(0);
-		this.setYVelocity(0);
 	}
 	
 	public void setRightKeyHeld(boolean state) {

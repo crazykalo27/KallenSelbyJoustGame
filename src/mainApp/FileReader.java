@@ -153,7 +153,7 @@ public class FileReader {
 				} else if (change.get(i).get(j).equals(FileReader.PLATFORM_STRING)) {
 					ans.add(new Platform(x, y));
 				} else if (change.get(i).get(j).equals(FileReader.HERO_STRING)) {
-					ans.add(new Hero(x, y, 5));
+					ans.add(new Hero(x, y, 1));
 				} else {
 					throw new InvalidLevelFormatException("Text file to load a level is not in the proper format");
 				}
