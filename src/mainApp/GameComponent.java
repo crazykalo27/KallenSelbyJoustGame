@@ -4,13 +4,14 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import javax.swing.JComponent;
 
 
 
-public class GameComponent extends JComponent implements KeyListener{
+public class GameComponent extends JComponent implements KeyListener {
 	
 	private ArrayList<GameObject> GameObjects;
 	private Hero hero;
@@ -57,9 +58,10 @@ public class GameComponent extends JComponent implements KeyListener{
 	
 	public void loadLevel(int levelNumberToLoad) {
 		ArrayList<GameObject> objects = fileReader.getObjectsFromFile(Integer.toString(levelNumberToLoad) + "level");
-		this.setGameObjectsArray(objects);
-		this.hero = findHeroInArray();
-		
+		if (!objects.isEmpty()) {
+			this.setGameObjectsArray(objects);
+			this.hero = findHeroInArray();
+		} 
 	}
 	
 	public Hero findHeroInArray() {
@@ -95,15 +97,13 @@ public class GameComponent extends JComponent implements KeyListener{
 		boolean shouldUpdateLevel = false;
 		
 		if (e.getKeyCode() == KeyEvent.VK_U) {
-			this.levelNum++;
-			shouldUpdateLevel = true;
+				levelNum++;
+				this.loadLevel(this.levelNum);
 		} else if (e.getKeyCode() == KeyEvent.VK_D) {
-			this.levelNum--;
-			shouldUpdateLevel = true;
-		}
-		
-		if (shouldUpdateLevel) {
-			this.loadLevel(this.levelNum);
+			if (this.levelNum > 1) {
+				this.levelNum--;
+				this.loadLevel(this.levelNum);
+			}
 		}
 	}
 

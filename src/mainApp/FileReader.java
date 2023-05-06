@@ -96,11 +96,9 @@ public class FileReader {
 			scan.close();
 			return chars;
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return new ArrayList<ArrayList<String>>();
 		}
-
-		return null;
 	}
 
 	// prints out what the readFile is reading from the given file
