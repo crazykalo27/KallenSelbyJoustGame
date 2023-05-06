@@ -25,11 +25,11 @@ public class MoveableObject extends GameObject {
 		this.move(xVelocity, yVelocity);
 		
 		if (this.hasGravity) {
-			this.move(0, GRAVITY_STRENGTH);
+			this.yVelocity += GRAVITY_STRENGTH;
 		}
 		
 		if (this.hasFriction) {
-			this.move(-Math.signum(xVelocity) * FRICTION_STRENGTH, 0);
+			this.addXVelocity(-Math.signum(xVelocity) * FRICTION_STRENGTH);
 		}
 	}
 
