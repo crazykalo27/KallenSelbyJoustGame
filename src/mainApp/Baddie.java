@@ -3,7 +3,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 
-
+//todo add collionsons and gravity 
 public class Baddie extends MoveableObject {
 	private final double DIST = 50;
 	private final Color COL = Color.green;
