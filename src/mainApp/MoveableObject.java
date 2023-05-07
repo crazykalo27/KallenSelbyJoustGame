@@ -11,7 +11,7 @@ public class MoveableObject extends GameObject {
 	private boolean hasGravity;
 	private boolean hasFriction;
 	
-	public MoveableObject(int xCent, int yCent) {
+	public MoveableObject(double xCent, double yCent) {
 		super(xCent, yCent);
 		this.xVelocity = 0;
 		this.yVelocity = 0;

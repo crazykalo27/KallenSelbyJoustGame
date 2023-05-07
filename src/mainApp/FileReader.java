@@ -24,6 +24,7 @@ public class FileReader {
 	private static final String HERO_STRING = "h";
 	private static final String BADDIE_STRING = "b";
 	private static final String ENEMY_STRING = "e";
+	private static final String TRACKER_STRING = "t";
 	private static final int COORDINATE_SCALE = 100;
 
 	FileReader() {
@@ -145,7 +146,8 @@ public class FileReader {
 	public ArrayList<GameObject> convertStringsToObjects(ArrayList<ArrayList<String>> change)
 			throws InvalidLevelFormatException {
 		ArrayList<GameObject> ans = new ArrayList<GameObject>();
-
+		int loc = 0;
+		int heroLoc = -1;
 		for(int i = 0; i < change.size(); i++) {
 			for(int j = 0; j < change.get(i).size(); j++) {
 				int y = i * COORDINATE_SCALE + COORDINATE_SCALE/2;
@@ -155,16 +157,28 @@ public class FileReader {
 				} else if (change.get(i).get(j).equals(FileReader.PLATFORM_STRING)) {
 					ans.add(new Platform(x, y));
 				} else if (change.get(i).get(j).equals(FileReader.HERO_STRING)) {
-					ans.add(new Hero(x, y, 1));
+					Hero temp = new Hero(x,y,1);
+					ans.add(temp);
+					heroLoc = ans.indexOf(temp);
 				}else if (change.get(i).get(j).equals(FileReader.BADDIE_STRING)) {
 					ans.add(new Baddie(x, y, 2));
 				}
 				else if (change.get(i).get(j).equals(FileReader.ENEMY_STRING)) {
 					ans.add(new Enemy(x, y, 2));
+				}else if (change.get(i).get(j).equals(FileReader.TRACKER_STRING)) {
+					Enemy placeHolder = new Enemy(x,y,2);
+					ans.add(placeHolder);
+					loc = ans.indexOf(placeHolder);
 				}else {
 					throw new InvalidLevelFormatException("Text file to load a level is not in the proper format");
 				}
 			}
+		}
+		if(heroLoc != -1) {
+			Enemy placeHolder = (Enemy) ans.get(loc);
+			double x = placeHolder.getXCent();
+			double y = placeHolder.getYCent();
+			ans.set(loc, new Tracker(x,y,2.0, (Hero)ans.get(heroLoc)));
 		}
 		return ans;
 	}
@@ -189,6 +203,9 @@ public class FileReader {
 				}
 				else if (s.getClass().equals(new Enemy(0,0,5).getClass())) {
 					line.add(FileReader.ENEMY_STRING);
+				}
+				else if (s.getClass().equals(new Tracker(0,0,5,new Hero(0,0,5)).getClass())) {
+					line.add(FileReader.TRACKER_STRING);
 				}else {
 					throw new InvalidLevelFormatException("File of gameobjects is not correctly set up");
 

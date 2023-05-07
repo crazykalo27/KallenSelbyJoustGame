@@ -3,18 +3,19 @@ package mainApp;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
-// todo add better movement and gravity and collsions 
-public class Enemy extends MoveableObject {
-	
-	private final Color COL = Color.blue;
-	private static final int WIDTH = 100;
-	private static final int HEIGHT = 100;
+
+public class Tracker extends MoveableObject{
+	private Hero hero;
+	private final Color COL = Color.yellow;
+	private static final int WIDTH = 50;
+	private static final int HEIGHT = 50;
 	private double speed;
 	
 
-	public Enemy(int xCent, int yCent, double speed) {
+	public Tracker(double xCent, double yCent, double speed, GameObject hero) {
 		super(xCent,yCent);
 		this.speed = speed;
+		this.hero = (Hero) hero;
 		this.setHasGravity(false);
 	}
 	public void drawOn(Graphics2D g2) {
