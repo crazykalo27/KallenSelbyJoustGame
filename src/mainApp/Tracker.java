@@ -27,13 +27,8 @@ public class Tracker extends MoveableObject{
 	
 	@Override
 	public void update() {
-		double i = Math.random();
-		if(i>=.5) {
-			this.speed = -this.speed;
-		}else {
-			this.addYVelocity(speed);
-		}
-		this.setXVelocity(this.getXVelocity()+this.speed);
+		this.setXVelocity((this.getXCent()-hero.getXCent())*-.03);
+		this.setYVelocity((this.getYCent()-hero.getYCent())*-.03);
 		super.update();
 	}
 }
