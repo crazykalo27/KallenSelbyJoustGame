@@ -156,7 +156,7 @@ public class FileReader {
 				} else if (change.get(i).get(j).equals(FileReader.HERO_STRING)) {
 					ans.add(new Hero(x, y, 1));
 				}else if (change.get(i).get(j).equals(FileReader.BADDIE_STRING)) {
-					ans.add(new Baddie(x, y, 1));
+					ans.add(new Baddie(x, y, 2));
 				} else {
 					throw new InvalidLevelFormatException("Text file to load a level is not in the proper format");
 				}
