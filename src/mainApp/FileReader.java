@@ -23,6 +23,7 @@ public class FileReader {
 	private static final String PLATFORM_STRING = "o";
 	private static final String HERO_STRING = "h";
 	private static final String BADDIE_STRING = "b";
+	private static final String ENEMY_STRING = "e";
 	private static final int COORDINATE_SCALE = 100;
 
 	FileReader() {
@@ -157,7 +158,10 @@ public class FileReader {
 					ans.add(new Hero(x, y, 1));
 				}else if (change.get(i).get(j).equals(FileReader.BADDIE_STRING)) {
 					ans.add(new Baddie(x, y, 2));
-				} else {
+				}
+				else if (change.get(i).get(j).equals(FileReader.ENEMY_STRING)) {
+					ans.add(new Enemy(x, y, 2));
+				}else {
 					throw new InvalidLevelFormatException("Text file to load a level is not in the proper format");
 				}
 			}
@@ -182,6 +186,9 @@ public class FileReader {
 					line.add(FileReader.PLATFORM_STRING);
 				} else if (s.getClass().equals(new Baddie(0,0,5).getClass())) {
 					line.add(FileReader.BADDIE_STRING);
+				}
+				else if (s.getClass().equals(new Enemy(0,0,5).getClass())) {
+					line.add(FileReader.ENEMY_STRING);
 				}else {
 					throw new InvalidLevelFormatException("File of gameobjects is not correctly set up");
 
