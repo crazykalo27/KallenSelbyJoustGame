@@ -16,7 +16,7 @@ public class Tracker extends MoveableObject{
 		super(xCent,yCent);
 		this.speed = speed;
 		this.hero = (Hero) hero;
-		this.setHasGravity(false);
+		//this.setHasGravity(false);
 	}
 	public void drawOn(Graphics2D g2) {
 		g2.setColor(COL);
