@@ -69,4 +69,12 @@ public class Hero extends MoveableObject {
 	public void setUpKeyHeld(boolean state) {
 		this.upKeyHeld = state;
 	}
+
+	public void collidewith(GameObject plat) {
+		
+		this.move(-getxVelocity(), -getyVelocity());
+		this.setyVelocity(0);
+		this.setxVelocity(0);
+		
+	}
 }
