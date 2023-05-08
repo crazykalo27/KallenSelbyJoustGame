@@ -31,6 +31,9 @@ public class Enemy extends MoveableObject {
 			this.speed = -this.speed;
 		}else {
 			this.addYVelocity(speed);
+			if(Math.abs(this.getYVelocity()) >=5) {
+				this.setYVelocity(this.getYVelocity()*.5);
+			}
 		}
 		this.setXVelocity(this.getXVelocity()+this.speed);
 		super.update();
