@@ -7,8 +7,8 @@ import java.awt.geom.Rectangle2D;
 public class Tracker extends MoveableObject{
 	private Hero hero;
 	private final Color COL = Color.yellow;
-	private static final int WIDTH = 50;
-	private static final int HEIGHT = 50;
+	//private static final int WIDTH = 50;
+	//private static final int HEIGHT = 50;
 	private double speed;
 	
 
@@ -16,12 +16,15 @@ public class Tracker extends MoveableObject{
 		super(xCent,yCent);
 		this.speed = speed;
 		this.hero = (Hero) hero;
+		this.setWidth(this.getWidth()/2);
+		this.setHeight(this.getHeight()/2);
+		
 		//this.setHasGravity(false);
 	}
 	public void drawOn(Graphics2D g2) {
 		g2.setColor(COL);
 		g2.translate(this.getXCent(), this.getYCent());
-		g2.fill(new Rectangle2D.Double(-WIDTH/2,-HEIGHT/2,WIDTH,HEIGHT));
+		g2.fill(new Rectangle2D.Double(-this.getWidth()/2,-this.getHeight()/2,this.getWidth(),this.getHeight()));
 		g2.translate(-this.getXCent(), -this.getYCent());
 	}
 	

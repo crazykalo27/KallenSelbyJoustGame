@@ -7,8 +7,8 @@ import java.awt.geom.Rectangle2D;
 public class Baddie extends MoveableObject {
 	private final double DIST = 50;
 	private final Color COL = Color.green;
-	private static final int WIDTH = 100;
-	private static final int HEIGHT = 100;
+	//private static final int WIDTH = 100;
+	//private static final int HEIGHT = 100;
 	private double speed;
 	
 
@@ -20,7 +20,7 @@ public class Baddie extends MoveableObject {
 	public void drawOn(Graphics2D g2) {
 		g2.setColor(COL);
 		g2.translate(this.getXCent(), this.getYCent());
-		g2.fill(new Rectangle2D.Double(-WIDTH/2,-HEIGHT/2,WIDTH,HEIGHT));
+		g2.fill(new Rectangle2D.Double(-this.getWidth()/2,-this.getHeight()/2,this.getWidth(),this.getHeight()));
 		g2.translate(-this.getXCent(), -this.getYCent());
 	}
 	
