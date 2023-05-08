@@ -10,14 +10,35 @@ package mainApp;
  * </pre>
  */
 import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
 
 public class GameObject {
 	private double xCent;
 	private double yCent;
+	private double Width;
+	private double Height;
 	
 	public GameObject(double xCord, double yCord) {
 			this.xCent = xCord;
 			this.yCent = yCord;
+			this.Width = 100;
+			this.Height = 100;
+	}
+
+	public double getWidth() {
+		return Width;
+	}
+
+	public void setWidth(double width) {
+		Width = width;
+	}
+
+	public double getHeight() {
+		return Height;
+	}
+
+	public void setHeight(double height) {
+		Height = height;
 	}
 
 	public void update() {
@@ -43,6 +64,12 @@ public class GameObject {
 
 	public void setYCent(double yCent) {
 		this.yCent = yCent;
+	}
+	public Rectangle2D.Double getBoundingBox() {
+		return new Rectangle2D.Double(this.xCent, this.yCent, this.getWidth(), this.getHeight() );
+	}
+	public boolean overlaps(GameObject other) {
+		return getBoundingBox().intersects(other.getBoundingBox());
 	}
 
 }
