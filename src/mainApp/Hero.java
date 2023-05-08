@@ -67,6 +67,10 @@ public class Hero extends MoveableObject {
 	}
 	
 	public void setUpKeyHeld(boolean state) {
+		if(state == false) {
+			//on up button release there is a hard stop of y movement for hero
+			this.setYVelocity(-super.GRAVITY_STRENGTH);
+		}
 		this.upKeyHeld = state;
 	}
 }
