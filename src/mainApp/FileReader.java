@@ -146,7 +146,7 @@ public class FileReader {
 	public ArrayList<GameObject> convertStringsToObjects(ArrayList<ArrayList<String>> change)
 			throws InvalidLevelFormatException {
 		ArrayList<GameObject> ans = new ArrayList<GameObject>();
-		int loc = 0;
+		int loc = -1;
 		int heroLoc = -1;
 		for(int i = 0; i < change.size(); i++) {
 			for(int j = 0; j < change.get(i).size(); j++) {
@@ -174,7 +174,7 @@ public class FileReader {
 				}
 			}
 		}
-		if(heroLoc != -1) {
+		if(heroLoc != -1 && loc != -1) {
 			Enemy placeHolder = (Enemy) ans.get(loc);
 			double x = placeHolder.getXCent();
 			double y = placeHolder.getYCent();

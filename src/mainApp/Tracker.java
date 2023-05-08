@@ -26,6 +26,7 @@ public class Tracker extends MoveableObject{
 	}
 	
 	@Override
+	//TODO could make this not dependent on location so it has a constant speed
 	public void update() {
 		this.setXVelocity((this.getXCent()-hero.getXCent())*-.03);
 		this.setYVelocity((this.getYCent()-hero.getYCent())*-.03);
