@@ -66,7 +66,7 @@ public class GameObject {
 		this.yCent = yCent;
 	}
 	public Rectangle2D.Double getBoundingBox() {
-		return new Rectangle2D.Double(this.xCent, this.yCent, this.getWidth(), this.getHeight() );
+		return new Rectangle2D.Double(this.xCent - this.getWidth()/2, this.yCent - this.getHeight()/2, this.getWidth(), this.getHeight() );
 	}
 	public boolean overlaps(GameObject other) {
 		return getBoundingBox().intersects(other.getBoundingBox());

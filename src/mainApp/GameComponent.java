@@ -71,9 +71,9 @@ public class GameComponent extends JComponent implements KeyListener {
 		ArrayList<GameObject> objects = fileReader.getObjectsFromFile(Integer.toString(levelNumberToLoad) + "level");
 		if (!objects.isEmpty()) {
 			this.setGameObjectsArray(objects);
-			this.enemies = fileReader.getBad();
-			this.platforms = fileReader.getPlatforms();
-			this.player = fileReader.getPlayer();
+			this.enemies = this.fileReader.getBad();
+			this.platforms = this.fileReader.getPlatforms();
+			this.player = this.fileReader.getPlayer();
 			this.hero = (Hero) this.player.get(0);
 		} 
 	}
@@ -99,11 +99,11 @@ public class GameComponent extends JComponent implements KeyListener {
 		//TODO: Find a better system for movement
 		//Hero Movement
 		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-			hero.setLeftKeyHeld(true);
+			this.hero.setLeftKeyHeld(true);
 		} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			hero.setRightKeyHeld(true);
+			this.hero.setRightKeyHeld(true);
 		} else if (e.getKeyCode() == KeyEvent.VK_UP) {
-			hero.setUpKeyHeld(true);
+			this.hero.setUpKeyHeld(true);
 		}
 		
 		
@@ -125,11 +125,11 @@ public class GameComponent extends JComponent implements KeyListener {
 	public void keyReleased(KeyEvent e) {
 		//Hero Movement
 		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-			hero.setLeftKeyHeld(false);
+			this.hero.setLeftKeyHeld(false);
 		} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			hero.setRightKeyHeld(false);
+			this.hero.setRightKeyHeld(false);
 		} else if (e.getKeyCode() == KeyEvent.VK_UP) {
-			hero.setUpKeyHeld(false);
+			this.hero.setUpKeyHeld(false);
 		}
 	}
 }
