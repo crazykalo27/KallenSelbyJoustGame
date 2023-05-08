@@ -15,9 +15,12 @@ import javax.swing.JComponent;
 public class GameComponent extends JComponent implements KeyListener {
 	
 	private ArrayList<GameObject> GameObjects;
-	private Hero hero;
 	private int levelNum;
 	private FileReader fileReader;
+	private Hero hero;
+	private ArrayList<GameObject> enemies = new ArrayList<GameObject>();
+	private ArrayList<GameObject> platforms = new ArrayList<GameObject>();
+	private ArrayList<GameObject> player = new ArrayList<GameObject>();
 	
 	public GameComponent() {
 		this.GameObjects = new ArrayList<GameObject>();
@@ -63,7 +66,10 @@ public class GameComponent extends JComponent implements KeyListener {
 		ArrayList<GameObject> objects = fileReader.getObjectsFromFile(Integer.toString(levelNumberToLoad) + "level");
 		if (!objects.isEmpty()) {
 			this.setGameObjectsArray(objects);
-			this.hero = findHeroInArray();
+			this.enemies = fileReader.getBad();
+			this.platforms = fileReader.getPlatforms();
+			this.player = fileReader.getPlayer();
+			this.hero = (Hero) this.player.get(0);
 		} 
 	}
 	

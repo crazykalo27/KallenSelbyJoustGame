@@ -26,7 +26,10 @@ public class FileReader {
 	private static final String ENEMY_STRING = "e";
 	private static final String TRACKER_STRING = "t";
 	private static final int COORDINATE_SCALE = 100;
-
+	
+	private ArrayList<GameObject> bad = new ArrayList<GameObject>();
+	private ArrayList<GameObject> platforms = new ArrayList<GameObject>();
+	private ArrayList<GameObject> player = new ArrayList<GameObject>();
 	FileReader() {
 
 	}
@@ -146,9 +149,6 @@ public class FileReader {
 	public ArrayList<GameObject> convertStringsToObjects(ArrayList<ArrayList<String>> change)
 			throws InvalidLevelFormatException {
 		ArrayList<GameObject> ans = new ArrayList<GameObject>();
-		ArrayList<GameObject> bad = new ArrayList<GameObject>();
-		ArrayList<GameObject> platforms = new ArrayList<GameObject>();
-		ArrayList<GameObject> player = new ArrayList<GameObject>();
 		int loc = -1;
 		int locb = -1;
 		int heroLoc = -1;
@@ -199,6 +199,30 @@ public class FileReader {
 			
 		}
 		return ans;
+	}
+
+	public ArrayList<GameObject> getBad() {
+		return bad;
+	}
+
+	public void setBad(ArrayList<GameObject> bad) {
+		this.bad = bad;
+	}
+
+	public ArrayList<GameObject> getPlatforms() {
+		return platforms;
+	}
+
+	public void setPlatforms(ArrayList<GameObject> platforms) {
+		this.platforms = platforms;
+	}
+
+	public ArrayList<GameObject> getPlayer() {
+		return player;
+	}
+
+	public void setPlayer(ArrayList<GameObject> player) {
+		this.player = player;
 	}
 
 	// converts 2d array of gameobjects to a 2d array of strings corresponding to
