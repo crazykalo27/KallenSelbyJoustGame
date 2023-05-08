@@ -30,6 +30,10 @@ public class Tracker extends MoveableObject{
 	public void update() {
 		this.setXVelocity((this.getXCent()-hero.getXCent())*-.03);
 		this.setYVelocity((this.getYCent()-hero.getYCent())*-.03);
+		if(Math.abs(this.getXVelocity())<=2) {
+			this.setXVelocity(this.getXVelocity()*2);
+			this.setYVelocity(this.getYVelocity()*2);
+		}
 		super.update();
 	}
 }
