@@ -21,8 +21,8 @@ import java.awt.geom.Rectangle2D;
 
 public class Hero extends MoveableObject {
 
-	//private static final int WIDTH = 100;
-	//private static final int HEIGHT = 100;
+	private static final int WIDTH = 75;
+	private static final int HEIGHT = 75;
 	
 	private boolean rightKeyHeld;
 	private boolean leftKeyHeld;
@@ -35,6 +35,8 @@ public class Hero extends MoveableObject {
 		this.rightKeyHeld = false;
 		this.leftKeyHeld = false;
 		this.upKeyHeld = false;
+		this.setWidth(WIDTH);
+		this.setHeight(HEIGHT);
 	}
 
 	public void drawOn(Graphics2D g2) {
@@ -70,11 +72,19 @@ public class Hero extends MoveableObject {
 		this.upKeyHeld = state;
 	}
 
-	public void collidewith(GameObject plat) {
-		
-		this.move(-getxVelocity(), -getyVelocity());
-		this.setyVelocity(0);
-		this.setxVelocity(0);
+	public void collidewith(GameObject other) {
+		Rectangle2D Recth = this.getBoundingBox();
+		Rectangle2D Recto = other.getBoundingBox();
+		Rectangle2D overlap = Recth.createIntersection(Recto);
+		double otherh = overlap.getHeight();
+		double otherw = overlap.getWidth();
+		if(otherh>=otherw) {
+			this.move(-Math.signum(this.getxVelocity())*otherw, 0);
+			this.setxVelocity(0);
+		}else {
+			this.move(0, -Math.signum(this.getyVelocity())*otherh);
+			this.setyVelocity(0);
+		}
 		
 	}
 }
