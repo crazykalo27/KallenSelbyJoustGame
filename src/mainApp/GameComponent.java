@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JComponent;
 
@@ -47,7 +48,9 @@ public class GameComponent extends JComponent implements KeyListener {
 	public void drawScreen() {
 		this.repaint();
 	}
-	
+	public void handleColisions() {
+			//todo add code
+	}
 	public void addGameObject(GameObject gameObject) {
 		this.GameObjects.add(gameObject);
 	}
