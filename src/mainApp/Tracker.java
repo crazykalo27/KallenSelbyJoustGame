@@ -7,8 +7,8 @@ import java.awt.geom.Rectangle2D;
 public class Tracker extends MoveableObject{
 	private Hero hero;
 	private final Color COL = Color.yellow;
-	//private static final int WIDTH = 50;
-	//private static final int HEIGHT = 50;
+	private static final int WIDTH = 50;
+	private static final int HEIGHT = 50;
 	private double speed;
 	
 
@@ -16,8 +16,8 @@ public class Tracker extends MoveableObject{
 		super(xCent,yCent);
 		this.speed = speed;
 		this.hero = (Hero) hero;
-		this.setWidth(this.getWidth()/2);
-		this.setHeight(this.getHeight()/2);
+		this.setWidth(WIDTH);
+		this.setHeight(HEIGHT);
 		
 		//this.setHasGravity(false);
 	}
