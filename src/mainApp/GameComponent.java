@@ -46,14 +46,19 @@ public class GameComponent extends JComponent implements KeyListener {
 				gO.update();
 			}
 		}
+		handleColisions();
 	}
 	
 	public void drawScreen() {
 		this.repaint();
 	}
 	public void handleColisions() {
-			//todo add code
-	}
+			for(GameObject plat : this.platforms) {
+				if(hero.overlaps(plat)){
+					hero.collidewith(plat);
+				}
+				}
+			}
 	public void addGameObject(GameObject gameObject) {
 		this.GameObjects.add(gameObject);
 	}

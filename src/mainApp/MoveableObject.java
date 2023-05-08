@@ -13,8 +13,8 @@ public class MoveableObject extends GameObject {
 	
 	public MoveableObject(double xCent, double yCent) {
 		super(xCent, yCent);
-		this.xVelocity = 0;
-		this.yVelocity = 0;
+		this.setxVelocity(0);
+		this.setyVelocity(0);
 		this.hasGravity = true;
 		this.hasFriction = true;
 	}
@@ -30,14 +30,14 @@ public class MoveableObject extends GameObject {
 	@Override
 	public void update() {
 		super.update();
-		this.move(xVelocity, yVelocity);
+		this.move(getxVelocity(), getyVelocity());
 		
 		if (this.hasGravity) {
-			this.yVelocity += GRAVITY_STRENGTH;
+			this.setyVelocity(this.getyVelocity() + GRAVITY_STRENGTH);
 		}
 		
 		if (this.hasFriction) {
-			this.addXVelocity(-Math.signum(xVelocity) * FRICTION_STRENGTH);
+			this.addXVelocity(-Math.signum(getxVelocity()) * FRICTION_STRENGTH);
 		}
 	}
 
@@ -48,27 +48,43 @@ public class MoveableObject extends GameObject {
 	}
 	
 	public double getXVelocity() {
-		return xVelocity;
+		return getxVelocity();
 	}
 
 	public void setXVelocity(double xVelocity) {
-		this.xVelocity = Math.signum(xVelocity) * Math.min(DEFAULT_MAX_SPEED, Math.abs(xVelocity));
+		this.setxVelocity(Math.signum(xVelocity) * Math.min(DEFAULT_MAX_SPEED, Math.abs(xVelocity)));
 	}
 	
 	public void addXVelocity(double amount) {
-		this.setXVelocity(this.xVelocity + amount);
+		this.setXVelocity(this.getxVelocity() + amount);
 	}
 
 	public double getYVelocity() {
-		return yVelocity;
+		return getyVelocity();
 	}
 
 	public void setYVelocity(double yVelocity) {
-		this.yVelocity = Math.signum(yVelocity) * Math.min(DEFAULT_MAX_SPEED, Math.abs(yVelocity));
+		this.setyVelocity(Math.signum(yVelocity) * Math.min(DEFAULT_MAX_SPEED, Math.abs(yVelocity)));
 	}
 	
 	public void addYVelocity(double amount) {
-		this.setYVelocity(this.yVelocity + amount);
+		this.setYVelocity(this.getyVelocity() + amount);
+	}
+
+	public double getxVelocity() {
+		return xVelocity;
+	}
+
+	public void setxVelocity(double xVelocity) {
+		this.xVelocity = xVelocity;
+	}
+
+	public double getyVelocity() {
+		return yVelocity;
+	}
+
+	public void setyVelocity(double yVelocity) {
+		this.yVelocity = yVelocity;
 	}
 
 }
