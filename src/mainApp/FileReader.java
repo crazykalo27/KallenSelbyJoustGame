@@ -146,7 +146,11 @@ public class FileReader {
 	public ArrayList<GameObject> convertStringsToObjects(ArrayList<ArrayList<String>> change)
 			throws InvalidLevelFormatException {
 		ArrayList<GameObject> ans = new ArrayList<GameObject>();
+		ArrayList<GameObject> bad = new ArrayList<GameObject>();
+		ArrayList<GameObject> platforms = new ArrayList<GameObject>();
+		ArrayList<GameObject> player = new ArrayList<GameObject>();
 		int loc = -1;
+		int locb = -1;
 		int heroLoc = -1;
 		for(int i = 0; i < change.size(); i++) {
 			for(int j = 0; j < change.get(i).size(); j++) {
@@ -155,20 +159,31 @@ public class FileReader {
 				if (change.get(i).get(j).equals(FileReader.AIR_STRING)) {
 					ans.add(null);
 				} else if (change.get(i).get(j).equals(FileReader.PLATFORM_STRING)) {
-					ans.add(new Platform(x, y));
+					Platform temp = new Platform(x,y);
+					ans.add(temp);
+					platforms.add(temp);
+					
 				} else if (change.get(i).get(j).equals(FileReader.HERO_STRING)) {
 					Hero temp = new Hero(x,y,1);
 					ans.add(temp);
 					heroLoc = ans.indexOf(temp);
+					player.add(temp);
 				}else if (change.get(i).get(j).equals(FileReader.BADDIE_STRING)) {
-					ans.add(new Baddie(x, y, 2));
+					Baddie temp = new Baddie(x,y,2);
+					ans.add(temp);
+					bad.add(temp);
 				}
 				else if (change.get(i).get(j).equals(FileReader.ENEMY_STRING)) {
-					ans.add(new Enemy(x, y, 2));
+					Enemy temp = new Enemy(x,y,2);
+					ans.add(temp);
+					bad.add(temp);
 				}else if (change.get(i).get(j).equals(FileReader.TRACKER_STRING)) {
 					Enemy placeHolder = new Enemy(x,y,2);
 					ans.add(placeHolder);
+					bad.add(placeHolder);
 					loc = ans.indexOf(placeHolder);
+					locb = bad.indexOf(placeHolder);
+					
 				}else {
 					throw new InvalidLevelFormatException("Text file to load a level is not in the proper format");
 				}
@@ -178,7 +193,10 @@ public class FileReader {
 			Enemy placeHolder = (Enemy) ans.get(loc);
 			double x = placeHolder.getXCent();
 			double y = placeHolder.getYCent();
-			ans.set(loc, new Tracker(x,y,2.0, (Hero)ans.get(heroLoc)));
+			Tracker temp = new Tracker(x,y,2.0, (Hero)ans.get(heroLoc));
+			ans.set(loc, temp);
+			bad.set(locb, temp);
+			
 		}
 		return ans;
 	}
