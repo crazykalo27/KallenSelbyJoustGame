@@ -13,8 +13,20 @@ package mainApp;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.Timer;
+
 import mainApp.GameComponent;
 
+/**
+ * Class: BankAccount
+ * @author CSSE Faculty
+ * <br>Purpose: Tells GameComponent to update and draw objects.
+ * <br>Usage: 
+ * <pre>
+ *    GameAdvanceListener advanceListener = new GameAdvanceListener(gameComponent);
+	  Timer timer = new Timer(DELAY, advanceListener);
+ * </pre>
+ */
 public class GameAdvanceListener implements ActionListener {
 
 	private GameComponent gameComponent;
