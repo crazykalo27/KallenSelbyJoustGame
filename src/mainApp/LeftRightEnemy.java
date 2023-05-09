@@ -5,8 +5,13 @@ import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Random;
 
-//todo add collionsons and gravity 
-public class Baddie extends MoveableObject {
+//TODO: add collionsons and gravity 
+/**
+ * Class: Baddie
+ * @author CSSE Faculty
+ * <br>Purpose: Swaps between moving left and right on a random interval
+ */
+public class LeftRightEnemy extends MoveableObject {
 	Random r = new Random();
 	private final double DIST = 50;
 	private final Color COL = Color.green;
@@ -16,7 +21,7 @@ public class Baddie extends MoveableObject {
 	private int ticks;
 	private int waitNum;
 
-	public Baddie(int xCent, int yCent, double speed) {
+	public LeftRightEnemy(int xCent, int yCent, double speed) {
 		super(xCent, yCent);
 		this.speed = speed;
 		this.setHasGravity(false);
