@@ -4,6 +4,14 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 
+// TODO: Make tracker follow player at a more constant rate? (Currently slows significantly when near player)
+
+/**
+ * Class: Tracker
+ * @author Team 303
+ * <br>Purpose: Class for enemy that follows the player
+ * <br>Restrictions: None
+ */
 public class Tracker extends MoveableObject{
 	private Hero hero;
 	private final Color COL = Color.yellow;
