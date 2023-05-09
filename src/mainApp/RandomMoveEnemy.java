@@ -3,8 +3,14 @@ package mainApp;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
-// todo add better movement and gravity and collsions 
-public class Enemy extends MoveableObject {
+// TODO: add better movement and gravity and collsions. 
+// TODO: Combine with LeftRightEnemy.
+/**
+ * Class: Enemy
+ * @author CSSE Faculty
+ * <br>Purpose: Moves wildly in random directions.
+ */
+public class RandomMoveEnemy extends MoveableObject {
 	
 	private final Color COL = Color.blue;
 	//private static final int WIDTH = 100;
@@ -12,7 +18,7 @@ public class Enemy extends MoveableObject {
 	private double speed;
 	
 
-	public Enemy(int xCent, int yCent, double speed) {
+	public RandomMoveEnemy(int xCent, int yCent, double speed) {
 		super(xCent,yCent);
 		this.speed = speed;
 		this.setHasGravity(false);

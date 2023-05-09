@@ -172,16 +172,16 @@ public class FileReader {
 					heroLoc = ans.indexOf(temp);
 					player.add(temp);
 				}else if (change.get(i).get(j).equals(FileReader.BADDIE_STRING)) {
-					Baddie temp = new Baddie(x,y,2);
+					LeftRightEnemy temp = new LeftRightEnemy(x,y,2);
 					ans.add(temp);
 					bad.add(temp);
 				}
 				else if (change.get(i).get(j).equals(FileReader.ENEMY_STRING)) {
-					Enemy temp = new Enemy(x,y,2);
+					RandomMoveEnemy temp = new RandomMoveEnemy(x,y,2);
 					ans.add(temp);
 					bad.add(temp);
 				}else if (change.get(i).get(j).equals(FileReader.TRACKER_STRING)) {
-					Enemy placeHolder = new Enemy(x,y,2);
+					RandomMoveEnemy placeHolder = new RandomMoveEnemy(x,y,2);
 					ans.add(placeHolder);
 					bad.add(placeHolder);
 					loc = ans.indexOf(placeHolder);
@@ -193,7 +193,7 @@ public class FileReader {
 			}
 		}
 		if(heroLoc != -1 && loc != -1) {
-			Enemy placeHolder = (Enemy) ans.get(loc);
+			RandomMoveEnemy placeHolder = (RandomMoveEnemy) ans.get(loc);
 			double x = placeHolder.getXCent();
 			double y = placeHolder.getYCent();
 			Tracker temp = new Tracker(x,y,2.0, (Hero)ans.get(heroLoc));
@@ -243,10 +243,10 @@ public class FileReader {
 					line.add(FileReader.HERO_STRING);
 				} else if (s.getClass().equals(new Platform(0,0).getClass())) {
 					line.add(FileReader.PLATFORM_STRING);
-				} else if (s.getClass().equals(new Baddie(0,0,5).getClass())) {
+				} else if (s.getClass().equals(new LeftRightEnemy(0,0,5).getClass())) {
 					line.add(FileReader.BADDIE_STRING);
 				}
-				else if (s.getClass().equals(new Enemy(0,0,5).getClass())) {
+				else if (s.getClass().equals(new RandomMoveEnemy(0,0,5).getClass())) {
 					line.add(FileReader.ENEMY_STRING);
 				}
 				else if (s.getClass().equals(new Tracker(0,0,5,new Hero(0,0,5)).getClass())) {
