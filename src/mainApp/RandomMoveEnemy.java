@@ -6,7 +6,7 @@ import java.awt.geom.Rectangle2D;
 // TODO: add better movement and gravity and collsions. 
 // TODO: Combine with LeftRightEnemy.
 /**
- * Class: Enemy
+ * Class: RandomMoveEnemy
  * @author CSSE Faculty
  * <br>Purpose: Moves wildly in random directions.
  */

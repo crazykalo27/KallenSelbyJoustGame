@@ -7,7 +7,7 @@ import java.util.Random;
 
 //TODO: add collionsons and gravity 
 /**
- * Class: Baddie
+ * Class: LeftRightEnemy
  * @author CSSE Faculty
  * <br>Purpose: Swaps between moving left and right on a random interval
  */
