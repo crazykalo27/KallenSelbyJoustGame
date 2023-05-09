@@ -20,7 +20,7 @@ import mainApp.GameAdvanceListener;
 
 public class GameViewer {
 	
-	public static final int DELAY=50;
+	public static final int DELAY=40;
 
 	public void viewerMain() {
 		final String frameTitle = "CSSE220 Final Project - Joust";
