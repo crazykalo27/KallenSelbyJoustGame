@@ -1,5 +1,11 @@
 package mainApp;
 
+/**
+ * Class: MoveableObject
+ * @author Team 303
+ * <br>Purpose: Parent class of any object that should be able to move (Enemies, the player, etc.)
+ * <br>Restrictions: None
+ */
 public class MoveableObject extends GameObject {
 
 	private static final double DEFAULT_MAX_SPEED = 10;
