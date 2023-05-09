@@ -19,6 +19,14 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
 
+// TODO: Collisions with enemies
+
+/**
+ * Class: Hero
+ * @author Team 303
+ * <br>Purpose: The player character class
+ * <br>Restrictions: Only one Hero instance should exist at a time
+ */
 public class Hero extends MoveableObject {
 
 	private static final int WIDTH = 75;
