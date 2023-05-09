@@ -4,6 +4,12 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 
+/**
+ * Class: Platform
+ * @author Team 303
+ * <br>Purpose: Class for a stationary platform in game.
+ * <br>Restrictions: None
+ */
 public class Platform extends GameObject {
 	private final int WIDTH = 100;
 	private final int HEIGHT = 100;
