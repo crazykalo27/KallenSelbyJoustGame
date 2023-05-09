@@ -39,7 +39,7 @@ public class LeftRightEnemy extends MoveableObject {
 
 	@Override
 	public void update() {
-		this.setxVelocity(Math.pow(speed, 2) * Math.signum(speed));
+		this.setXVelocity(Math.pow(speed, 2) * Math.signum(speed));
 
 		ticks++;
 
@@ -48,7 +48,7 @@ public class LeftRightEnemy extends MoveableObject {
 			if(r.nextBoolean()) {
 				diry *= -1;
 			}
-			this.setyVelocity(speed * diry);
+			this.setYVelocity(speed * diry);
 			System.out.println("updated " + waitNum);
 			speed *= -1;
 			ticks = 0;

@@ -19,8 +19,8 @@ public class MoveableObject extends GameObject {
 	
 	public MoveableObject(double xCent, double yCent) {
 		super(xCent, yCent);
-		this.setxVelocity(0);
-		this.setyVelocity(0);
+		this.setYVelocity(0);
+		this.setYVelocity(0);
 		this.hasGravity = true;
 		this.hasFriction = true;
 	}
@@ -36,14 +36,14 @@ public class MoveableObject extends GameObject {
 	@Override
 	public void update() {
 		super.update();
-		this.move(getxVelocity(), getyVelocity());
+		this.move(getXVelocity(), getYVelocity());
 		
 		if (this.hasGravity) {
-			this.setyVelocity(this.getyVelocity() + GRAVITY_STRENGTH);
+			this.setYVelocity(this.getYVelocity() + GRAVITY_STRENGTH);
 		}
 		
 		if (this.hasFriction) {
-			this.addXVelocity(-Math.signum(getxVelocity()) * FRICTION_STRENGTH);
+			this.addXVelocity(-Math.signum(getXVelocity()) * FRICTION_STRENGTH);
 		}
 	}
 
@@ -54,43 +54,27 @@ public class MoveableObject extends GameObject {
 	}
 	
 	public double getXVelocity() {
-		return getxVelocity();
-	}
-
-	public void setXVelocity(double xVelocity) {
-		this.setxVelocity(Math.signum(xVelocity) * Math.min(DEFAULT_MAX_SPEED, Math.abs(xVelocity)));
-	}
-	
-	public void addXVelocity(double amount) {
-		this.setXVelocity(this.getxVelocity() + amount);
-	}
-
-	public double getYVelocity() {
-		return getyVelocity();
-	}
-
-	public void setYVelocity(double yVelocity) {
-		this.setyVelocity(Math.signum(yVelocity) * Math.min(DEFAULT_MAX_SPEED, Math.abs(yVelocity)));
-	}
-	
-	public void addYVelocity(double amount) {
-		this.setYVelocity(this.getyVelocity() + amount);
-	}
-
-	public double getxVelocity() {
 		return xVelocity;
 	}
 
-	public void setxVelocity(double xVelocity) {
-		this.xVelocity = xVelocity;
+	public void setXVelocity(double xVelocity) {
+		this.xVelocity = Math.signum(xVelocity) * Math.min(DEFAULT_MAX_SPEED, Math.abs(xVelocity));
+	}
+	
+	public void addXVelocity(double amount) {
+		this.setXVelocity(this.getXVelocity() + amount);
 	}
 
-	public double getyVelocity() {
+	public double getYVelocity() {
 		return yVelocity;
 	}
 
-	public void setyVelocity(double yVelocity) {
-		this.yVelocity = yVelocity;
+	public void setYVelocity(double yVelocity) {
+		this.yVelocity = Math.signum(yVelocity) * Math.min(DEFAULT_MAX_SPEED, Math.abs(yVelocity));
+	}
+	
+	public void addYVelocity(double amount) {
+		this.setYVelocity(this.getYVelocity() + amount);
 	}
 
 }

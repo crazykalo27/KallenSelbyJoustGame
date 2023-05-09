@@ -91,11 +91,11 @@ public class Hero extends MoveableObject {
 		double otherh = overlap.getHeight();
 		double otherw = overlap.getWidth();
 		if(otherh>=otherw) {
-			this.move(-Math.signum(this.getxVelocity())*otherw, 0);
-			this.setxVelocity(0);
+			this.move(-Math.signum(this.getXVelocity())*otherw, 0);
+			this.setXVelocity(0);
 		}else {
-			this.move(0, -Math.signum(this.getyVelocity())*otherh);
-			this.setyVelocity(0);
+			this.move(0, -Math.signum(this.getYVelocity())*otherh);
+			this.setYVelocity(0);
 		}
 		
 	}
