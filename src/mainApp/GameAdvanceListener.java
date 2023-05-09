@@ -19,7 +19,7 @@ import mainApp.GameComponent;
 
 /**
  * Class: GameAdvanceListener
- * @author CSSE Faculty
+ * @author Team 303
  * <br>Purpose: Tells GameComponent to update and draw objects.
  * <br>Usage: 
  * <pre>
