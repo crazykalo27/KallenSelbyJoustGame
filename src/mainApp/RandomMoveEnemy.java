@@ -7,7 +7,7 @@ import java.awt.geom.Rectangle2D;
 // TODO: Combine with LeftRightEnemy.
 /**
  * Class: RandomMoveEnemy
- * @author CSSE Faculty
+ * @author Team 303
  * <br>Purpose: Moves wildly in random directions.
  */
 public class RandomMoveEnemy extends MoveableObject {

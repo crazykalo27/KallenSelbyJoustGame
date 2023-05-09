@@ -17,7 +17,7 @@ import java.util.Scanner;
 
 /**
  * Class: FileReader
- * @author CSSE Faculty
+ * @author Team 303
  * <br>Purpose: Contains methods for loading levels from text files.
  * <br>Restrictions: Must be instantiated before any methods can be called.
  * <br>For example: 

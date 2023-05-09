@@ -8,7 +8,7 @@ import java.util.Random;
 //TODO: add collionsons and gravity 
 /**
  * Class: LeftRightEnemy
- * @author CSSE Faculty
+ * @author Team 303
  * <br>Purpose: Swaps between moving left and right on a random interval
  */
 public class LeftRightEnemy extends MoveableObject {
