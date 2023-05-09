@@ -15,10 +15,17 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Class: FileReader
+ * @author CSSE Faculty
+ * <br>Purpose: Contains methods for loading levels from text files.
+ * <br>Restrictions: Must be instantiated before any methods can be called.
+ * <br>For example: 
+ * <pre>
+ *    FileReader fileReader = new FileReader();
+ * </pre>
+ */
 public class FileReader {
-	//TODO could be static class oh my goodness
-	// read file, return array list of gameObjects
-
 	private static final String AIR_STRING = ".";
 	private static final String PLATFORM_STRING = "o";
 	private static final String HERO_STRING = "h";
