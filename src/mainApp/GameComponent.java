@@ -16,7 +16,6 @@ import javax.swing.JComponent;
  * Class: GameComponent
  * @author Team 303
  * <br>Purpose: Runs game logic and draws objects to screen
- * <br>Restrictions: Cannot be used for checking accounts
  * <br>For example: 
  * <pre>
  *    GameComponent gameComponent = new GameComponent();
