@@ -18,7 +18,7 @@ import javax.swing.Timer;
 import mainApp.GameComponent;
 
 /**
- * Class: BankAccount
+ * Class: GameAdvanceListener
  * @author CSSE Faculty
  * <br>Purpose: Tells GameComponent to update and draw objects.
  * <br>Usage: 
