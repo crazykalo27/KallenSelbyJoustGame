@@ -12,6 +12,13 @@ package mainApp;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 
+// TODO: Make abstract?
+
+/**
+ * Class: GameObject
+ * @author Team 303
+ * <br>Purpose: Parent class for every object in the game (Platforms, the player, enemies, etc.)
+ */
 public class GameObject {
 	private double xCent;
 	private double yCent;
