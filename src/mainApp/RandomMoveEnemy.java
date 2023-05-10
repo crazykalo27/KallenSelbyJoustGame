@@ -10,7 +10,7 @@ import java.awt.geom.Rectangle2D;
  * @author Team 303
  * <br>Purpose: Moves wildly in random directions.
  */
-public class RandomMoveEnemy extends MoveableObject {
+public class RandomMoveEnemy extends Enemy {
 	
 	private final Color COL = Color.blue;
 	//private static final int WIDTH = 100;
@@ -18,8 +18,8 @@ public class RandomMoveEnemy extends MoveableObject {
 	private double speed;
 	
 
-	public RandomMoveEnemy(int xCent, int yCent, double speed) {
-		super(xCent,yCent);
+	public RandomMoveEnemy(double xCent, double yCent, double speed) {
+		super(xCent, yCent, speed);
 		this.speed = speed;
 		this.setHasGravity(false);
 	}
