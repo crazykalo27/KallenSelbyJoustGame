@@ -12,17 +12,15 @@ import java.awt.geom.Rectangle2D;
  * <br>Purpose: Class for enemy that follows the player
  * <br>Restrictions: None
  */
-public class Tracker extends MoveableObject{
+public class Tracker extends Enemy{
 	private Hero hero;
 	private final Color COL = Color.yellow;
 	private static final int WIDTH = 50;
 	private static final int HEIGHT = 50;
-	private double speed;
 	
 
 	public Tracker(double xCent, double yCent, double speed, GameObject hero) {
-		super(xCent,yCent);
-		this.speed = speed;
+		super(xCent,yCent, speed);
 		this.hero = (Hero) hero;
 		this.setWidth(WIDTH);
 		this.setHeight(HEIGHT);
