@@ -34,7 +34,7 @@ public class FileReader {
 	private static final String TRACKER_STRING = "t";
 	private static final int COORDINATE_SCALE = 100;
 	
-	private ArrayList<GameObject> bad = new ArrayList<GameObject>();
+	private ArrayList<Enemy> bad = new ArrayList<Enemy>();
 	private ArrayList<GameObject> platforms = new ArrayList<GameObject>();
 	private ArrayList<GameObject> player = new ArrayList<GameObject>();
 	FileReader() {
@@ -211,11 +211,11 @@ public class FileReader {
 		return ans;
 	}
 
-	public ArrayList<GameObject> getBad() {
+	public ArrayList<Enemy> getBad() {
 		return bad;
 	}
 
-	public void setBad(ArrayList<GameObject> bad) {
+	public void setBad(ArrayList<Enemy> bad) {
 		this.bad = bad;
 	}
 
