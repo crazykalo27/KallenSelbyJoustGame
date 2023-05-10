@@ -14,61 +14,81 @@ import javax.swing.JComponent;
 
 /**
  * Class: GameComponent
- * @author Team 303
- * <br>Purpose: Runs game logic and draws objects to screen
- * <br>For example: 
- * <pre>
- *    GameComponent gameComponent = new GameComponent();
- *    frame.add(gameComponent);
- * </pre>
+ * 
+ * @author Team 303 <br>
+ *         Purpose: Runs game logic and draws objects to screen <br>
+ *         For example:
+ * 
+ *         <pre>
+ *         GameComponent gameComponent = new GameComponent();
+ *         frame.add(gameComponent);
+ *         </pre>
  */
 public class GameComponent extends JComponent implements KeyListener {
-	
+
 	private ArrayList<GameObject> GameObjects;
 	private int levelNum;
 	private FileReader fileReader;
 	private Hero hero;
-	private ArrayList<GameObject> enemies = new ArrayList<GameObject>();
+	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 	private ArrayList<GameObject> platforms = new ArrayList<GameObject>();
 	private ArrayList<GameObject> player = new ArrayList<GameObject>();
-	
+
 	public GameComponent() {
 		this.GameObjects = new ArrayList<GameObject>();
 		this.hero = null;
 		this.levelNum = 1;
 		this.fileReader = new FileReader();
 	}
-	
+
 	protected void paintComponent(Graphics g) {
-		
+
 		Graphics2D g2 = (Graphics2D) g;
-		
-		for (GameObject gO: this.GameObjects) {
+
+		for (GameObject gO : this.GameObjects) {
 			if (gO != null) {
 				gO.drawOn(g2);
 			}
 		}
 	}
-	
+
 	public void updateObjects() {
-		for (GameObject gO: this.GameObjects) {
+		for (GameObject gO : this.GameObjects) {
 			if (gO != null) {
 				gO.update();
 			}
 		}
 		handleColisions();
 	}
-	
+
 	public void drawScreen() {
 		this.repaint();
 	}
+
 	public void handleColisions() {
-			for(GameObject plat : this.platforms) {
-				if(hero.overlaps(plat)){
-					hero.collidewith(plat);
-				}
+		for (GameObject plat : this.platforms) {
+			if (hero.overlaps(plat)) {
+				hero.collidewith(plat);
+			}
+			
+			//causes enemies to collide with platforms
+			for (Enemy enem : this.enemies) {
+				if(enem.overlaps(plat)) {
+					enem.collidewith(plat);
 				}
 			}
+			
+		}
+		
+		for (GameObject enem : this.enemies) {
+			if(hero.overlaps(enem)) {
+				hero.collidewith(enem);
+			}
+		}
+		
+
+	}
+
 	public void addGameObject(GameObject gameObject) {
 		this.GameObjects.add(gameObject);
 	}
@@ -76,7 +96,7 @@ public class GameComponent extends JComponent implements KeyListener {
 	public void setGameObjectsArray(ArrayList<GameObject> array) {
 		this.GameObjects = array;
 	}
-	
+
 	public void loadLevel(int levelNumberToLoad) {
 		ArrayList<GameObject> objects = fileReader.getObjectsFromFile(Integer.toString(levelNumberToLoad) + "level");
 		if (!objects.isEmpty()) {
@@ -85,19 +105,19 @@ public class GameComponent extends JComponent implements KeyListener {
 			this.platforms = this.fileReader.getPlatforms();
 			this.player = this.fileReader.getPlayer();
 			this.hero = (Hero) this.player.get(0);
-		} 
+		}
 	}
-	
+
 	public Hero findHeroInArray() {
 		for (GameObject gO : this.GameObjects) {
 			if (gO instanceof Hero) {
 				return (Hero) gO;
 			}
 		}
-		
+
 		return null;
 	}
-	
+
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
@@ -105,9 +125,9 @@ public class GameComponent extends JComponent implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		
-		//TODO: Find a better system for movement
-		//Hero Movement
+
+		// TODO: Find a better system for movement
+		// Hero Movement
 		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 			this.hero.setLeftKeyHeld(true);
 		} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
@@ -115,14 +135,13 @@ public class GameComponent extends JComponent implements KeyListener {
 		} else if (e.getKeyCode() == KeyEvent.VK_UP) {
 			this.hero.setUpKeyHeld(true);
 		}
-		
-		
-		//Level Loading
+
+		// Level Loading
 		boolean shouldUpdateLevel = false;
-		
+
 		if (e.getKeyCode() == KeyEvent.VK_U) {
-				levelNum++;
-				this.loadLevel(this.levelNum);
+			levelNum++;
+			this.loadLevel(this.levelNum);
 		} else if (e.getKeyCode() == KeyEvent.VK_D) {
 			if (this.levelNum > 1) {
 				this.levelNum--;
@@ -133,7 +152,7 @@ public class GameComponent extends JComponent implements KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		//Hero Movement
+		// Hero Movement
 		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 			this.hero.setLeftKeyHeld(false);
 		} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
