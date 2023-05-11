@@ -99,4 +99,15 @@ public class Hero extends MoveableObject {
 		}
 		
 	}
+
+	public boolean joust(GameObject enem) {		
+		
+		//case of enemy is lower on the screen: enemy should die
+		if(enem.getYCent() > this.getYCent()) {
+			System.out.println("Enemy is lower!");
+			return true;
+		}
+		
+		return false;
+	}
 }

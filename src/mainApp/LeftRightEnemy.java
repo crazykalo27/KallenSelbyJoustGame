@@ -28,11 +28,13 @@ public class LeftRightEnemy extends Enemy {
 
 	}
 
-	public void drawOn(Graphics2D g2) {
+	public void drawOn(Graphics2D g2) throws DeadEnemyException {
 		g2.setColor(COL);
 		g2.translate(this.getXCent(), this.getYCent());
 		g2.fill(new Rectangle2D.Double(-this.getWidth() / 2, -this.getHeight() / 2, this.getWidth(), this.getHeight()));
 		g2.translate(-this.getXCent(), -this.getYCent());
+		
+		super.drawOn(g2);
 	}
 
 	@Override
