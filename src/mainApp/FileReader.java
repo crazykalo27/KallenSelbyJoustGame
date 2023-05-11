@@ -179,7 +179,7 @@ public class FileReader {
 					heroLoc = ans.indexOf(temp);
 					player.add(temp);
 				}else if (change.get(i).get(j).equals(FileReader.BADDIE_STRING)) {
-					LeftRightEnemy temp = new LeftRightEnemy(x,y,2);
+					LeftRightEnemy temp = new LeftRightEnemy(x,y,4);
 					ans.add(temp);
 					bad.add(temp);
 				}
