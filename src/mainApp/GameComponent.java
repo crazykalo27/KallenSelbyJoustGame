@@ -116,7 +116,7 @@ public class GameComponent extends JComponent implements KeyListener {
 						gameOver = true;
 					}
 						hero.setXCent(100);
-						hero.setYCent(100);
+						hero.setYCent(10);
 					}
 				}
 			}
