@@ -95,7 +95,7 @@ public class Hero extends MoveableObject {
 			int direction = (int) Math.signum(other.getXCent() - this.getXCent());
 			this.move(-direction*otherw, 0);
 			this.setXVelocity(0);
-		}else {
+		} else {
 			this.move(0, -Math.signum(this.getYVelocity())*otherh);
 			this.setYVelocity(0);
 		}

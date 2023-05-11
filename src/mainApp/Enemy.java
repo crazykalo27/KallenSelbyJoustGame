@@ -6,8 +6,6 @@ import java.awt.geom.Rectangle2D;
 public class Enemy extends MoveableObject{
 	
 	private double speed;
-	private boolean dead = false;
-
 
 	public Enemy(double xCent, double yCent, double speed) {
 		super(xCent, yCent);
@@ -19,7 +17,7 @@ public class Enemy extends MoveableObject{
 	
 	@Override
 	public void drawOn(Graphics2D g2) throws DeadException {
-		if(getDead()) {
+		if(shouldBeRemoved()) {
 			throw new DeadException("This RandomMoveEnemy is Dead!");
 		}
 	}
@@ -51,13 +49,4 @@ public class Enemy extends MoveableObject{
 		}
 		
 	}
-	
-	public void die() {
-		dead = true;
-	}
-	
-	public boolean getDead() {
-		return dead;
-	}
-
 }
