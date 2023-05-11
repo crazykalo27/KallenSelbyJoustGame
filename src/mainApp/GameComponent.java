@@ -45,9 +45,15 @@ public class GameComponent extends JComponent implements KeyListener {
 
 		Graphics2D g2 = (Graphics2D) g;
 
-		for (GameObject gO : this.GameObjects) {
-			if (gO != null) {
-				gO.drawOn(g2);
+		for(int i = 0; i < this.GameObjects.size(); i++) {
+			if(this.GameObjects.get(i) != null) {
+				try {
+					this.GameObjects.get(i).drawOn(g2);
+				} catch (DeadEnemyException e) {  //removes the enemy
+					//System.out.println("REMOVING");
+					this.enemies.remove(this.GameObjects.get(i));
+					this.GameObjects.remove(this.GameObjects.get(i));
+				}
 			}
 		}
 	}
@@ -70,22 +76,22 @@ public class GameComponent extends JComponent implements KeyListener {
 			if (hero.overlaps(plat)) {
 				hero.collidewith(plat);
 			}
-			
-			//causes enemies to collide with platforms
+
+			// causes enemies to collide with platforms
 			for (Enemy enem : this.enemies) {
-				if(enem.overlaps(plat)) {
+				if (enem.overlaps(plat)) {
 					enem.collidewith(plat);
 				}
 			}
-			
 		}
-		
-		for (GameObject enem : this.enemies) {
-			if(hero.overlaps(enem)) {
-				hero.collidewith(enem);
+
+		for (Enemy enem : this.enemies) {
+			if (hero.overlaps(enem)) {
+				if(hero.joust(enem)) {
+					enem.die();
+				}
 			}
 		}
-		
 
 	}
 

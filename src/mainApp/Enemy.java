@@ -1,10 +1,12 @@
 package mainApp;
 
+import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 
 public class Enemy extends MoveableObject{
 	
 	private double speed;
+	private boolean dead = false;
 
 
 	public Enemy(double xCent, double yCent, double speed) {
@@ -13,6 +15,13 @@ public class Enemy extends MoveableObject{
 		this.speed = speed;
 		
 		// TODO Auto-generated constructor stub
+	}
+	
+	@Override
+	public void drawOn(Graphics2D g2) throws DeadEnemyException {
+		if(getDead()) {
+			throw new DeadEnemyException("This RandomMoveEnemy is Dead!");
+		}
 	}
 
 
@@ -40,6 +49,14 @@ public class Enemy extends MoveableObject{
 			this.setYVelocity(0);
 		}
 		
+	}
+	
+	public void die() {
+		dead = true;
+	}
+	
+	public boolean getDead() {
+		return dead;
 	}
 
 }

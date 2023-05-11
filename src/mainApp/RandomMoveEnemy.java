@@ -15,19 +15,24 @@ public class RandomMoveEnemy extends Enemy {
 	private final Color COL = Color.blue;
 	//private static final int WIDTH = 100;
 	//private static final int HEIGHT = 100;
-	private double speed;
-	
+	private double speed;	
 
 	public RandomMoveEnemy(double xCent, double yCent, double speed) {
 		super(xCent, yCent, speed);
 		this.speed = speed;
 		this.setHasGravity(false);
 	}
-	public void drawOn(Graphics2D g2) {
+	
+	@Override
+	public void drawOn(Graphics2D g2) throws DeadEnemyException {
+		if(super.getDead()) {
+			throw new DeadEnemyException("This RandomMoveEnemy is Dead!");
+		}
 		g2.setColor(COL);
 		g2.translate(this.getXCent(), this.getYCent());
 		g2.fill(new Rectangle2D.Double(-this.getWidth()/2,-this.getHeight()/2,this.getWidth(),this.getHeight()));
 		g2.translate(-this.getXCent(), -this.getYCent());
+		super.drawOn(g2);
 	}
 	
 	@Override
@@ -44,5 +49,6 @@ public class RandomMoveEnemy extends Enemy {
 		this.setXVelocity(this.getXVelocity()+this.speed);
 		super.update();
 	}
+	
 }
 
