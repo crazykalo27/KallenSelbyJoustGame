@@ -7,6 +7,10 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.JComponent;
 
@@ -35,11 +39,14 @@ public class GameComponent extends JComponent implements KeyListener {
 	private Hero hero;
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 	private ArrayList<Egg> eggs = new ArrayList<Egg>();
+	private HashMap<Egg, Timer> times = new HashMap<Egg, Timer>();
 	private ArrayList<GameObject> platforms = new ArrayList<GameObject>();
 	private ArrayList<GameObject> player = new ArrayList<GameObject>();
 	private int points;
 	private int lives;
 	private boolean gameOver = false;
+
+	Random r;
 
 	public GameComponent() {
 		this.GameObjects = new ArrayList<GameObject>();
@@ -48,6 +55,7 @@ public class GameComponent extends JComponent implements KeyListener {
 		this.fileReader = new FileReader();
 		points = 0;
 		lives = 4;
+		r = new Random();
 	}
 
 	protected void paintComponent(Graphics g) {
@@ -74,6 +82,18 @@ public class GameComponent extends JComponent implements KeyListener {
 					this.GameObjects.add(egg);
 					this.eggs.add(egg);
 
+					Timer time = new Timer();
+					time.schedule(new TimerTask() {
+						
+						 @Override
+				            public void run() {
+				                replaceEgg(egg.getXCent(), egg.getYCent(), egg);
+				            }
+						
+					}, 10000);
+					
+					this.times.put(egg, time);
+					
 					this.points += this.POINTS_FOR_ENEMY_KILL;
 					this.enemies.remove(this.GameObjects.get(i));
 					this.GameObjects.remove(this.GameObjects.get(i));
@@ -138,6 +158,7 @@ public class GameComponent extends JComponent implements KeyListener {
 
 			if (this.eggs.get(i).overlaps(hero)) {
 				this.GameObjects.remove(this.eggs.get(i));
+				this.times.get(this.eggs.get(i)).cancel();
 				this.eggs.remove(this.eggs.get(i));
 				points += this.POINTS_FOR_EGG;
 			}
@@ -216,6 +237,32 @@ public class GameComponent extends JComponent implements KeyListener {
 		} else if (e.getKeyCode() == KeyEvent.VK_UP) {
 			this.hero.setUpKeyHeld(false);
 		}
+	}
+
+	public void replaceEgg(double x, double y, Egg egg) {
+		this.GameObjects.remove(egg);
+		this.eggs.remove(egg);
+		this.times.remove(egg);
+		
+		int en = r.nextInt(1,4);
+		Enemy a;
+		
+		switch (en) {
+		case 1:
+			a = new RandomMoveEnemy(x, y, 2);
+			break;
+		case 2:
+			a = new LeftRightEnemy(x, y, 2);
+			break;
+		case 3:
+			a = new Tracker(x, y, 2, hero);
+			break;
+		default:
+			return;
+		}
+		
+		this.GameObjects.add(a);
+		this.enemies.add(a);
 	}
 
 	public ArrayList<GameObject> getGameObjects() {
