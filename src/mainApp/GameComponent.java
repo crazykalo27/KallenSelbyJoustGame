@@ -120,6 +120,10 @@ public class GameComponent extends JComponent implements KeyListener {
 	}
 
 	public void handleColisions() {
+		
+		//TODO only have enemies turn into eggs if they are killed in the air
+		//TODO enemy and player bounce off eachother cases
+		
 		for (GameObject plat : this.platforms) {
 			if (hero.overlaps(plat)) {
 				hero.collidewith(plat);
