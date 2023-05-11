@@ -24,6 +24,7 @@ public class GameObject {
 	private double yCent;
 	private double Width;
 	private double Height;
+	private boolean shouldRemove = false;
 	
 	public GameObject(double xCord, double yCord) {
 			this.xCent = xCord;
@@ -77,6 +78,14 @@ public class GameObject {
 	}
 	public boolean overlaps(GameObject other) {
 		return getBoundingBox().intersects(other.getBoundingBox());
+	}
+	
+	public void markForRemoval() {
+		this.shouldRemove = true;
+	}
+	
+	public boolean shouldBeRemoved() {
+		return this.shouldRemove;
 	}
 
 }
