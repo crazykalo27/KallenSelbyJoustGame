@@ -24,9 +24,9 @@ public class RandomMoveEnemy extends Enemy {
 	}
 	
 	@Override
-	public void drawOn(Graphics2D g2) throws DeadEnemyException {
+	public void drawOn(Graphics2D g2) throws DeadException {
 		if(super.getDead()) {
-			throw new DeadEnemyException("This RandomMoveEnemy is Dead!");
+			throw new DeadException("This RandomMoveEnemy is Dead!");
 		}
 		g2.setColor(COL);
 		g2.translate(this.getXCent(), this.getYCent());

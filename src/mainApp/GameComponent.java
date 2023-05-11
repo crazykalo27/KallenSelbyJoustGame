@@ -27,10 +27,10 @@ import javax.swing.JComponent;
  *         </pre>
  */
 public class GameComponent extends JComponent implements KeyListener {
-	
+
 	public static final int POINTS_FOR_ENEMY_KILL = 750;
 	public static final int POINTS_FOR_EGG = 500;
-	
+
 	private ArrayList<GameObject> GameObjects;
 	private int levelNum;
 	private FileReader fileReader;
@@ -39,35 +39,46 @@ public class GameComponent extends JComponent implements KeyListener {
 	private ArrayList<GameObject> platforms = new ArrayList<GameObject>();
 	private ArrayList<GameObject> player = new ArrayList<GameObject>();
 	private int points;
+	private int lives;
+	private boolean gameOver = false;
 
 	public GameComponent() {
 		this.GameObjects = new ArrayList<GameObject>();
 		this.hero = null;
 		this.levelNum = 1;
 		this.fileReader = new FileReader();
-		points = 0; 
+		points = 0;
+		lives = 4;
 	}
 
 	protected void paintComponent(Graphics g) {
-
 		Graphics2D g2 = (Graphics2D) g;
-		
-		for(int i = 0; i < this.GameObjects.size(); i++) {
-			if(this.GameObjects.get(i) != null) {
+
+		if (gameOver == true) {
+			g2.setColor(Color.black);
+			g2.setFont(new Font("TimesRoman", Font.PLAIN, 80));
+			g2.drawString("GAME OVER", 250, 250);
+
+			g2.setFont(new Font("TimesRoman", Font.PLAIN, 40));
+			g2.drawString("Points: " + this.points + "  ||  Lives: " + this.lives, 300, 550);
+			return;
+		}
+
+		for (int i = 0; i < this.GameObjects.size(); i++) {
+			if (this.GameObjects.get(i) != null) {
 				try {
 					this.GameObjects.get(i).drawOn(g2);
-				} catch (DeadEnemyException e) {  //removes the enemy
-					
+				} catch (DeadException e) { // removes the enemy
 					this.points += this.POINTS_FOR_ENEMY_KILL;
 					this.enemies.remove(this.GameObjects.get(i));
 					this.GameObjects.remove(this.GameObjects.get(i));
 				}
 			}
 		}
-		
+
 		g2.setColor(Color.black);
 		g2.setFont(new Font("TimesRoman", Font.PLAIN, 40));
-		g2.drawString("Points: " + this.points + "  ||  Lives: " + this.hero.getLives(), 300, 550);
+		g2.drawString("Points: " + this.points + "  ||  Lives: " + this.lives, 300, 550);
 	}
 
 	public void updateObjects() {
@@ -99,13 +110,19 @@ public class GameComponent extends JComponent implements KeyListener {
 
 		for (Enemy enem : this.enemies) {
 			if (hero.overlaps(enem)) {
-				if(hero.joust(enem)) {
+				if (hero.joust(enem)) {
 					enem.die();
+				} else {
+					this.lives--;
+					if (this.lives == 0) {
+						gameOver = true;
+					}
+						hero.setXCent(100);
+						hero.setYCent(100);
+					}
 				}
 			}
 		}
-
-	}
 
 	public void addGameObject(GameObject gameObject) {
 		this.GameObjects.add(gameObject);
@@ -179,4 +196,93 @@ public class GameComponent extends JComponent implements KeyListener {
 			this.hero.setUpKeyHeld(false);
 		}
 	}
+
+	public ArrayList<GameObject> getGameObjects() {
+		return GameObjects;
+	}
+
+	public void setGameObjects(ArrayList<GameObject> gameObjects) {
+		GameObjects = gameObjects;
+	}
+
+	public int getLevelNum() {
+		return levelNum;
+	}
+
+	public void setLevelNum(int levelNum) {
+		this.levelNum = levelNum;
+	}
+
+	public FileReader getFileReader() {
+		return fileReader;
+	}
+
+	public void setFileReader(FileReader fileReader) {
+		this.fileReader = fileReader;
+	}
+
+	public Hero getHero() {
+		return hero;
+	}
+
+	public void setHero(Hero hero) {
+		this.hero = hero;
+	}
+
+	public ArrayList<Enemy> getEnemies() {
+		return enemies;
+	}
+
+	public void setEnemies(ArrayList<Enemy> enemies) {
+		this.enemies = enemies;
+	}
+
+	public ArrayList<GameObject> getPlatforms() {
+		return platforms;
+	}
+
+	public void setPlatforms(ArrayList<GameObject> platforms) {
+		this.platforms = platforms;
+	}
+
+	public ArrayList<GameObject> getPlayer() {
+		return player;
+	}
+
+	public void setPlayer(ArrayList<GameObject> player) {
+		this.player = player;
+	}
+
+	public int getPoints() {
+		return points;
+	}
+
+	public void setPoints(int points) {
+		this.points = points;
+	}
+
+	public int getLives() {
+		return lives;
+	}
+
+	public void setLives(int lives) {
+		this.lives = lives;
+	}
+
+	public boolean isGameOver() {
+		return gameOver;
+	}
+
+	public void setGameOver(boolean gameOver) {
+		this.gameOver = gameOver;
+	}
+
+	public static int getPointsForEnemyKill() {
+		return POINTS_FOR_ENEMY_KILL;
+	}
+
+	public static int getPointsForEgg() {
+		return POINTS_FOR_EGG;
+	}
+
 }

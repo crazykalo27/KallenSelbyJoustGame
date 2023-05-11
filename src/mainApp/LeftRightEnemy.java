@@ -28,7 +28,7 @@ public class LeftRightEnemy extends Enemy {
 
 	}
 
-	public void drawOn(Graphics2D g2) throws DeadEnemyException {
+	public void drawOn(Graphics2D g2) throws DeadException {
 		g2.setColor(COL);
 		g2.translate(this.getXCent(), this.getYCent());
 		g2.fill(new Rectangle2D.Double(-this.getWidth() / 2, -this.getHeight() / 2, this.getWidth(), this.getHeight()));
@@ -49,7 +49,7 @@ public class LeftRightEnemy extends Enemy {
 				diry *= -1;
 			}
 			this.setYVelocity(super.getSpeed() * diry);
-			System.out.println("updated " + waitNum);
+			//System.out.println("updated " + waitNum);
 			super.setSpeed(super.getSpeed() * -1);
 			ticks = 0;
 			waitNum = r.nextInt(90, 140);
