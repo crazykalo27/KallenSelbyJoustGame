@@ -42,7 +42,8 @@ public class Enemy extends MoveableObject{
 		double otherh = overlap.getHeight();
 		double otherw = overlap.getWidth();
 		if(otherh>=otherw) {
-			this.move(-Math.signum(this.getXVelocity())*otherw, 0);
+			int direction = (int) Math.signum(other.getXCent() - this.getXCent());
+			this.move(-direction*otherw, 0);
 			this.setXVelocity(0);
 		}else {
 			this.move(0, -Math.signum(this.getYVelocity())*otherh);
