@@ -10,13 +10,13 @@ package mainApp;
  * </pre>
  */
 
-import java.awt.Component;
+import java.awt.BorderLayout;
+import java.awt.Color;
 
-import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.Timer;
-
-import mainApp.GameAdvanceListener;
 
 public class GameViewer {
 	
@@ -42,7 +42,7 @@ public class GameViewer {
 		GameAdvanceListener advanceListener = new GameAdvanceListener(gameComponent);
 		Timer timer = new Timer(DELAY, advanceListener);
 		timer.start();
-		
+	
 		frame.add(gameComponent);
 		frame.setVisible(true);
 	}
