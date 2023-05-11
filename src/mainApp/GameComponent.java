@@ -1,5 +1,7 @@
 package mainApp;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
@@ -25,7 +27,10 @@ import javax.swing.JComponent;
  *         </pre>
  */
 public class GameComponent extends JComponent implements KeyListener {
-
+	
+	public static final int POINTS_FOR_ENEMY_KILL = 750;
+	public static final int POINTS_FOR_EGG = 500;
+	
 	private ArrayList<GameObject> GameObjects;
 	private int levelNum;
 	private FileReader fileReader;
@@ -33,29 +38,36 @@ public class GameComponent extends JComponent implements KeyListener {
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 	private ArrayList<GameObject> platforms = new ArrayList<GameObject>();
 	private ArrayList<GameObject> player = new ArrayList<GameObject>();
+	private int points;
 
 	public GameComponent() {
 		this.GameObjects = new ArrayList<GameObject>();
 		this.hero = null;
 		this.levelNum = 1;
 		this.fileReader = new FileReader();
+		points = 0; 
 	}
 
 	protected void paintComponent(Graphics g) {
 
 		Graphics2D g2 = (Graphics2D) g;
-
+		
 		for(int i = 0; i < this.GameObjects.size(); i++) {
 			if(this.GameObjects.get(i) != null) {
 				try {
 					this.GameObjects.get(i).drawOn(g2);
 				} catch (DeadEnemyException e) {  //removes the enemy
-					//System.out.println("REMOVING");
+					
+					this.points += this.POINTS_FOR_ENEMY_KILL;
 					this.enemies.remove(this.GameObjects.get(i));
 					this.GameObjects.remove(this.GameObjects.get(i));
 				}
 			}
 		}
+		
+		g2.setColor(Color.black);
+		g2.setFont(new Font("TimesRoman", Font.PLAIN, 40));
+		g2.drawString("Points: " + this.points + "  ||  Lives: " + this.hero.getLives(), 300, 550);
 	}
 
 	public void updateObjects() {
