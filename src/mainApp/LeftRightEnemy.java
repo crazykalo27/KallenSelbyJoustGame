@@ -24,7 +24,7 @@ public class LeftRightEnemy extends Enemy {
 		super(xCent, yCent, speed);
 		this.setHasGravity(false);
 		this.ticks = 0;
-		this.waitNum = r.nextInt(80, 160);
+		this.waitNum = r.nextInt(40, 90);
 
 	}
 
@@ -52,7 +52,7 @@ public class LeftRightEnemy extends Enemy {
 			//System.out.println("updated " + waitNum);
 			super.setSpeed(super.getSpeed() * -1);
 			ticks = 0;
-			waitNum = r.nextInt(90, 140);
+			waitNum = r.nextInt(50, 100);
 		}
 
 		super.update();
