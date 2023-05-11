@@ -52,7 +52,7 @@ public class GameObject {
 		
 	}
 	
-	public void drawOn(Graphics2D g2) throws DeadEnemyException{
+	public void drawOn(Graphics2D g2) throws DeadException{
 		// TODO Auto-generated method stub
 		
 	}

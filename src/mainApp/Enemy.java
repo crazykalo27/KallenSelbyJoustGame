@@ -18,9 +18,9 @@ public class Enemy extends MoveableObject{
 	}
 	
 	@Override
-	public void drawOn(Graphics2D g2) throws DeadEnemyException {
+	public void drawOn(Graphics2D g2) throws DeadException {
 		if(getDead()) {
-			throw new DeadEnemyException("This RandomMoveEnemy is Dead!");
+			throw new DeadException("This RandomMoveEnemy is Dead!");
 		}
 	}
 

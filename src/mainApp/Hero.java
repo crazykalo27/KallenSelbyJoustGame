@@ -36,7 +36,6 @@ public class Hero extends MoveableObject {
 	private boolean leftKeyHeld;
 	private boolean upKeyHeld;
 	private double speed;
-	private int lives;
 	
 	public Hero(int xCent, int yCent, double speed) {
 		super(xCent, yCent);
@@ -46,7 +45,6 @@ public class Hero extends MoveableObject {
 		this.upKeyHeld = false;
 		this.setWidth(WIDTH);
 		this.setHeight(HEIGHT);
-		this.lives = 4;
 	}
 
 	public void drawOn(Graphics2D g2) {
@@ -109,8 +107,6 @@ public class Hero extends MoveableObject {
 			System.out.println("Enemy is lower!");
 			return true;
 		}
-		
-		lives--;
 		return false;
 	}
 
@@ -120,14 +116,6 @@ public class Hero extends MoveableObject {
 
 	public void setSpeed(double speed) {
 		this.speed = speed;
-	}
-
-	public int getLives() {
-		return lives;
-	}
-
-	public void setLives(int lives) {
-		this.lives = lives;
 	}
 
 	public boolean isRightKeyHeld() {
