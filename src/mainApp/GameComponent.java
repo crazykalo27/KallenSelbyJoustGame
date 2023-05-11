@@ -34,6 +34,7 @@ public class GameComponent extends JComponent implements KeyListener {
 	private FileReader fileReader;
 	private Hero hero;
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+	private ArrayList<Egg> eggs = new ArrayList<Egg>();
 	private ArrayList<GameObject> platforms = new ArrayList<GameObject>();
 	private ArrayList<GameObject> player = new ArrayList<GameObject>();
 	private int points;
@@ -67,6 +68,12 @@ public class GameComponent extends JComponent implements KeyListener {
 				try {
 					this.GameObjects.get(i).drawOn(g2);
 				} catch (DeadException e) { // removes the enemy
+					double xegg = this.GameObjects.get(i).getXCent();
+					double yegg = this.GameObjects.get(i).getYCent();
+					Egg egg = new Egg(xegg, yegg);
+					this.GameObjects.add(egg);
+					this.eggs.add(egg);
+
 					this.points += this.POINTS_FOR_ENEMY_KILL;
 					this.enemies.remove(this.GameObjects.get(i));
 					this.GameObjects.remove(this.GameObjects.get(i));
@@ -104,6 +111,12 @@ public class GameComponent extends JComponent implements KeyListener {
 					enem.collidewith(plat);
 				}
 			}
+
+			for (Egg eggs : this.eggs) {
+				if (eggs.overlaps(plat)) {
+					eggs.collidewith(plat);
+				}
+			}
 		}
 
 		for (Enemy enem : this.enemies) {
@@ -115,12 +128,22 @@ public class GameComponent extends JComponent implements KeyListener {
 					if (this.lives == 0) {
 						gameOver = true;
 					}
-						hero.setXCent(100);
-						hero.setYCent(10);
-					}
+					hero.setXCent(100);
+					hero.setYCent(10);
 				}
 			}
 		}
+
+		for (int i = 0; i < this.eggs.size(); i++) {
+
+			if (this.eggs.get(i).overlaps(hero)) {
+				this.GameObjects.remove(this.eggs.get(i));
+				this.eggs.remove(this.eggs.get(i));
+				points += this.POINTS_FOR_EGG;
+			}
+		}
+
+	}
 
 	public void addGameObject(GameObject gameObject) {
 		this.GameObjects.add(gameObject);
