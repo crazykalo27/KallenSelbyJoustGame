@@ -24,13 +24,14 @@ public class GameObject {
 	private double yCent;
 	private double Width;
 	private double Height;
-	private boolean shouldRemove = false;
+	private boolean shouldRemove;
 	
 	public GameObject(double xCord, double yCord) {
 			this.xCent = xCord;
 			this.yCent = yCord;
 			this.Width = 100;
 			this.Height = 100;
+			this.shouldRemove = false;
 	}
 
 	public double getWidth() {
@@ -49,11 +50,11 @@ public class GameObject {
 		Height = height;
 	}
 
-	public void update() {
+	public void update() throws DeadException {
 		
 	}
 	
-	public void drawOn(Graphics2D g2) throws DeadException{
+	public void drawOn(Graphics2D g2) {
 		// TODO Auto-generated method stub
 		
 	}

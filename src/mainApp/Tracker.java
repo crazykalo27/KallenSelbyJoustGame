@@ -27,7 +27,7 @@ public class Tracker extends Enemy{
 		
 		//this.setHasGravity(false);
 	}
-	public void drawOn(Graphics2D g2) throws DeadException {
+	public void drawOn(Graphics2D g2) {
 		g2.setColor(COL);
 		g2.translate(this.getXCent(), this.getYCent());
 		g2.fill(new Rectangle2D.Double(-this.getWidth()/2,-this.getHeight()/2,this.getWidth(),this.getHeight()));
@@ -38,13 +38,14 @@ public class Tracker extends Enemy{
 	
 	@Override
 	//TODO could make this not dependent on location so it has a constant speed
-	public void update() {
+	public void update() throws DeadException {
 		this.setXVelocity((this.getXCent()-hero.getXCent())*-.03);
 		this.setYVelocity((this.getYCent()-hero.getYCent())*-.03);
 		if(Math.abs(this.getXVelocity())<=2) {
 			this.setXVelocity(this.getXVelocity()*2);
 			this.setYVelocity(this.getYVelocity()*2);
 		}
+
 		super.update();
 	}
 }

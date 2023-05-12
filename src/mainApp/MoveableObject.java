@@ -34,7 +34,7 @@ public class MoveableObject extends GameObject {
 	}
 
 	@Override
-	public void update() {
+	public void update() throws DeadException {
 		super.update();
 		this.move(getXVelocity(), getYVelocity());
 		
