@@ -70,8 +70,13 @@ public class GameComponent extends JComponent implements KeyListener {
 			g2.drawString("Points: " + this.points + "  ||  Lives: " + this.lives, 300, 550);
 			return;
 		}
+		
+		for (GameObject gO : new ArrayList<GameObject>(this.GameObjects)) {
+			gO.drawOn(g2);
+		}
 
-		for (int i = 0; i < this.GameObjects.size(); i++) {
+		// TODO: Move game logic to update()
+		/* for (int i = 0; i < this.GameObjects.size(); i++) {
 			if (this.GameObjects.get(i) != null) {
 				try {
 					this.GameObjects.get(i).drawOn(g2);
@@ -98,8 +103,8 @@ public class GameComponent extends JComponent implements KeyListener {
 					this.enemies.remove(this.GameObjects.get(i));
 					this.GameObjects.remove(this.GameObjects.get(i));
 				}
-			}
-		}
+			} 
+		}*/
 
 		g2.setColor(Color.black);
 		g2.setFont(new Font("TimesRoman", Font.PLAIN, 40));
@@ -107,12 +112,41 @@ public class GameComponent extends JComponent implements KeyListener {
 	}
 
 	public void updateObjects() {
-		for (GameObject gO : this.GameObjects) {
-			if (gO != null) {
+		ArrayList<GameObject> enemiesToRemove = new ArrayList<GameObject>();
+		
+		for (GameObject gO : new ArrayList<GameObject>(this.GameObjects)) {
+			try {
 				gO.update();
+			} catch (DeadException e) { // removes the enemy
+				removeDeadEnemy(gO, enemiesToRemove);
 			}
 		}
+		this.enemies.removeAll(enemiesToRemove);
+		this.GameObjects.removeAll(enemiesToRemove);
 		handleColisions();
+	}
+	
+	public void removeDeadEnemy(GameObject enemy, ArrayList<GameObject> enemiesToRemove) {
+		double xegg = enemy.getXCent();
+		double yegg = enemy.getYCent();
+		Egg egg = new Egg(xegg, yegg);
+		this.GameObjects.add(egg);
+		this.eggs.add(egg);
+
+		Timer time = new Timer();
+		time.schedule(new TimerTask() {
+				
+			 @Override
+		     public void run() {
+				 replaceEgg(egg.getXCent(), egg.getYCent(), egg);
+		     }
+				
+		}, 10000);
+			
+		this.times.put(egg, time);
+			
+		this.points += this.POINTS_FOR_ENEMY_KILL;
+		enemiesToRemove.add(enemy);
 	}
 
 	public void drawScreen() {

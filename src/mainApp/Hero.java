@@ -55,7 +55,7 @@ public class Hero extends MoveableObject {
 	}
 	
 	@Override
-	public void update() {
+	public void update() throws DeadException {
 		if (this.rightKeyHeld) {
 			this.addXVelocity(this.speed);
 		}

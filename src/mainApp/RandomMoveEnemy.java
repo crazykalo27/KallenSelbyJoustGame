@@ -24,10 +24,7 @@ public class RandomMoveEnemy extends Enemy {
 	}
 	
 	@Override
-	public void drawOn(Graphics2D g2) throws DeadException {
-		if(super.getDead()) {
-			throw new DeadException("This RandomMoveEnemy is Dead!");
-		}
+	public void drawOn(Graphics2D g2) {
 		g2.setColor(COL);
 		g2.translate(this.getXCent(), this.getYCent());
 		g2.fill(new Rectangle2D.Double(-this.getWidth()/2,-this.getHeight()/2,this.getWidth(),this.getHeight()));
@@ -36,7 +33,10 @@ public class RandomMoveEnemy extends Enemy {
 	}
 	
 	@Override
-	public void update() {
+	public void update() throws DeadException {
+		if(this.shouldBeRemoved()) {
+			throw new DeadException("This RandomMoveEnemy is Dead!");
+		}
 		double i = Math.random();
 		if(i>=.5) {
 			this.speed = -this.speed;

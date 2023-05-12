@@ -16,7 +16,8 @@ public class Enemy extends MoveableObject{
 	}
 	
 	@Override
-	public void drawOn(Graphics2D g2) throws DeadException {
+	public void update() throws DeadException {
+		super.update();
 		if(shouldBeRemoved()) {
 			throw new DeadException("This RandomMoveEnemy is Dead!");
 		}

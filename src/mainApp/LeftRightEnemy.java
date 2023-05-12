@@ -13,8 +13,7 @@ import java.util.Random;
  */
 public class LeftRightEnemy extends Enemy {
 	Random r = new Random();
-	private final double DIST = 50;
-	private final Color COL = Color.green;
+	private static final Color COL = Color.green;
 	// private static final int WIDTH = 100;
 	// private static final int HEIGHT = 100;
 	private int ticks;
@@ -28,7 +27,7 @@ public class LeftRightEnemy extends Enemy {
 
 	}
 
-	public void drawOn(Graphics2D g2) throws DeadException {
+	public void drawOn(Graphics2D g2) {
 		g2.setColor(COL);
 		g2.translate(this.getXCent(), this.getYCent());
 		g2.fill(new Rectangle2D.Double(-this.getWidth() / 2, -this.getHeight() / 2, this.getWidth(), this.getHeight()));
@@ -38,7 +37,7 @@ public class LeftRightEnemy extends Enemy {
 	}
 
 	@Override
-	public void update() {
+	public void update() throws DeadException {
 		this.setXVelocity(Math.pow(super.getSpeed(), 2) * Math.signum(super.getSpeed()));
 
 		ticks++;
