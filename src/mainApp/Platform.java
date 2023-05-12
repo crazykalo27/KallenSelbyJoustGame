@@ -20,10 +20,13 @@ public class Platform extends GameObject {
 	}
 	
 	public void drawOn(Graphics2D g2) {
-		g2.setColor(COLOR);
-		g2.setColor(COLOR);
 		g2.translate(this.getXCent(), this.getYCent());
+		g2.setColor(COLOR);
+		//g2.translate(this.getXCent(), this.getYCent());
 		g2.fill(new Rectangle2D.Double(-WIDTH/2,-HEIGHT/2,WIDTH,HEIGHT));
+		g2.setColor(Color.BLACK);
+		g2.draw(new Rectangle2D.Double(-WIDTH/2,-HEIGHT/2,WIDTH,HEIGHT));
+		
 		g2.translate(-this.getXCent(), -this.getYCent());
 		
 	}
