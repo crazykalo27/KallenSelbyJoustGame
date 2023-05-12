@@ -167,7 +167,7 @@ public class FileReader {
 				int y = i * COORDINATE_SCALE + COORDINATE_SCALE/2;
 				int x = j * COORDINATE_SCALE + COORDINATE_SCALE/2;
 				if (change.get(i).get(j).equals(FileReader.AIR_STRING)) {
-					ans.add(null);
+					continue;
 				} else if (change.get(i).get(j).equals(FileReader.PLATFORM_STRING)) {
 					Platform temp = new Platform(x,y);
 					ans.add(temp);
