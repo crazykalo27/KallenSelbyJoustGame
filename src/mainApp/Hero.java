@@ -102,14 +102,19 @@ public class Hero extends MoveableObject {
 		
 	}
 
-	public boolean joust(GameObject enem) {		
-		
-		//case of enemy is lower on the screen: enemy should die
-		if(enem.getYCent() > this.getYCent()) {
-			//System.out.println("Enemy is lower!");
-			return true;
+	
+	// 0 = Enemy higher, player dies
+	// 1 = Approximately even, bounce off
+	// 2 = Player wins, enemy dies
+	public int joust(GameObject enemy) {
+		int bounceAreaWidth = 40;
+	    if (enemy.getYCent() < this.getYCent() + bounceAreaWidth && enemy.getYCent() > this.getYCent() - bounceAreaWidth) {
+			return 1;
+		} else if(enemy.getYCent() > this.getYCent()) {
+			return 2;
+		} else {
+			return 0;
 		}
-		return false;
 	}
 
 	public double getSpeed() {
@@ -131,4 +136,6 @@ public class Hero extends MoveableObject {
 	public boolean isUpKeyHeld() {
 		return upKeyHeld;
 	}
+	
+	
 }

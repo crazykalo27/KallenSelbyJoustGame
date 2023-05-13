@@ -177,17 +177,23 @@ public class GameComponent extends JComponent implements KeyListener {
 			}
 		}
 
+		int bounceStrength = 99999999;
+		
 		for (Enemy enemy : this.enemies) {
 			if (hero.overlaps(enemy)) {
-				if (hero.joust(enemy)) {
+				int joustResult = hero.joust(enemy);
+				if (joustResult == 2) {
 					enemy.markForRemoval();
-				} else {
+				} else if (joustResult == 0) {
 					this.lives--;
 					if (this.lives == 0) {
 						gameOver = true;
 					}
 					hero.setXCent(100);
 					hero.setYCent(10);
+				} else {
+					int direction = (int) Math.signum(enemy.getXCent() - hero.getXCent());
+					hero.setXVelocity(-direction * bounceStrength);
 				}
 			}
 		}
