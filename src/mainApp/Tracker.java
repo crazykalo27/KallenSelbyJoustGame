@@ -48,5 +48,10 @@ public class Tracker extends Enemy{
 
 		super.update();
 	}
+	
+	@Override
+	public Enemy getCopy() {
+		return new Tracker(this.getXCent(), this.getYCent(), this.getSpeed(), this.hero);
+	}
 }
 

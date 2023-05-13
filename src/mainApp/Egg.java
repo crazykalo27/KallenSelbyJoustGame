@@ -9,13 +9,20 @@ public class Egg extends Enemy {
 	private final Color COLOR = Color.gray;
 	// private static final int WIDTH = 100;
 	// private static final int HEIGHT = 100;
+	
+	private Enemy containedEnemy;
 
-	public Egg(double xCent, double yCent) {
+	public Egg(double xCent, double yCent, Enemy containedEnemy) {
 		super(xCent, yCent, 0);
 		this.setHasGravity(true);
 		this.setHeight(20);
 		this.setWidth(20);
+		this.containedEnemy = containedEnemy;
 		// TODO Auto-generated constructor stub
+	}
+
+	public Enemy getContainedEnemy() {
+		return containedEnemy;
 	}
 
 	@Override

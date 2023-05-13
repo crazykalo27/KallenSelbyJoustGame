@@ -118,7 +118,7 @@ public class GameComponent extends JComponent implements KeyListener {
 			try {
 				gO.update();
 			} catch (DeadException e) { // removes the enemy
-				removeDeadEnemy(gO, enemiesToRemove);
+				removeDeadEnemy((Enemy) gO, enemiesToRemove);
 			}
 		}
 		this.enemies.removeAll(enemiesToRemove);
@@ -126,10 +126,10 @@ public class GameComponent extends JComponent implements KeyListener {
 		handleColisions();
 	}
 	
-	public void removeDeadEnemy(GameObject enemy, ArrayList<GameObject> enemiesToRemove) {
+	public void removeDeadEnemy(Enemy enemy, ArrayList<GameObject> enemiesToRemove) {
 		double xegg = enemy.getXCent();
 		double yegg = enemy.getYCent();
-		Egg egg = new Egg(xegg, yegg);
+		Egg egg = new Egg(xegg, yegg, enemy);
 		this.GameObjects.add(egg);
 		this.eggs.add(egg);
 
@@ -282,25 +282,12 @@ public class GameComponent extends JComponent implements KeyListener {
 		this.eggs.remove(egg);
 		this.times.remove(egg);
 		
-		int en = r.nextInt(1,4);
-		Enemy a;
+		Enemy newEnemy = egg.getContainedEnemy().getCopy();
+		newEnemy.setXCent(egg.getXCent());
+		newEnemy.setYCent(egg.getYCent() - newEnemy.getHeight()/2);
 		
-		switch (en) {
-		case 1:
-			a = new RandomMoveEnemy(x, y, 2);
-			break;
-		case 2:
-			a = new LeftRightEnemy(x, y, 2);
-			break;
-		case 3:
-			a = new Tracker(x, y, 2, hero);
-			break;
-		default:
-			return;
-		}
-		
-		this.GameObjects.add(a);
-		this.enemies.add(a);
+		this.GameObjects.add(newEnemy);
+		this.enemies.add(newEnemy);
 	}
 
 	public ArrayList<GameObject> getGameObjects() {
