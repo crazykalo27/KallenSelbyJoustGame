@@ -50,5 +50,10 @@ public class RandomMoveEnemy extends Enemy {
 		super.update();
 	}
 	
+	@Override
+	public Enemy getCopy() {
+		// TODO Auto-generated method stub
+		return new RandomMoveEnemy(this.getXCent(), this.getYCent(), speed);
+	}
 }
 

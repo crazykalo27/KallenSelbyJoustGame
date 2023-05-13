@@ -50,4 +50,8 @@ public class Enemy extends MoveableObject{
 		}
 		
 	}
+	
+	public Enemy getCopy() {
+		return new Enemy(this.getXCent(), this.getYCent(), speed);
+	}
 }
