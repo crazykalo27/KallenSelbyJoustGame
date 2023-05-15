@@ -11,12 +11,13 @@ import java.awt.geom.Rectangle2D;
  * <br>Restrictions: None
  */
 public class Platform extends GameObject {
-	private final int WIDTH = 100;
-	private final int HEIGHT = 100;
 	private final Color COLOR = Color.RED;
-	
+	private double WIDTH;
+	private double HEIGHT;
 	public Platform(double xCord,double yCord) {
 		super(xCord, yCord);
+		WIDTH = this.getWidth();
+		HEIGHT = this.getHeight();
 	}
 	
 	public void drawOn(Graphics2D g2) {

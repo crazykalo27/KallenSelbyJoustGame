@@ -29,8 +29,8 @@ public class GameObject {
 	public GameObject(double xCord, double yCord) {
 			this.xCent = xCord;
 			this.yCent = yCord;
-			this.Width = 100;
-			this.Height = 100;
+			this.Width = 50;
+			this.Height = 50;
 			this.shouldRemove = false;
 	}
 
