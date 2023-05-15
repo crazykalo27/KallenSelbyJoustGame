@@ -47,6 +47,8 @@ public class GameComponent extends JComponent implements KeyListener {
 	private boolean gameOver = false;
 
 	Random r;
+	private double xstart;
+	private double ystart;
 
 	public GameComponent() {
 		this.GameObjects = new ArrayList<GameObject>();
@@ -221,10 +223,8 @@ public class GameComponent extends JComponent implements KeyListener {
 		if (this.lives == 0) {
 			gameOver = true;
 		}
-		hero.setXVelocity(0);
-		hero.setYVelocity(0);
-		hero.setXCent(100);
-		hero.setYCent(750);
+		hero.setXCent(xstart);
+		hero.setYCent(ystart);
 	}
 
 	public void addGameObject(GameObject gameObject) {
@@ -243,6 +243,8 @@ public class GameComponent extends JComponent implements KeyListener {
 			this.platforms = this.fileReader.getPlatforms();
 			this.player = this.fileReader.getPlayer();
 			this.hero = (Hero) this.player.get(0);
+			this.xstart = this.hero.getXCent();
+			this.ystart = this.hero.getYCent();
 		}
 	}
 
