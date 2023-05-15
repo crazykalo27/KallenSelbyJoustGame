@@ -27,7 +27,7 @@ public class GameViewer {
 		final int frameWidth = 800;
 		final int frameHeight = 850;
 		final int frameXLoc = 100;
-		final int frameYLoc = 100;
+		final int frameYLoc = 0;
 		
 		JFrame frame = new JFrame();
 		frame.setTitle(frameTitle);
