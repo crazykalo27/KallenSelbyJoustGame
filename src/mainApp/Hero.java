@@ -84,7 +84,7 @@ public class Hero extends MoveableObject {
 		this.upKeyHeld = state;
 	}
 
-	public void collidewith(GameObject other) {
+	public void collidewith(GameObject other) {		
 		Rectangle2D Recth = this.getBoundingBox();
 		Rectangle2D Recto = other.getBoundingBox();
 		Rectangle2D overlap = Recth.createIntersection(Recto);
