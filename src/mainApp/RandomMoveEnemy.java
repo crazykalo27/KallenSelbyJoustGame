@@ -15,11 +15,13 @@ public class RandomMoveEnemy extends Enemy {
 	private final Color COL = Color.blue;
 	//private static final int WIDTH = 100;
 	//private static final int HEIGHT = 100;
+	private int direction;
 
 	public RandomMoveEnemy(double xCent, double yCent, double speed) {
 		super(xCent, yCent, speed);
-		this.setHasGravity(false);
-		this.setSpeed(this.getSpeed()*.75);
+		this.setHasGravity(true);
+		this.setSpeed(this.getSpeed()*1.5);
+		this.direction = 1;
 	}
 	
 	@Override
@@ -37,15 +39,10 @@ public class RandomMoveEnemy extends Enemy {
 			throw new DeadException("This RandomMoveEnemy is Dead!");
 		}
 		double i = Math.random();
-		if(i>=.5) {
-			super.setSpeed(-super.getSpeed());
-		}else {
-			this.addYVelocity(super.getSpeed());
-			if(Math.abs(this.getYVelocity()) >=5) {
-				this.setYVelocity(this.getYVelocity()*.5);
-			}
+		if(i < .02) {
+			this.addYVelocity(-20);
 		}
-		this.setXVelocity(this.getXVelocity()+super.getSpeed());
+		this.setXVelocity(super.getSpeed() * direction);
 		super.update();
 	}
 	
@@ -53,6 +50,25 @@ public class RandomMoveEnemy extends Enemy {
 	public Enemy getCopy() {
 		// TODO Auto-generated method stub
 		return new RandomMoveEnemy(this.getXCent(), this.getYCent(), super.getSpeed());
+	}
+	
+	@Override
+	public void collidewith(GameObject other) {
+		Rectangle2D Recth = this.getBoundingBox();
+		Rectangle2D Recto = other.getBoundingBox();
+		Rectangle2D overlap = Recth.createIntersection(Recto);
+		double otherh = overlap.getHeight();
+		double otherw = overlap.getWidth();
+		if(otherh>=otherw) {
+			this.direction *= -1;
+			int direction = (int) Math.signum(other.getXCent() - this.getXCent());
+			this.move(-direction*otherw, 0);
+			this.setXVelocity(0);
+		}else {
+			this.move(0, -Math.signum(this.getYVelocity())*otherh);
+			this.setYVelocity(0);
+		}
+		
 	}
 }
 
