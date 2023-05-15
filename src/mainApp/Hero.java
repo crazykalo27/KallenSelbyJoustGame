@@ -106,7 +106,7 @@ public class Hero extends MoveableObject {
 	// 1 = Approximately even, bounce off
 	// 2 = Player wins, enemy dies
 	public int joust(GameObject enemy) {
-		int bounceAreaWidth = 40;
+		int bounceAreaWidth = 20;
 	    if (enemy.getYCent() < this.getYCent() + bounceAreaWidth && enemy.getYCent() > this.getYCent() - bounceAreaWidth) {
 			return 1;
 		} else if(enemy.getYCent() > this.getYCent()) {
