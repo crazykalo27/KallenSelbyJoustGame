@@ -172,12 +172,20 @@ public class GameComponent extends JComponent implements KeyListener {
 					enemy.collidewith(platform);
 				}
 			}
+			
+			for (int i = 0; i < this.eggs.size(); i++) {
 
-			for (Egg eggs : this.eggs) {
-				if (eggs.overlaps(platform)) {
-					eggs.collidewith(platform);
+				if (this.eggs.get(i).overlaps(platform)) {
+					if(platform.isLava()) {
+						this.GameObjects.remove(this.eggs.get(i));
+						this.times.get(this.eggs.get(i)).cancel();
+						this.eggs.remove(this.eggs.get(i));
+					} else {
+					this.eggs.get(i).collidewith(platform);
+					}
 				}
 			}
+
 		}
 
 		int bounceStrength = 99999999;
@@ -213,8 +221,10 @@ public class GameComponent extends JComponent implements KeyListener {
 		if (this.lives == 0) {
 			gameOver = true;
 		}
+		hero.setXVelocity(0);
+		hero.setYVelocity(0);
 		hero.setXCent(100);
-		hero.setYCent(10);
+		hero.setYCent(750);
 	}
 
 	public void addGameObject(GameObject gameObject) {
