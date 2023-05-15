@@ -56,4 +56,9 @@ public class LeftRightEnemy extends Enemy {
 
 		super.update();
 	}
+	
+	@Override
+	public Enemy getCopy() {
+		return new LeftRightEnemy(this.getXCent(), this.getYCent(), super.getSpeed());
+	}
 }

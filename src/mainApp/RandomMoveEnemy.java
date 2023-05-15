@@ -15,11 +15,9 @@ public class RandomMoveEnemy extends Enemy {
 	private final Color COL = Color.blue;
 	//private static final int WIDTH = 100;
 	//private static final int HEIGHT = 100;
-	private double speed;	
 
 	public RandomMoveEnemy(double xCent, double yCent, double speed) {
 		super(xCent, yCent, speed);
-		this.speed = speed;
 		this.setHasGravity(false);
 	}
 	
@@ -39,21 +37,21 @@ public class RandomMoveEnemy extends Enemy {
 		}
 		double i = Math.random();
 		if(i>=.5) {
-			this.speed = -this.speed;
+			super.setSpeed(-super.getSpeed());
 		}else {
-			this.addYVelocity(speed);
+			this.addYVelocity(super.getSpeed());
 			if(Math.abs(this.getYVelocity()) >=5) {
 				this.setYVelocity(this.getYVelocity()*.5);
 			}
 		}
-		this.setXVelocity(this.getXVelocity()+this.speed);
+		this.setXVelocity(this.getXVelocity()+super.getSpeed());
 		super.update();
 	}
 	
 	@Override
 	public Enemy getCopy() {
 		// TODO Auto-generated method stub
-		return new RandomMoveEnemy(this.getXCent(), this.getYCent(), speed);
+		return new RandomMoveEnemy(this.getXCent(), this.getYCent(), super.getSpeed());
 	}
 }
 
