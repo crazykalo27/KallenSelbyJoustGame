@@ -37,7 +37,7 @@ public class FileReader {
 
 	
 	private ArrayList<Enemy> bad = new ArrayList<Enemy>();
-	private ArrayList<GameObject> platforms = new ArrayList<GameObject>();
+	private ArrayList<Platform> platforms = new ArrayList<Platform>();
 	private ArrayList<GameObject> player = new ArrayList<GameObject>();
 	FileReader() {
 
@@ -171,7 +171,7 @@ public class FileReader {
 				if (change.get(i).get(j).equals(FileReader.AIR_STRING)) {
 					continue;
 				} else if (change.get(i).get(j).equals(FileReader.PLATFORM_STRING)) {
-					Platform temp = new Platform(x,y);
+					Platform temp = new Platform(x,y, false);
 					ans.add(temp);
 					platforms.add(temp);
 					
@@ -197,7 +197,7 @@ public class FileReader {
 					locb = bad.indexOf(placeHolder);
 					
 				}else if (change.get(i).get(j).equals(FileReader.LAVA_STRING)) {
-					Lava temp = new Lava(x,y);
+					Platform temp = new Platform(x,y, true);
 					ans.add(temp);
 					platforms.add(temp);
 				}else {
@@ -226,11 +226,11 @@ public class FileReader {
 		this.bad = bad;
 	}
 
-	public ArrayList<GameObject> getPlatforms() {
+	public ArrayList<Platform> getPlatforms() {
 		return platforms;
 	}
 
-	public void setPlatforms(ArrayList<GameObject> platforms) {
+	public void setPlatforms(ArrayList<Platform> platforms) {
 		this.platforms = platforms;
 	}
 
@@ -255,7 +255,7 @@ public class FileReader {
 					line.add(FileReader.AIR_STRING);
 				} else if (s.getClass().equals(new Hero(0, 0, 5).getClass())) {
 					line.add(FileReader.HERO_STRING);
-				} else if (s.getClass().equals(new Platform(0,0).getClass())) {
+				} else if (s.getClass().equals(new Platform(0,0, false).getClass()) && !((Platform) s).isLava()) {
 					line.add(FileReader.PLATFORM_STRING);
 				} else if (s.getClass().equals(new LeftRightEnemy(0,0,5).getClass())) {
 					line.add(FileReader.BADDIE_STRING);
@@ -265,7 +265,7 @@ public class FileReader {
 				}
 				else if (s.getClass().equals(new Tracker(0,0,5,new Hero(0,0,5)).getClass())) {
 					line.add(FileReader.TRACKER_STRING);
-				}else if (s.getClass().equals(new Lava(0,0).getClass())) {
+				}else if (s.getClass().equals(new Platform(0,0, true).getClass()) && ((Platform) s).isLava()) {
 					line.add(FileReader.LAVA_STRING);
 				}else {
 					throw new InvalidLevelFormatException("File of gameobjects is not correctly set up");

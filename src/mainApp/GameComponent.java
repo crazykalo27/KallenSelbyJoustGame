@@ -40,7 +40,7 @@ public class GameComponent extends JComponent implements KeyListener {
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 	private ArrayList<Egg> eggs = new ArrayList<Egg>();
 	private HashMap<Egg, Timer> times = new HashMap<Egg, Timer>();
-	private ArrayList<GameObject> platforms = new ArrayList<GameObject>();
+	private ArrayList<Platform> platforms = new ArrayList<Platform>();
 	private ArrayList<GameObject> player = new ArrayList<GameObject>();
 	private int points;
 	private int lives;
@@ -158,8 +158,11 @@ public class GameComponent extends JComponent implements KeyListener {
 		//TODO only have enemies turn into eggs if they are killed in the air
 		//TODO enemy and player bounce off eachother cases
 		
-		for (GameObject platform : this.platforms) {
+		for (Platform platform : this.platforms) {
 			if (hero.overlaps(platform)) {
+				if(platform.isLava()) {
+					heroLoseLife();
+				}
 				hero.collidewith(platform);
 			}
 
@@ -185,12 +188,7 @@ public class GameComponent extends JComponent implements KeyListener {
 				if (joustResult == 2) {
 					enemy.markForRemoval();
 				} else if (joustResult == 0) {
-					this.lives--;
-					if (this.lives == 0) {
-						gameOver = true;
-					}
-					hero.setXCent(100);
-					hero.setYCent(10);
+					heroLoseLife();
 				} else {
 					int direction = (int) Math.signum(enemy.getXCent() - hero.getXCent());
 					hero.setXVelocity(-direction * bounceStrength);
@@ -208,6 +206,15 @@ public class GameComponent extends JComponent implements KeyListener {
 			}
 		}
 
+	}
+	
+	public void heroLoseLife() {
+		this.lives--;
+		if (this.lives == 0) {
+			gameOver = true;
+		}
+		hero.setXCent(100);
+		hero.setYCent(10);
 	}
 
 	public void addGameObject(GameObject gameObject) {
@@ -336,11 +343,11 @@ public class GameComponent extends JComponent implements KeyListener {
 		this.enemies = enemies;
 	}
 
-	public ArrayList<GameObject> getPlatforms() {
+	public ArrayList<Platform> getPlatforms() {
 		return platforms;
 	}
 
-	public void setPlatforms(ArrayList<GameObject> platforms) {
+	public void setPlatforms(ArrayList<Platform> platforms) {
 		this.platforms = platforms;
 	}
 
