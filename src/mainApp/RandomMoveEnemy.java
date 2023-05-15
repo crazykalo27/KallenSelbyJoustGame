@@ -19,6 +19,7 @@ public class RandomMoveEnemy extends Enemy {
 	public RandomMoveEnemy(double xCent, double yCent, double speed) {
 		super(xCent, yCent, speed);
 		this.setHasGravity(false);
+		this.setSpeed(this.getSpeed()*.75);
 	}
 	
 	@Override
