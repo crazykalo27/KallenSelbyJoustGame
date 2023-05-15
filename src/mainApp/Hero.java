@@ -29,8 +29,7 @@ import java.awt.geom.Rectangle2D;
  */
 public class Hero extends MoveableObject {
 
-	private static final int WIDTH = 75;
-	private static final int HEIGHT = 75;
+	private static final double SCALER = .75;
 	
 	private boolean rightKeyHeld;
 	private boolean leftKeyHeld;
@@ -43,8 +42,8 @@ public class Hero extends MoveableObject {
 		this.rightKeyHeld = false;
 		this.leftKeyHeld = false;
 		this.upKeyHeld = false;
-		this.setWidth(WIDTH);
-		this.setHeight(HEIGHT);
+		this.setWidth(this.getWidth()*SCALER);
+		this.setHeight(this.getHeight()*SCALER);
 	}
 
 	public void drawOn(Graphics2D g2) {

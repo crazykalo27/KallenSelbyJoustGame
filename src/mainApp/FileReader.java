@@ -33,7 +33,8 @@ public class FileReader {
 	private static final String ENEMY_STRING = "e";
 	private static final String TRACKER_STRING = "t";
 	private static final String LAVA_STRING = "l";
-	private static final int COORDINATE_SCALE = 100;
+	private static final int COORDINATE_SCALE = 50;
+
 	
 	private ArrayList<Enemy> bad = new ArrayList<Enemy>();
 	private ArrayList<GameObject> platforms = new ArrayList<GameObject>();
