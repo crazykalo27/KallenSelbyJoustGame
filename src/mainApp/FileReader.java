@@ -32,6 +32,7 @@ public class FileReader {
 	private static final String BADDIE_STRING = "b";
 	private static final String ENEMY_STRING = "e";
 	private static final String TRACKER_STRING = "t";
+	private static final String LAVA_STRING = "l";
 	private static final int COORDINATE_SCALE = 100;
 	
 	private ArrayList<Enemy> bad = new ArrayList<Enemy>();
@@ -194,7 +195,12 @@ public class FileReader {
 					loc = ans.indexOf(placeHolder);
 					locb = bad.indexOf(placeHolder);
 					
+				}else if (change.get(i).get(j).equals(FileReader.LAVA_STRING)) {
+					Lava temp = new Lava(x,y);
+					ans.add(temp);
+					platforms.add(temp);
 				}else {
+					
 					throw new InvalidLevelFormatException("Text file to load a level is not in the proper format");
 				}
 			}
@@ -258,6 +264,8 @@ public class FileReader {
 				}
 				else if (s.getClass().equals(new Tracker(0,0,5,new Hero(0,0,5)).getClass())) {
 					line.add(FileReader.TRACKER_STRING);
+				}else if (s.getClass().equals(new Lava(0,0).getClass())) {
+					line.add(FileReader.LAVA_STRING);
 				}else {
 					throw new InvalidLevelFormatException("File of gameobjects is not correctly set up");
 

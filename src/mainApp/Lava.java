@@ -4,21 +4,16 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 
-/**
- * Class: Platform
- * @author Team 303
- * <br>Purpose: Class for a stationary platform in game.
- * <br>Restrictions: None
- */
-public class Platform extends GameObject {
+public class Lava extends Platform{
 	private final int WIDTH = 100;
 	private final int HEIGHT = 100;
-	private final Color COLOR = Color.ORANGE;
-	
-	public Platform(double xCord,double yCord) {
+	private final Color COLOR = Color.RED;
+
+	public Lava(double xCord, double yCord) {
 		super(xCord, yCord);
 	}
 	
+	@Override
 	public void drawOn(Graphics2D g2) {
 		g2.translate(this.getXCent(), this.getYCent());
 		g2.setColor(this.COLOR);
@@ -30,5 +25,5 @@ public class Platform extends GameObject {
 		g2.translate(-this.getXCent(), -this.getYCent());
 		
 	}
-	
+
 }
