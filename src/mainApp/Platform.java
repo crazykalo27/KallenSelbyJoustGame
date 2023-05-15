@@ -23,6 +23,9 @@ public class Platform extends GameObject {
 		WIDTH = this.getWidth();
 		HEIGHT = this.getHeight();
 		this.isLava = isLava;
+		if(isLava) {
+			HEIGHT = HEIGHT*.8;
+		}
 	}
 	
 	public void drawOn(Graphics2D g2) {
