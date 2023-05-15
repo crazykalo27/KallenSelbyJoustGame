@@ -37,7 +37,7 @@ public class FileReader {
 
 	
 	private ArrayList<Enemy> bad = new ArrayList<Enemy>();
-	private ArrayList<GameObject> platforms = new ArrayList<GameObject>();
+	private ArrayList<Platform> platforms = new ArrayList<Platform>();
 	private ArrayList<GameObject> player = new ArrayList<GameObject>();
 	FileReader() {
 
@@ -226,11 +226,11 @@ public class FileReader {
 		this.bad = bad;
 	}
 
-	public ArrayList<GameObject> getPlatforms() {
+	public ArrayList<Platform> getPlatforms() {
 		return platforms;
 	}
 
-	public void setPlatforms(ArrayList<GameObject> platforms) {
+	public void setPlatforms(ArrayList<Platform> platforms) {
 		this.platforms = platforms;
 	}
 
