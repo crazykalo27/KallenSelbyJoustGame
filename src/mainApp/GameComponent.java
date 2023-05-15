@@ -125,6 +125,11 @@ public class GameComponent extends JComponent implements KeyListener {
 		}
 		this.enemies.removeAll(enemiesToRemove);
 		this.GameObjects.removeAll(enemiesToRemove);
+		
+		if(enemies.size() == 0) {
+			loadLevel(levelNum + 1);
+		}
+		
 		handleColisions();
 	}
 	
