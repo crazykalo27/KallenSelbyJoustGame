@@ -24,10 +24,10 @@ public class GameViewer {
 
 	public void viewerMain() {
 		final String frameTitle = "CSSE220 Final Project - Joust";
-		final int frameWidth = 1000;
-		final int frameHeight = 600;
+		final int frameWidth = 800;
+		final int frameHeight = 850;
 		final int frameXLoc = 100;
-		final int frameYLoc = 200;
+		final int frameYLoc = 100;
 		
 		JFrame frame = new JFrame();
 		frame.setTitle(frameTitle);
