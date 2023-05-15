@@ -91,9 +91,9 @@ public class Hero extends MoveableObject {
 		double otherw = overlap.getWidth();
 		if(otherh>=otherw) {
 			// TODO: Fix getting caught on ceiling
+			//this.setXVelocity(0);
 			int direction = (int) Math.signum(other.getXCent() - this.getXCent());
 			this.move(-direction*otherw, 0);
-			this.setXVelocity(0);
 		} else {
 			this.move(0, -Math.signum(this.getYVelocity())*otherh);
 			this.setYVelocity(0);
