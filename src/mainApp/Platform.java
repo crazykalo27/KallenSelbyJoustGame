@@ -16,6 +16,7 @@ public class Platform extends GameObject {
 	private final Color LAVA_COLOR = Color.RED;
 	private double WIDTH;
 	private double HEIGHT;
+	private double height;
 	private boolean isLava;
 	
 	public Platform(double xCord,double yCord, boolean isLava) {
@@ -25,6 +26,7 @@ public class Platform extends GameObject {
 		this.isLava = isLava;
 		if(isLava) {
 			HEIGHT = HEIGHT*.8;
+			this.setHeight(HEIGHT);
 		}
 	}
 	
