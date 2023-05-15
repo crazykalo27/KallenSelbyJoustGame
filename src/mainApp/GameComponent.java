@@ -161,7 +161,7 @@ public class GameComponent extends JComponent implements KeyListener {
 		for (Platform platform : this.platforms) {
 			if (hero.overlaps(platform)) {
 				if(platform.isLava()) {
-					heroLoseLife();
+					respawn();
 				}
 				hero.collidewith(platform);
 			}
@@ -188,7 +188,7 @@ public class GameComponent extends JComponent implements KeyListener {
 				if (joustResult == 2) {
 					enemy.markForRemoval();
 				} else if (joustResult == 0) {
-					heroLoseLife();
+					respawn();
 				} else {
 					int direction = (int) Math.signum(enemy.getXCent() - hero.getXCent());
 					hero.setXVelocity(-direction * bounceStrength);
@@ -208,7 +208,7 @@ public class GameComponent extends JComponent implements KeyListener {
 
 	}
 	
-	public void heroLoseLife() {
+	public void respawn() {
 		this.lives--;
 		if (this.lives == 0) {
 			gameOver = true;
