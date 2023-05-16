@@ -88,5 +88,9 @@ public class GameObject {
 	public boolean shouldBeRemoved() {
 		return this.shouldRemove;
 	}
+	
+	public double getDistance(double x, double y) {
+		return Math.sqrt(Math.pow(x - this.getXCent(), 2) + Math.pow(y - this.getYCent(), 2));
+	}
 
 }

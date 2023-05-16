@@ -168,7 +168,6 @@ public class GameComponent extends JComponent implements KeyListener {
 		
 		//TODO only have enemies turn into eggs if they are killed in the air
 		//TODO enemy and player bounce off eachother cases
-		int in = 0;
 		ArrayList<Platform> playerPlatformCollisions = new ArrayList<Platform>();
 		for (Platform platform : this.platforms) {
 			if (hero.overlaps(platform)) {
@@ -184,8 +183,8 @@ public class GameComponent extends JComponent implements KeyListener {
 					platform.SetCool(false);
 					this.lives++;
 				}
-				hero.collidewith(platform);
-				in++;
+				playerPlatformCollisions.add(platform);
+				//hero.collidewith(platform);
 			}
 
 			// causes enemies to collide with platforms
@@ -208,6 +207,18 @@ public class GameComponent extends JComponent implements KeyListener {
 				}
 			}
 
+		}
+		if (!playerPlatformCollisions.isEmpty()) {
+			Platform closestPlatform = playerPlatformCollisions.get(0);
+			double shortestDistance = Double.MAX_VALUE;
+			for (Platform platform : playerPlatformCollisions) {
+				double distance = platform.getDistance(hero.getXCent(), hero.getYCent());
+				if (distance < shortestDistance) {
+					shortestDistance = distance;
+					closestPlatform = platform;
+				}
+			}
+			hero.collidewith(closestPlatform);
 		}
 
 		int bounceStrength = 99999999;
