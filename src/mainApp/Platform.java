@@ -18,12 +18,15 @@ public class Platform extends GameObject {
 	private double HEIGHT;
 	private double height;
 	private boolean isLava;
+	private boolean isIce;
+
 	
-	public Platform(double xCord,double yCord, boolean isLava) {
+	public Platform(double xCord,double yCord, boolean isLava, boolean isIce) {
 		super(xCord, yCord);
 		WIDTH = this.getWidth();
 		HEIGHT = this.getHeight();
 		this.isLava = isLava;
+		this.isIce = isIce;
 		if(isLava) {
 			HEIGHT = HEIGHT*.8;
 			this.setHeight(HEIGHT);
@@ -35,6 +38,9 @@ public class Platform extends GameObject {
 		Color temp = DEFAULT_COLOR;
 		if(isLava) {
 			temp = LAVA_COLOR;
+		}
+		if(isIce) {
+			temp = Color.BLUE;
 		}
 		g2.setColor(temp);
 		//g2.translate(this.getXCent(), this.getYCent());
@@ -76,6 +82,11 @@ public class Platform extends GameObject {
 
 	public Color getLAVA_COLOR() {
 		return LAVA_COLOR;
+	}
+
+	public boolean isIce() {
+		// TODO Auto-generated method stub
+		return isIce;
 	}
 	
 }

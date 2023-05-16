@@ -171,6 +171,9 @@ public class GameComponent extends JComponent implements KeyListener {
 				if(platform.isLava()) {
 					respawn();
 				}
+				if(platform.isIce()) {
+					hero.addXVelocity(2*Math.signum(hero.getXVelocity()));
+				}
 				if(hero.overlaps(this.platforms.get(in+1))) {
 					hero.collidewith(this.platforms.get(in+1));
 					in++;
@@ -269,7 +272,7 @@ public class GameComponent extends JComponent implements KeyListener {
 
 		return null;
 	}
-
+	
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
