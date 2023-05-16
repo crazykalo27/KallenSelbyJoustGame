@@ -165,13 +165,19 @@ public class GameComponent extends JComponent implements KeyListener {
 		
 		//TODO only have enemies turn into eggs if they are killed in the air
 		//TODO enemy and player bounce off eachother cases
-		
+		int in = 0;
 		for (Platform platform : this.platforms) {
 			if (hero.overlaps(platform)) {
 				if(platform.isLava()) {
 					respawn();
 				}
+				if(hero.overlaps(this.platforms.get(in+1))) {
+					hero.collidewith(this.platforms.get(in+1));
+					in++;
+					break;
+				}
 				hero.collidewith(platform);
+				in++;
 			}
 
 			// causes enemies to collide with platforms
