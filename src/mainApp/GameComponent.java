@@ -45,6 +45,7 @@ public class GameComponent extends JComponent implements KeyListener {
 	private int points;
 	private int lives;
 	private boolean gameOver = false;
+	private static final String EGG_FILE = "Egg";
 
 	Random r;
 	private double xstart;
@@ -142,7 +143,7 @@ public class GameComponent extends JComponent implements KeyListener {
 	public void removeDeadEnemy(Enemy enemy, ArrayList<GameObject> enemiesToRemove) {
 		double xegg = enemy.getXCent();
 		double yegg = enemy.getYCent();
-		Egg egg = new Egg(xegg, yegg, enemy);
+		Egg egg = new Egg(xegg, yegg, enemy, GameComponent.EGG_FILE);
 		this.GameObjects.add(egg);
 		this.eggs.add(egg);
 

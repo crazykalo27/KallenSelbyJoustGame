@@ -19,8 +19,8 @@ public class LeftRightEnemy extends Enemy {
 	private int ticks;
 	private int waitNum;
 
-	public LeftRightEnemy(double xCent, double yCent, double speed) {
-		super(xCent, yCent, speed);
+	public LeftRightEnemy(double xCent, double yCent, double speed, String name) {
+		super(xCent, yCent, speed, name);
 		this.setHasGravity(false);
 		this.ticks = 0;
 		this.waitNum = r.nextInt(40, 90);
@@ -29,12 +29,13 @@ public class LeftRightEnemy extends Enemy {
 	}
 
 	public void drawOn(Graphics2D g2) {
-		g2.setColor(COL);
-		g2.translate(this.getXCent(), this.getYCent());
-		g2.fill(new Rectangle2D.Double(-this.getWidth() / 2, -this.getHeight() / 2, this.getWidth(), this.getHeight()));
-		g2.translate(-this.getXCent(), -this.getYCent());
-		
 		super.drawOn(g2);
+		
+//		g2.setColor(COL);
+//		g2.translate(this.getXCent(), this.getYCent());
+//		g2.fill(new Rectangle2D.Double(-this.getWidth() / 2, -this.getHeight() / 2, this.getWidth(), this.getHeight()));
+//		g2.translate(-this.getXCent(), -this.getYCent());
+		
 	}
 
 	@Override
@@ -60,6 +61,6 @@ public class LeftRightEnemy extends Enemy {
 	
 	@Override
 	public Enemy getCopy() {
-		return new LeftRightEnemy(this.getXCent(), this.getYCent(), super.getSpeed());
+		return new LeftRightEnemy(this.getXCent(), this.getYCent(), super.getSpeed(), super.getName());
 	}
 }

@@ -1,5 +1,14 @@
 package mainApp;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 /**
  * Class: MoveableObject
  * @author Team 303
@@ -16,15 +25,47 @@ public class MoveableObject extends GameObject {
 	private double yVelocity;
 	private boolean hasGravity;
 	private boolean hasFriction;
+	private String name;
 	
-	public MoveableObject(double xCent, double yCent) {
+	public MoveableObject(double xCent, double yCent, String name) {
 		super(xCent, yCent);
 		this.setYVelocity(0);
 		this.setYVelocity(0);
 		this.hasGravity = true;
 		this.hasFriction = true;
+		this.name = name;
 	}
 	
+	@Override
+	public void drawOn(Graphics2D g2) {
+		//un comment to see bounding box
+//		g2.setColor(Color.blue);
+//		g2.translate(this.getXCent(), this.getYCent());
+//		g2.fill(new Rectangle2D.Double(-this.getWidth()/2,-this.getHeight()/2,this.getWidth(),this.getHeight()));
+//		g2.translate(-this.getXCent(), -this.getYCent());
+		
+		String fileName = "images/" + name;
+		
+		fileName += getDir() ? "Left" : "Right";
+		fileName += ".PNG";
+		BufferedImage img;
+		try {
+			img = ImageIO.read(new File(fileName));
+			g2.drawImage(img, (int) (this.getXCent()-(this.getWidth()/2)), (int) (this.getYCent()-(this.getHeight()/2)), (int) this.getHeight(), (int) this.getWidth(), null);
+		} catch (IOException e) {
+		}
+		
+		super.drawOn(g2);
+	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public boolean isHasFriction() {
 		return hasFriction;
 	}
@@ -83,6 +124,13 @@ public class MoveableObject extends GameObject {
 	
 	public void addYVelocity(double amount) {
 		this.setYVelocity(this.getYVelocity() + amount);
+	}
+	
+	public boolean getDir() {
+		if(getXVelocity() >= 0) {
+			return false;
+		}
+		return true;
 	}
 
 }

@@ -19,8 +19,8 @@ public class Tracker extends Enemy{
 	private static final int HEIGHT = 50;
 	
 
-	public Tracker(double xCent, double yCent, double speed, GameObject hero) {
-		super(xCent,yCent, speed);
+	public Tracker(double xCent, double yCent, double speed, GameObject hero, String name) {
+		super(xCent,yCent, speed, name);
 		this.hero = (Hero) hero;
 		this.setWidth(WIDTH);
 		this.setHeight(HEIGHT);
@@ -51,7 +51,7 @@ public class Tracker extends Enemy{
 	
 	@Override
 	public Enemy getCopy() {
-		return new Tracker(this.getXCent(), this.getYCent(), this.getSpeed(), this.hero);
+		return new Tracker(this.getXCent(), this.getYCent(), this.getSpeed(), this.hero, super.getName());
 	}
 }
 
