@@ -127,7 +127,7 @@ public class GameComponent extends JComponent implements KeyListener {
 		this.GameObjects.removeAll(enemiesToRemove);
 		
 		//moves to next level when all enemies are dead
-		if(enemies.size() == 0) {
+		if(this.enemies.size() == 0 && this.eggs.size() == 0) {
 			loadLevel(levelNum + 1);
 		}
 		
