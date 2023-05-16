@@ -233,6 +233,11 @@ public class GameComponent extends JComponent implements KeyListener {
 
 	}
 	
+	private double getXVelocity() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 	public void respawn() {
 		this.lives--;
 		if (this.lives == 0) {
