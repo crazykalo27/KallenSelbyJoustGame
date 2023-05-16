@@ -179,6 +179,9 @@ public class GameComponent extends JComponent implements KeyListener {
 				}
 				if(platform.isSlime()) {
 					hero.setXVelocity(0);
+				}if(platform.isCool()) {
+					platform.SetCool(false);
+					this.lives++;
 				}
 				if(hero.overlaps(this.platforms.get(in+1))) {
 					hero.collidewith(this.platforms.get(in+1));

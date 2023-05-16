@@ -10,7 +10,7 @@ public class MoveableObject extends GameObject {
 
 	private static final double DEFAULT_MAX_SPEED = 10;
 	public static final double GRAVITY_STRENGTH = .5;
-	private static final double FRICTION_STRENGTH = .75;
+	private static final double FRICTION_STRENGTH = .5;
 	
 	private double xVelocity;
 	private double yVelocity;

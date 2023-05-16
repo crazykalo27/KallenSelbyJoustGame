@@ -20,15 +20,17 @@ public class Platform extends GameObject {
 	private boolean isLava;
 	private boolean isIce;
 	private boolean isSlime;
+	private boolean isCool;
 
 	
-	public Platform(double xCord,double yCord, boolean isLava, boolean isIce,boolean isSlime) {
+	public Platform(double xCord,double yCord, boolean isLava, boolean isIce,boolean isSlime,boolean isCool) {
 		super(xCord, yCord);
 		WIDTH = this.getWidth();
 		HEIGHT = this.getHeight();
 		this.isLava = isLava;
 		this.isIce = isIce;
 		this.isSlime = isSlime;
+		this.isCool = isCool;
 		if(isLava) {
 			HEIGHT = HEIGHT*.8;
 			this.setHeight(HEIGHT);
@@ -46,6 +48,9 @@ public class Platform extends GameObject {
 		}
 		if(isSlime) {
 			temp = Color.GREEN;
+		}
+		if(isCool) {
+			temp = Color.PINK;
 		}
 		g2.setColor(temp);
 		//g2.translate(this.getXCent(), this.getYCent());
@@ -98,5 +103,10 @@ public class Platform extends GameObject {
 		// TODO Auto-generated method stub
 		return isSlime;
 	}
-	
+	public boolean isCool() {
+		return isCool;
+	}
+	public void SetCool(boolean isCool) {
+		this.isCool = isCool;
+	}
 }
