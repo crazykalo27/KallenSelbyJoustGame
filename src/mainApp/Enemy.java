@@ -7,8 +7,8 @@ public class Enemy extends MoveableObject{
 	
 	private double speed;
 
-	public Enemy(double xCent, double yCent, double speed) {
-		super(xCent, yCent);
+	public Enemy(double xCent, double yCent, double speed, String name) {
+		super(xCent, yCent, name);
 		
 		this.speed = speed;
 		
@@ -52,6 +52,7 @@ public class Enemy extends MoveableObject{
 	}
 	
 	public Enemy getCopy() {
-		return new Enemy(this.getXCent(), this.getYCent(), speed);
+		return new Enemy(this.getXCent(), this.getYCent(), speed, super.getName());
 	}
+	
 }

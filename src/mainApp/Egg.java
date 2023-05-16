@@ -1,19 +1,17 @@
 package mainApp;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 public class Egg extends Enemy {
-
-	private final Color COLOR = Color.gray;
-	// private static final int WIDTH = 100;
-	// private static final int HEIGHT = 100;
-	
 	private Enemy containedEnemy;
 
-	public Egg(double xCent, double yCent, Enemy containedEnemy) {
-		super(xCent, yCent, 0);
+	public Egg(double xCent, double yCent, Enemy containedEnemy, String name) {
+		super(xCent, yCent, 0, name);
 		this.setHasGravity(true);
 		this.setHeight(20);
 		this.setWidth(20);
@@ -27,11 +25,15 @@ public class Egg extends Enemy {
 
 	@Override
 	public void drawOn(Graphics2D g2) {
-		g2.setColor(COLOR);
-		g2.translate(this.getXCent(), this.getYCent());
-		g2.fill(new Rectangle2D.Double(-this.getWidth() / 2, -this.getHeight() / 2, this.getWidth(), this.getHeight()));
-		g2.translate(-this.getXCent(), -this.getYCent());
-		super.drawOn(g2);
+		String fileName = "images/" + super.getName();
+		
+		fileName += ".PNG";
+		BufferedImage img;
+		try {
+			img = ImageIO.read(new File(fileName));
+			g2.drawImage(img, (int) (this.getXCent()-(this.getWidth()/2)), (int) (this.getYCent()-(this.getHeight()/2)), (int) this.getHeight(), (int) this.getWidth(), null);
+		} catch (IOException e) {
+		}
 	}
 	
 

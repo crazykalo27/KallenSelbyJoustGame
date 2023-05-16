@@ -10,13 +10,7 @@ package mainApp;
  *    Hero h = new Hero(10, 10, 10);
  * </pre>
  */
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+
 import java.awt.geom.Rectangle2D;
 
 /**
@@ -34,21 +28,14 @@ public class Hero extends MoveableObject {
 	private boolean upKeyHeld;
 	private double speed;
 	
-	public Hero(int xCent, int yCent, double speed) {
-		super(xCent, yCent);
+	public Hero(int xCent, int yCent, double speed, String name) {
+		super(xCent, yCent, name);
 		this.speed = speed;
 		this.rightKeyHeld = false;
 		this.leftKeyHeld = false;
 		this.upKeyHeld = false;
 		this.setWidth(this.getWidth()*SCALER);
 		this.setHeight(this.getHeight()*SCALER);
-	}
-
-	public void drawOn(Graphics2D g2) {
-		g2.setColor(Color.BLACK);
-		g2.translate(this.getXCent(), this.getYCent());
-		g2.fill(new Rectangle2D.Double(-this.getWidth()/2,-this.getHeight()/2,this.getWidth(),this.getHeight()));
-		g2.translate(-this.getXCent(), -this.getYCent());
 	}
 	
 	@Override
