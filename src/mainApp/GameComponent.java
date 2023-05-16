@@ -68,8 +68,7 @@ public class GameComponent extends JComponent implements KeyListener {
 			g2.setFont(new Font("TimesRoman", Font.PLAIN, 80));
 			g2.drawString("GAME OVER", 250, 250);
 
-			g2.setFont(new Font("TimesRoman", Font.PLAIN, 40));
-			g2.drawString("Points: " + this.points + "  ||  Lives: " + this.lives, 300, 550);
+			drawScore(this.getWidth()/2 - 182, 40, g2);
 			return;
 		}
 		
@@ -108,9 +107,13 @@ public class GameComponent extends JComponent implements KeyListener {
 			} 
 		}*/
 
+		drawScore(this.getWidth()/2 - 182, 40, g2);
+	}
+	
+	public void drawScore(int x, int y, Graphics2D g2) {
 		g2.setColor(Color.black);
 		g2.setFont(new Font("TimesRoman", Font.PLAIN, 40));
-		g2.drawString("Points: " + this.points + "  ||  Lives: " + this.lives, 300, 550);
+		g2.drawString("Points: " + this.points + "  ||  Lives: " + this.lives, x, y);
 	}
 
 	public void updateObjects() {
