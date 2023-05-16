@@ -28,16 +28,6 @@ public class LeftRightEnemy extends Enemy {
 
 	}
 
-	public void drawOn(Graphics2D g2) {
-		super.drawOn(g2);
-		
-//		g2.setColor(COL);
-//		g2.translate(this.getXCent(), this.getYCent());
-//		g2.fill(new Rectangle2D.Double(-this.getWidth() / 2, -this.getHeight() / 2, this.getWidth(), this.getHeight()));
-//		g2.translate(-this.getXCent(), -this.getYCent());
-		
-	}
-
 	@Override
 	public void update() throws DeadException {
 		this.setXVelocity(Math.pow(super.getSpeed(), 2) * Math.signum(super.getSpeed()));

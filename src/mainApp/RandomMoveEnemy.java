@@ -31,28 +31,6 @@ public class RandomMoveEnemy extends Enemy {
 	}
 	
 	@Override
-	public void drawOn(Graphics2D g2) {
-		g2.setColor(COL);
-		g2.translate(this.getXCent(), this.getYCent());
-		g2.fill(new Rectangle2D.Double(-this.getWidth()/2,-this.getHeight()/2,this.getWidth(),this.getHeight()));
-		g2.translate(-this.getXCent(), -this.getYCent());
-		
-		String fileName = "images/" + super.getName();
-		
-		fileName += super.getDir() ? "Left" : "Right";
-		fileName += ".PNG";
-		BufferedImage img;
-		try {
-			img = ImageIO.read(new File(fileName));
-			g2.drawImage(img, (int) (this.getXCent()-(this.getWidth()/2)), (int) (this.getYCent()-(this.getHeight()/2)), (int) this.getHeight(), (int) this.getWidth(), null);
-		} catch (IOException e) {
-		}
-		
-		
-		super.drawOn(g2);
-	}
-	
-	@Override
 	public void update() throws DeadException {
 		if(this.shouldBeRemoved()) {
 			throw new DeadException("This RandomMoveEnemy is Dead!");
