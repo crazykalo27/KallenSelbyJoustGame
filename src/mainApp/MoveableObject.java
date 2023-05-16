@@ -25,6 +25,14 @@ public class MoveableObject extends GameObject {
 		this.hasFriction = true;
 	}
 	
+	public boolean isHasFriction() {
+		return hasFriction;
+	}
+
+	public void setHasFriction(boolean hasFriction) {
+		this.hasFriction = hasFriction;
+	}
+
 	public boolean isHasGravity() {
 		return hasGravity;
 	}

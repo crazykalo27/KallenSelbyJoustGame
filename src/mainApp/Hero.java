@@ -19,8 +19,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
 
-// TODO: Collisions with enemies
-
 /**
  * Class: Hero
  * @author Team 303
@@ -91,7 +89,7 @@ public class Hero extends MoveableObject {
 		double otherw = overlap.getWidth();
 		if(otherh>=otherw) {
 			// TODO: Fix getting caught on ceiling
-			//this.setXVelocity(0);
+			this.setXVelocity(0);
 			int direction = (int) Math.signum(other.getXCent() - this.getXCent());
 			this.move(-direction*otherw, 0);
 		} else {
