@@ -175,7 +175,7 @@ public class GameComponent extends JComponent implements KeyListener {
 					respawn();
 				}
 				if(platform.isIce()) {
-					hero.addXVelocity(2*Math.signum(hero.getXVelocity()));
+					hero.addXVelocity(5*Math.signum(hero.getXVelocity()));
 				}
 				if(platform.isSlime()) {
 					hero.setXVelocity(0);
