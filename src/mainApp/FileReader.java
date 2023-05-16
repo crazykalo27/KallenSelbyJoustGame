@@ -35,6 +35,7 @@ public class FileReader {
 	private static final String LAVA_STRING = "l";
 	private static final String ICE_STRING = "i";
 	private static final String SLIME_STRING = "s";
+	private static final String COOL_STRING = "c";
 	private static final int COORDINATE_SCALE = 50;
 
 	
@@ -173,7 +174,7 @@ public class FileReader {
 				if (change.get(i).get(j).equals(FileReader.AIR_STRING)) {
 					continue;
 				} else if (change.get(i).get(j).equals(FileReader.PLATFORM_STRING)) {
-					Platform temp = new Platform(x,y, false,false,false);
+					Platform temp = new Platform(x,y, false,false,false,false);
 					ans.add(temp);
 					platforms.add(temp);
 					
@@ -199,16 +200,20 @@ public class FileReader {
 					locb = bad.indexOf(placeHolder);
 					
 				}else if (change.get(i).get(j).equals(FileReader.LAVA_STRING)) {
-					Platform temp = new Platform(x,y, true,false,false);
+					Platform temp = new Platform(x,y, true,false,false,false);
 					ans.add(temp);
 					platforms.add(temp);
 					
 				}else if (change.get(i).get(j).equals(FileReader.ICE_STRING)) {
-					Platform temp = new Platform(x,y, false,true,false);
+					Platform temp = new Platform(x,y, false,true,false,false);
 					ans.add(temp);
 					platforms.add(temp);
 				}else if (change.get(i).get(j).equals(FileReader.SLIME_STRING)) {
-					Platform temp = new Platform(x,y, false,true,true);
+					Platform temp = new Platform(x,y, false,false,true,false);
+					ans.add(temp);
+					platforms.add(temp);
+				}else if (change.get(i).get(j).equals(FileReader.COOL_STRING)) {
+					Platform temp = new Platform(x,y, false,false,false,true);
 					ans.add(temp);
 					platforms.add(temp);
 				}
@@ -267,7 +272,7 @@ public class FileReader {
 					line.add(FileReader.AIR_STRING);
 				} else if (s.getClass().equals(new Hero(0, 0, 5).getClass())) {
 					line.add(FileReader.HERO_STRING);
-				} else if (s.getClass().equals(new Platform(0,0, false,false,false).getClass()) && !((Platform) s).isLava()) {
+				} else if (s.getClass().equals(new Platform(0,0, false,false,false,false).getClass()) && !((Platform) s).isLava()) {
 					line.add(FileReader.PLATFORM_STRING);
 				} else if (s.getClass().equals(new LeftRightEnemy(0,0,5).getClass())) {
 					line.add(FileReader.BADDIE_STRING);
@@ -277,12 +282,14 @@ public class FileReader {
 				}
 				else if (s.getClass().equals(new Tracker(0,0,5,new Hero(0,0,5)).getClass())) {
 					line.add(FileReader.TRACKER_STRING);
-				}else if (s.getClass().equals(new Platform(0,0, true,false,false).getClass()) && ((Platform) s).isLava()) {
+				}else if (s.getClass().equals(new Platform(0,0, true,false,false,false).getClass()) && ((Platform) s).isLava()) {
 					line.add(FileReader.LAVA_STRING);
-				}else if (s.getClass().equals(new Platform(0,0, false,true,false).getClass()) && ((Platform) s).isIce()) {
+				}else if (s.getClass().equals(new Platform(0,0, false,true,false,false).getClass()) && ((Platform) s).isIce()) {
 					line.add(FileReader.ICE_STRING);
-				}else if (s.getClass().equals(new Platform(0,0, false,false,true).getClass()) && ((Platform) s).isIce()) {
+				}else if (s.getClass().equals(new Platform(0,0, false,false,true,false).getClass()) && ((Platform) s).isSlime()) {
 					line.add(FileReader.SLIME_STRING);
+				}else if (s.getClass().equals(new Platform(0,0, false,false,false,true).getClass()) && ((Platform) s).isCool()) {
+					line.add(FileReader.COOL_STRING);
 				}
 					else {
 					throw new InvalidLevelFormatException("File of gameobjects is not correctly set up");
