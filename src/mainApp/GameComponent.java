@@ -131,7 +131,9 @@ public class GameComponent extends JComponent implements KeyListener {
 		
 		//moves to next level when all enemies are dead
 		if(this.enemies.size() == 0 && this.eggs.size() == 0) {
-			loadLevel(levelNum + 1);
+			if(!(levelNum == 10)) {
+				loadLevel(levelNum + 1);
+			}
 		}
 		
 		handleColisions();
@@ -281,6 +283,7 @@ public class GameComponent extends JComponent implements KeyListener {
 			this.hero = (Hero) this.player.get(0);
 			this.xstart = this.hero.getXCent();
 			this.ystart = this.hero.getYCent();
+			this.levelNum = levelNumberToLoad;
 		}
 	}
 
