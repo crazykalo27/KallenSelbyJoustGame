@@ -1,7 +1,7 @@
 oooooooooooooooo
 o..............o
 o..............o
-ob...........b.o
+o............b.o
 oooooo...llllooo
 o..............o
 o........b.....o
@@ -11,6 +11,6 @@ o..............o
 oooo......oo...o
 oob............o
 oooooooooooo...o
-o............b.o
+o..............o
 o.h.........oooo
 ooooooooollooooo
