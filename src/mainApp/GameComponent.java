@@ -174,6 +174,9 @@ public class GameComponent extends JComponent implements KeyListener {
 				if(platform.isIce()) {
 					hero.addXVelocity(2*Math.signum(hero.getXVelocity()));
 				}
+				if(platform.isSlime()) {
+					hero.setXVelocity(0);
+				}
 				if(hero.overlaps(this.platforms.get(in+1))) {
 					hero.collidewith(this.platforms.get(in+1));
 					in++;
