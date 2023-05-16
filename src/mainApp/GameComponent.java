@@ -66,7 +66,7 @@ public class GameComponent extends JComponent implements KeyListener {
 		if (gameOver == true) {
 			g2.setColor(Color.black);
 			g2.setFont(new Font("TimesRoman", Font.PLAIN, 80));
-			g2.drawString("GAME OVER", 250, 250);
+			g2.drawString("GAME OVER", 150, 250);
 
 			drawScore(this.getWidth()/2 - 182, 40, g2);
 			return;
