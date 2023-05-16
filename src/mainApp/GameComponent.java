@@ -319,7 +319,9 @@ public class GameComponent extends JComponent implements KeyListener {
 		boolean shouldUpdateLevel = false;
 
 		if (e.getKeyCode() == KeyEvent.VK_U) {
-			levelNum++;
+			if(!(levelNum == 10)) {
+				levelNum++;
+			}
 			this.loadLevel(this.levelNum);
 		} else if (e.getKeyCode() == KeyEvent.VK_D) {
 			if (this.levelNum > 1) {
