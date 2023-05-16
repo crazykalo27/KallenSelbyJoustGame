@@ -81,19 +81,25 @@ public class Hero extends MoveableObject {
 		this.upKeyHeld = state;
 	}
 
-	public void collidewith(GameObject other) {		
+	public void collidewith(GameObject other) {
+		double previousX = this.getXCent() - this.getXVelocity();
+		double previousY = this.getYCent() - this.getYVelocity();
+		double previousXDist = Math.abs(other.getXCent() - previousX);
+		double previousYDist = Math.abs(other.getYCent() - previousY);
 		Rectangle2D Recth = this.getBoundingBox();
 		Rectangle2D Recto = other.getBoundingBox();
 		Rectangle2D overlap = Recth.createIntersection(Recto);
-		double otherh = overlap.getHeight();
-		double otherw = overlap.getWidth();
-		if(otherh>=otherw) {
+		double overlapHeight = overlap.getHeight();
+		double overlapWidth = overlap.getWidth();
+		if (previousYDist == previousXDist) {
+			return;
+		} else if (previousYDist < previousXDist) {
 			// TODO: Fix getting caught on ceiling
 			this.setXVelocity(0);
 			int direction = (int) Math.signum(other.getXCent() - this.getXCent());
-			this.move(-direction*otherw, 0);
+			this.move(-direction*overlapWidth, 0);
 		} else {
-			this.move(0, -Math.signum(this.getYVelocity())*otherh);
+			this.move(0, -Math.signum(this.getYVelocity())*overlapHeight);
 			this.setYVelocity(0);
 		}
 		
