@@ -49,7 +49,12 @@ public class FileReader {
 	private ArrayList<Enemy> bad = new ArrayList<Enemy>();
 	private ArrayList<Platform> platforms = new ArrayList<Platform>();
 	private ArrayList<GameObject> player = new ArrayList<GameObject>();
+	private Hero hero;
 	FileReader() {
+	}
+	
+	public Hero getHero() {
+		return this.hero;
 	}
 	
 	public void setTutorial(boolean bruh){
@@ -193,6 +198,8 @@ public class FileReader {
 					ans.add(temp);
 					heroLoc = ans.indexOf(temp);
 					player.add(temp);
+					System.out.println("NEW HERO " + x + " " + y);
+					hero = temp;
 				}else if (change.get(i).get(j).equals(FileReader.GHOST_STRING)) {
 					LeftRightEnemy temp;
 					if(tutorial) {
