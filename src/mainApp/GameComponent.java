@@ -159,7 +159,7 @@ public class GameComponent extends JComponent implements KeyListener {
 			
 		this.times.put(egg, time);
 			
-		this.points += this.POINTS_FOR_ENEMY_KILL;
+		this.points += GameComponent.POINTS_FOR_ENEMY_KILL;
 		enemiesToRemove.add(enemy);
 	}
 
@@ -183,6 +183,7 @@ public class GameComponent extends JComponent implements KeyListener {
 				if(platform.isSlime()) {
 					hero.setXVelocity(0);
 				}if(platform.isCool()) {
+					platform.setName(0);
 					platform.SetCool(false);
 					this.lives++;
 				}
