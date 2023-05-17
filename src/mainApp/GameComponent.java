@@ -165,6 +165,8 @@ public class GameComponent extends JComponent implements KeyListener {
 			}
 			this.enemies.removeAll(enemiesToRemove);
 			this.GameObjects.removeAll(enemiesToRemove);
+			handleColisions();
+		}
 
 		// moves to next level when all enemies are dead
 		if (this.enemies.size() == 0 && this.eggs.size() == 0) {
@@ -173,9 +175,7 @@ public class GameComponent extends JComponent implements KeyListener {
 				this.pointsLoss = 0;
 				loadLevel(levelNum + 1);
 			}
-			handleColisions();
 		}
-	}
 	}
 
 	public void removeDeadEnemy(Enemy enemy, ArrayList<GameObject> enemiesToRemove) {
