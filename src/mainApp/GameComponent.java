@@ -34,6 +34,10 @@ import javax.swing.JPanel;
  *         </pre>
  */
 public class GameComponent extends JComponent implements KeyListener {
+	
+	//TODO fix hero teleporting through shit
+	//TODO enemies colliding with eachother
+	//TODO fix lava respawning issue
 
 	public static final int POINTS_FOR_ENEMY_KILL = 750;
 	public static final int POINTS_FOR_EGG = 500;
@@ -64,6 +68,8 @@ public class GameComponent extends JComponent implements KeyListener {
 		this.fileReader = new FileReader();
 		points = 0;
 		lives = 4;
+		this.xstart = 0;
+		this.ystart = 0;
 		r = new Random();
 		this.setTutorial(true);
 	}
@@ -194,8 +200,6 @@ public class GameComponent extends JComponent implements KeyListener {
 
 	public void handleColisions() {
 
-		// TODO only have enemies turn into eggs if they are killed in the air
-		// TODO enemy and player bounce off eachother cases
 		ArrayList<Platform> playerPlatformCollisions = new ArrayList<Platform>();
 
 		for (int p = 0; p < this.platforms.size(); p++) {
@@ -278,11 +282,6 @@ public class GameComponent extends JComponent implements KeyListener {
 			}
 		}
 
-	}
-
-	private double getXVelocity() {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 	public void respawn() {
