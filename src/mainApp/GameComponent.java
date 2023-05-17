@@ -150,25 +150,27 @@ public class GameComponent extends JComponent implements KeyListener {
 	public void updateObjects() {
 		ArrayList<GameObject> enemiesToRemove = new ArrayList<GameObject>();
 
-		for (GameObject gO : new ArrayList<GameObject>(this.GameObjects)) {
-			try {
-				gO.update();
-			} catch (DeadException e) { // removes the enemy
-				removeDeadEnemy((Enemy) gO, enemiesToRemove);
+		if (!this.gameOver) {
+			for (GameObject gO : new ArrayList<GameObject>(this.GameObjects)) {
+				try {
+					gO.update();
+				} catch (DeadException e) { // removes the enemy
+					removeDeadEnemy((Enemy) gO, enemiesToRemove);
+				}
 			}
-		}
-		this.enemies.removeAll(enemiesToRemove);
-		this.GameObjects.removeAll(enemiesToRemove);
+			this.enemies.removeAll(enemiesToRemove);
+			this.GameObjects.removeAll(enemiesToRemove);
 
 		// moves to next level when all enemies are dead
-		if (this.enemies.size() == 0 && this.eggs.size() == 0) {
-			if (!(levelNum == 10)) {
-				this.setTutorial(false);
-				loadLevel(levelNum + 1);
+			if (this.enemies.size() == 0 && this.eggs.size() == 0) {
+				if (!(levelNum == 10)) {
+					this.setTutorial(false);
+					loadLevel(levelNum + 1);
+				}
 			}
-		}
 
-		handleColisions();
+			handleColisions();
+		}
 	}
 
 	public void removeDeadEnemy(Enemy enemy, ArrayList<GameObject> enemiesToRemove) {
@@ -294,7 +296,11 @@ public class GameComponent extends JComponent implements KeyListener {
 			this.setTutorial(false);
 			gameOver = true;
 		} else {
-			loadLevel(this.levelNum);
+			//loadLevel(this.levelNum);
+			this.hero.setXCent(this.xstart);
+			this.hero.setYCent(this.ystart);
+			this.hero.setXVelocity(0);
+			this.hero.setYVelocity(0);
 		}
 	}
 
