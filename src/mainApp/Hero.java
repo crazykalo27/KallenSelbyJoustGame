@@ -28,6 +28,9 @@ public class Hero extends MoveableObject {
 	private boolean upKeyHeld;
 	private double speed;
 	
+	private double previousXPos;
+	private double previousYPos;
+	
 	public Hero(int xCent, int yCent, double speed, String name) {
 		super(xCent, yCent, name);
 		this.speed = speed;
@@ -36,10 +39,13 @@ public class Hero extends MoveableObject {
 		this.upKeyHeld = false;
 		this.setWidth(this.getWidth()*SCALER);
 		this.setHeight(this.getHeight()*SCALER);
+		this.previousXPos = 0;
+		this.previousYPos = 0;
 	}
 	
 	@Override
 	public void update() throws DeadException {
+		updatePreviousPosition();
 		if (this.rightKeyHeld) {
 			this.addXVelocity(this.speed);
 		}
@@ -69,29 +75,31 @@ public class Hero extends MoveableObject {
 	}
 
 	public void collidewith(GameObject other) {
-		double previousX = this.getXCent() - this.getXVelocity();
-		double previousY = this.getYCent() - this.getYVelocity();
-		double previousXDist = Math.abs(other.getXCent() - previousX);
-		double previousYDist = Math.abs(other.getYCent() - previousY);
+		double previousXDist = other.getXCent() - this.previousXPos;
+		double previousYDist = other.getYCent() - this.previousYPos;
 		Rectangle2D Recth = this.getBoundingBox();
 		Rectangle2D Recto = other.getBoundingBox();
 		Rectangle2D overlap = Recth.createIntersection(Recto);
 		double overlapHeight = overlap.getHeight();
 		double overlapWidth = overlap.getWidth();
-		if (previousYDist == previousXDist) {
+		if (Math.abs(previousYDist) == Math.abs(previousXDist)) {
 			return;
-		} else if (previousYDist < previousXDist) {
-			// TODO: Fix getting caught on ceiling
+		} else if (Math.abs(previousYDist) < Math.abs(previousXDist)) {
 			this.setXVelocity(0);
-			int direction = (int) Math.signum(other.getXCent() - this.getXCent());
+			double direction = Math.signum(other.getXCent() - this.getXCent());
 			this.move(-direction*overlapWidth, 0);
+			updatePreviousPosition();
 		} else {
-			this.move(0, -Math.signum(this.getYVelocity())*overlapHeight);
+			this.move(0, -Math.signum(previousYDist)*overlapHeight);
 			this.setYVelocity(0);
+			updatePreviousPosition();
 		}
-		
 	}
-
+	
+	private void updatePreviousPosition() {
+		this.previousXPos = this.getXCent();
+		this.previousYPos = this.getYCent();
+	}
 	
 	// 0 = Enemy higher, player dies
 	// 1 = Approximately even, bounce off
