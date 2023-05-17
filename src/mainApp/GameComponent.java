@@ -58,6 +58,7 @@ public class GameComponent extends JComponent implements KeyListener {
 	private static final String EGG_FILE = "Egg";
 	private boolean tutorial;
 	private int pointsLoss;
+	public static final int NUM_LEVELS = 11;
 
 	Random r;
 	private double xstart;
@@ -166,7 +167,7 @@ public class GameComponent extends JComponent implements KeyListener {
 
 		// moves to next level when all enemies are dead
 		if (this.enemies.size() == 0 && this.eggs.size() == 0) {
-			if (!(levelNum == 10)) {
+			if (!(levelNum == GameComponent.NUM_LEVELS)) {
 				this.setTutorial(false);
 				this.pointsLoss = 0;
 				loadLevel(levelNum + 1);
@@ -322,7 +323,10 @@ public class GameComponent extends JComponent implements KeyListener {
 			this.enemies = this.fileReader.getBad();
 			this.platforms = this.fileReader.getPlatforms();
 			this.player = this.fileReader.getPlayer();
-			this.hero = (Hero) this.player.get(0);
+			//this.hero = (Hero) this.player.get(0);
+			this.hero = this.fileReader.getHero();
+			System.out.println(this.hero.getXCent() + " " + this.hero.getYCent());
+			//this.hero.move(this.hero.getXCent(), this.hero.getYCent());
 			this.xstart = this.hero.getXCent();
 			this.ystart = this.hero.getYCent();
 			this.levelNum = levelNumberToLoad;
@@ -362,9 +366,11 @@ public class GameComponent extends JComponent implements KeyListener {
 
 		if (e.getKeyCode() == KeyEvent.VK_U) {
 			this.pointsLoss = 0;
-			if (!(levelNum == 10)) {
+			if (!(levelNum == GameComponent.NUM_LEVELS)) {
 				this.setTutorial(false);
-				levelNum++;
+				if(levelNum < GameComponent.NUM_LEVELS) {
+					levelNum++;
+				}
 			}
 			this.loadLevel(this.levelNum);
 		} else if (e.getKeyCode() == KeyEvent.VK_D) {
