@@ -69,7 +69,7 @@ public class GameComponent extends JComponent implements KeyListener {
 			g2.setFont(new Font("TimesRoman", Font.PLAIN, 80));
 			g2.drawString("GAME OVER", 150, 250);
 
-			drawScore(this.getWidth() / 2 - 182, 40, g2);
+			drawScore(this.getWidth() / 2 - 182, 32, g2);
 			return;
 		}
 
@@ -77,12 +77,15 @@ public class GameComponent extends JComponent implements KeyListener {
 			gO.drawOn(g2);
 		}
 
-		drawScore(this.getWidth() / 2 - 182, 40, g2);
+		drawScore(this.getWidth() / 2 - 182, 32, g2);
 	}
 
 	public void drawScore(int x, int y, Graphics2D g2) {
 		g2.setColor(Color.black);
-		g2.setFont(new Font("TimesRoman", Font.PLAIN, 40));
+		g2.fillRect(100, y - 38, 550, 42);
+
+		g2.setColor(Color.white);
+		g2.setFont(new Font("TimesRoman", Font.PLAIN, 35));
 		g2.drawString("Points: " + this.points + "  ||  Lives: " + this.lives, x, y);
 	}
 
@@ -141,12 +144,11 @@ public class GameComponent extends JComponent implements KeyListener {
 		// TODO only have enemies turn into eggs if they are killed in the air
 		// TODO enemy and player bounce off eachother cases
 		ArrayList<Platform> playerPlatformCollisions = new ArrayList<Platform>();
-		
-		
-		for(int p = 0; p < this.platforms.size(); p++) {
+
+		for (int p = 0; p < this.platforms.size(); p++) {
 			Platform temp = this.platforms.get(p);
-			if(hero.overlaps(temp)) {
-				if(temp.isLava()) {
+			if (hero.overlaps(temp)) {
+				if (temp.isLava()) {
 					respawn();
 				}
 				if (temp.isIce()) {
@@ -162,9 +164,9 @@ public class GameComponent extends JComponent implements KeyListener {
 				}
 				playerPlatformCollisions.add(temp);
 			}
-			
-			for(int e = 0; e < this.enemies.size(); e++) {
-				if(this.enemies.get(e).overlaps(temp)) {
+
+			for (int e = 0; e < this.enemies.size(); e++) {
+				if (this.enemies.get(e).overlaps(temp)) {
 					this.enemies.get(e).collidewith(temp);
 				}
 			}
@@ -182,7 +184,7 @@ public class GameComponent extends JComponent implements KeyListener {
 				}
 			}
 		}
-		
+
 		if (!playerPlatformCollisions.isEmpty()) {
 			Platform closestPlatform = playerPlatformCollisions.get(0);
 			double shortestDistance = Double.MAX_VALUE;
@@ -197,8 +199,8 @@ public class GameComponent extends JComponent implements KeyListener {
 		}
 
 		int bounceStrength = 99999999;
-		
-		for(int e = 0; e < this.enemies.size(); e++) {
+
+		for (int e = 0; e < this.enemies.size(); e++) {
 			Enemy enemy = this.enemies.get(e);
 			if (hero.overlaps(enemy)) {
 				int joustResult = hero.joust(enemy);
