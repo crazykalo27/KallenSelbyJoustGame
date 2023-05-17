@@ -29,8 +29,8 @@ public class FileReader {
 	private static final String AIR_STRING = ".";
 	private static final String PLATFORM_STRING = "o";
 	private static final String HERO_STRING = "h";
-	private static final String BADDIE_STRING = "b";
-	private static final String ENEMY_STRING = "e";
+	private static final String GHOST_STRING = "b";
+	private static final String KOOPA_STRING = "e";
 	private static final String TRACKER_STRING = "t";
 	private static final String LAVA_STRING = "l";
 	private static final String ICE_STRING = "i";
@@ -38,10 +38,10 @@ public class FileReader {
 	private static final String COOL_STRING = "c";
 	private static final int COORDINATE_SCALE = 50;
 	
-	private static final String RANDOM_ENEMY_FILE = "BlueKoopa";
+	private static final String KOOPA_FILE = "BlueKoopa";
 	private static final String TRACKER_ENEMY_FILE = "WaddleD";
 	private static final String HERO_FILE = "DigDug";
-	private static final String LEFT_RIGHT_ENEMY_FILE = "PacMan";
+	private static final String GHOST_FILE = "PacMan";
 
 	
 	private ArrayList<Enemy> bad = new ArrayList<Enemy>();
@@ -188,17 +188,17 @@ public class FileReader {
 					ans.add(temp);
 					heroLoc = ans.indexOf(temp);
 					player.add(temp);
-				}else if (change.get(i).get(j).equals(FileReader.BADDIE_STRING)) {
-					LeftRightEnemy temp = new LeftRightEnemy(x,y,4,FileReader.LEFT_RIGHT_ENEMY_FILE);
+				}else if (change.get(i).get(j).equals(FileReader.GHOST_STRING)) {
+					LeftRightEnemy temp = new LeftRightEnemy(x,y,4,FileReader.GHOST_FILE);
 					ans.add(temp);
 					bad.add(temp);
 				}
-				else if (change.get(i).get(j).equals(FileReader.ENEMY_STRING)) {
-					RandomMoveEnemy temp = new RandomMoveEnemy(x,y,2,FileReader.RANDOM_ENEMY_FILE);
+				else if (change.get(i).get(j).equals(FileReader.KOOPA_STRING)) {
+					RandomMoveEnemy temp = new RandomMoveEnemy(x,y,2,FileReader.KOOPA_FILE);
 					ans.add(temp);
 					bad.add(temp);
 				}else if (change.get(i).get(j).equals(FileReader.TRACKER_STRING)) {
-					RandomMoveEnemy placeHolder = new RandomMoveEnemy(x,y,2,FileReader.RANDOM_ENEMY_FILE);
+					RandomMoveEnemy placeHolder = new RandomMoveEnemy(x,y,2,FileReader.KOOPA_FILE);
 					ans.add(placeHolder);
 					bad.add(placeHolder);
 					loc = ans.indexOf(placeHolder);
@@ -279,11 +279,11 @@ public class FileReader {
 					line.add(FileReader.HERO_STRING);
 				} else if (s.getClass().equals(new Platform(0,0,0).getClass()) && !((Platform) s).isLava()) {
 					line.add(FileReader.PLATFORM_STRING);
-				} else if (s.getClass().equals(new LeftRightEnemy(0,0,5, FileReader.LEFT_RIGHT_ENEMY_FILE).getClass())) {
-					line.add(FileReader.BADDIE_STRING);
+				} else if (s.getClass().equals(new LeftRightEnemy(0,0,5, FileReader.GHOST_FILE).getClass())) {
+					line.add(FileReader.GHOST_STRING);
 				}
-				else if (s.getClass().equals(new RandomMoveEnemy(0,0,5, FileReader.RANDOM_ENEMY_FILE).getClass())) {
-					line.add(FileReader.ENEMY_STRING);
+				else if (s.getClass().equals(new RandomMoveEnemy(0,0,5, FileReader.KOOPA_FILE).getClass())) {
+					line.add(FileReader.KOOPA_STRING);
 				}
 				else if (s.getClass().equals(new Tracker(0,0,5,new Hero(0,0,5, FileReader.HERO_FILE),FileReader.TRACKER_ENEMY_FILE).getClass())) {
 					line.add(FileReader.TRACKER_STRING);
