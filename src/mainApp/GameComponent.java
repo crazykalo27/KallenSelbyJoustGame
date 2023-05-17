@@ -38,6 +38,7 @@ public class GameComponent extends JComponent implements KeyListener {
 	//TODO fix hero teleporting through shit
 	//TODO enemies colliding with eachother
 	//TODO fix lava respawning issue
+	//TODO eggs still respawing enemy even if level is reloaeded
 
 	public static final int POINTS_FOR_ENEMY_KILL = 750;
 	public static final int POINTS_FOR_EGG = 500;
