@@ -70,6 +70,7 @@ public class GameComponent extends JComponent implements KeyListener {
 		this.levelNum = 1;
 		points = 0;
 		lives = 4;
+		gameOver = false;
 		loadLevel(levelNum);
 	}
 
@@ -245,6 +246,10 @@ public class GameComponent extends JComponent implements KeyListener {
 	}
 
 	public void respawn() {
+		//when you die, you lose the amount of points equal to enemies on the screen
+		for(Enemy enemies : this.enemies) {
+			this.points -= GameComponent.POINTS_FOR_ENEMY_KILL + GameComponent.POINTS_FOR_EGG;
+		}
 		this.lives--;
 		if (this.lives == 0) {
 			gameOver = true;
