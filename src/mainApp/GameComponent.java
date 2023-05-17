@@ -51,6 +51,7 @@ public class GameComponent extends JComponent implements KeyListener {
 	private int lives;
 	private boolean gameOver = false;
 	private static final String EGG_FILE = "Egg";
+	private boolean tutorial;
 
 	Random r;
 	private double xstart;
@@ -64,6 +65,7 @@ public class GameComponent extends JComponent implements KeyListener {
 		points = 0;
 		lives = 4;
 		r = new Random();
+		this.setTutorial(true);
 	}
 
 	public void newGame() {
@@ -71,16 +73,48 @@ public class GameComponent extends JComponent implements KeyListener {
 		points = 0;
 		lives = 4;
 		gameOver = false;
-		loadLevel(levelNum);
+		this.setTutorial(true);
+		loadLevel(0);
 	}
 
 	protected void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
 
+		if (tutorial) {
+			g2.setColor(Color.black);
+			g2.setFont(new Font("TimesRoman", Font.PLAIN, 60));
+			g2.drawString("Welcome to Joust!", 150, 150);
+			
+			g2.setFont(new Font("TimesRoman", Font.PLAIN, 25));
+			g2.drawString("Use Arrow Keys to fly", 500, 430);
+			g2.drawString("up to this health box!", 500, 455);
+			
+			g2.drawString("During Collisions, if you are higher", 75, 200);
+			g2.drawString("than the enemy it will die. Don't hit", 75, 225);
+			g2.drawString("them while they are higher!", 75, 250);
+
+			g2.drawString("Kill all enemies to move", 75, 525);
+			g2.drawString("to the next level!", 75, 550);
+			
+			g2.drawString("Press 'N' to quick restart!", 75, 600);
+			
+			g2.drawString("Watch out for blocks", 450, 675);
+			g2.drawString("with special properties!", 450, 700);
+
+
+
+
+			
+			drawScore(this.getWidth() / 2 - 182, 32, g2);
+		}
+		
 		if (gameOver == true) {
 			g2.setColor(Color.black);
 			g2.setFont(new Font("TimesRoman", Font.PLAIN, 80));
 			g2.drawString("GAME OVER", 150, 250);
+			
+			g2.setFont(new Font("TimesRoman", Font.PLAIN, 30));
+			g2.drawString("Press 'N' to quick restart!", 150, 400);
 
 			drawScore(this.getWidth() / 2 - 182, 32, g2);
 			return;
@@ -102,6 +136,11 @@ public class GameComponent extends JComponent implements KeyListener {
 		g2.drawString("Points: " + this.points + "  ||  Lives: " + this.lives, x, y);
 	}
 
+	public void setTutorial(boolean bruh) {
+		this.fileReader.setTutorial(bruh);
+		this.tutorial = bruh;
+	}
+	
 	public void updateObjects() {
 		ArrayList<GameObject> enemiesToRemove = new ArrayList<GameObject>();
 
@@ -118,6 +157,7 @@ public class GameComponent extends JComponent implements KeyListener {
 		// moves to next level when all enemies are dead
 		if (this.enemies.size() == 0 && this.eggs.size() == 0) {
 			if (!(levelNum == 10)) {
+				this.setTutorial(false);
 				loadLevel(levelNum + 1);
 			}
 		}
@@ -246,12 +286,13 @@ public class GameComponent extends JComponent implements KeyListener {
 	}
 
 	public void respawn() {
-		//when you die, you lose the amount of points equal to enemies on the screen
-		for(Enemy enemies : this.enemies) {
+		// when you die, you lose the amount of points equal to enemies on the screen
+		for (Enemy enemies : this.enemies) {
 			this.points -= GameComponent.POINTS_FOR_ENEMY_KILL + GameComponent.POINTS_FOR_EGG;
 		}
 		this.lives--;
 		if (this.lives == 0) {
+			this.setTutorial(false);
 			gameOver = true;
 		} else {
 			loadLevel(this.levelNum);
@@ -313,12 +354,16 @@ public class GameComponent extends JComponent implements KeyListener {
 
 		if (e.getKeyCode() == KeyEvent.VK_U) {
 			if (!(levelNum == 10)) {
+				this.setTutorial(false);
 				levelNum++;
 			}
 			this.loadLevel(this.levelNum);
 		} else if (e.getKeyCode() == KeyEvent.VK_D) {
-			if (this.levelNum > 1) {
+			if (this.levelNum > 0) {
 				this.levelNum--;
+				if(this.levelNum == 0) {
+					this.setTutorial(true);
+				}
 				this.loadLevel(this.levelNum);
 			}
 		}
