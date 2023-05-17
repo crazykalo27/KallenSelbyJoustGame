@@ -11,13 +11,15 @@ package mainApp;
  */
 
 
+import java.awt.Color;
+
 import javax.swing.JFrame;
 
 import javax.swing.Timer;
 
 public class GameViewer {
 	
-	public static final int DELAY=30;
+	public static final int DELAY=40;
 
 	public void viewerMain() {
 		final String frameTitle = "CSSE220 Final Project - Joust";

@@ -69,48 +69,17 @@ public class GameComponent extends JComponent implements KeyListener {
 			g2.setFont(new Font("TimesRoman", Font.PLAIN, 80));
 			g2.drawString("GAME OVER", 150, 250);
 
-			drawScore(this.getWidth()/2 - 182, 40, g2);
+			drawScore(this.getWidth() / 2 - 182, 40, g2);
 			return;
 		}
-		
+
 		for (GameObject gO : new ArrayList<GameObject>(this.GameObjects)) {
 			gO.drawOn(g2);
 		}
 
-		// TODO: Move game logic to update()
-		/* for (int i = 0; i < this.GameObjects.size(); i++) {
-			if (this.GameObjects.get(i) != null) {
-				try {
-					this.GameObjects.get(i).drawOn(g2);
-				} catch (DeadException e) { // removes the enemy
-					double xegg = this.GameObjects.get(i).getXCent();
-					double yegg = this.GameObjects.get(i).getYCent();
-					Egg egg = new Egg(xegg, yegg);
-					this.GameObjects.add(egg);
-					this.eggs.add(egg);
-
-					Timer time = new Timer();
-					time.schedule(new TimerTask() {
-						
-						 @Override
-				            public void run() {
-				                replaceEgg(egg.getXCent(), egg.getYCent(), egg);
-				            }
-						
-					}, 10000);
-					
-					this.times.put(egg, time);
-					
-					this.points += this.POINTS_FOR_ENEMY_KILL;
-					this.enemies.remove(this.GameObjects.get(i));
-					this.GameObjects.remove(this.GameObjects.get(i));
-				}
-			} 
-		}*/
-
-		drawScore(this.getWidth()/2 - 182, 40, g2);
+		drawScore(this.getWidth() / 2 - 182, 40, g2);
 	}
-	
+
 	public void drawScore(int x, int y, Graphics2D g2) {
 		g2.setColor(Color.black);
 		g2.setFont(new Font("TimesRoman", Font.PLAIN, 40));
@@ -119,7 +88,7 @@ public class GameComponent extends JComponent implements KeyListener {
 
 	public void updateObjects() {
 		ArrayList<GameObject> enemiesToRemove = new ArrayList<GameObject>();
-		
+
 		for (GameObject gO : new ArrayList<GameObject>(this.GameObjects)) {
 			try {
 				gO.update();
@@ -129,17 +98,17 @@ public class GameComponent extends JComponent implements KeyListener {
 		}
 		this.enemies.removeAll(enemiesToRemove);
 		this.GameObjects.removeAll(enemiesToRemove);
-		
-		//moves to next level when all enemies are dead
-		if(this.enemies.size() == 0 && this.eggs.size() == 0) {
-			if(!(levelNum == 10)) {
+
+		// moves to next level when all enemies are dead
+		if (this.enemies.size() == 0 && this.eggs.size() == 0) {
+			if (!(levelNum == 10)) {
 				loadLevel(levelNum + 1);
 			}
 		}
-		
+
 		handleColisions();
 	}
-	
+
 	public void removeDeadEnemy(Enemy enemy, ArrayList<GameObject> enemiesToRemove) {
 		double xegg = enemy.getXCent();
 		double yegg = enemy.getYCent();
@@ -149,16 +118,16 @@ public class GameComponent extends JComponent implements KeyListener {
 
 		Timer time = new Timer();
 		time.schedule(new TimerTask() {
-				
-			 @Override
-		     public void run() {
-				 replaceEgg(egg.getXCent(), egg.getYCent(), egg);
-		     }
-				
+
+			@Override
+			public void run() {
+				replaceEgg(egg.getXCent(), egg.getYCent(), egg);
+			}
+
 		}, 10000);
-			
+
 		this.times.put(egg, time);
-			
+
 		this.points += GameComponent.POINTS_FOR_ENEMY_KILL;
 		enemiesToRemove.add(enemy);
 	}
@@ -168,50 +137,52 @@ public class GameComponent extends JComponent implements KeyListener {
 	}
 
 	public void handleColisions() {
-		
-		//TODO only have enemies turn into eggs if they are killed in the air
-		//TODO enemy and player bounce off eachother cases
+
+		// TODO only have enemies turn into eggs if they are killed in the air
+		// TODO enemy and player bounce off eachother cases
 		ArrayList<Platform> playerPlatformCollisions = new ArrayList<Platform>();
-		for (Platform platform : this.platforms) {
-			if (hero.overlaps(platform)) {
-				if(platform.isLava()) {
+		
+		
+		for(int p = 0; p < this.platforms.size(); p++) {
+			Platform temp = this.platforms.get(p);
+			if(hero.overlaps(temp)) {
+				if(temp.isLava()) {
 					respawn();
 				}
-				if(platform.isIce()) {
-					hero.addXVelocity(5*Math.signum(hero.getXVelocity()));
+				if (temp.isIce()) {
+					hero.addXVelocity(5 * Math.signum(hero.getXVelocity()));
 				}
-				if(platform.isSlime()) {
+				if (temp.isSlime()) {
 					hero.setXVelocity(0);
-				}if(platform.isCool()) {
-					platform.setName(0);
-					platform.SetCool(false);
+				}
+				if (temp.isCool()) {
+					temp.setName(0);
+					temp.SetCool(false);
 					this.lives++;
 				}
-				playerPlatformCollisions.add(platform);
-				//hero.collidewith(platform);
-			}
-
-			// causes enemies to collide with platforms
-			for (Enemy enemy : this.enemies) {
-				if (enemy.overlaps(platform)) {
-					enemy.collidewith(platform);
-				}
+				playerPlatformCollisions.add(temp);
 			}
 			
+			for (Enemy enemy : this.enemies) {
+				if (enemy.overlaps(temp)) {
+					enemy.collidewith(temp);
+				}
+			}
+
 			for (int i = 0; i < this.eggs.size(); i++) {
 
-				if (this.eggs.get(i).overlaps(platform)) {
-					if(platform.isLava()) {
+				if (this.eggs.get(i).overlaps(temp)) {
+					if (temp.isLava()) {
 						this.GameObjects.remove(this.eggs.get(i));
 						this.times.get(this.eggs.get(i)).cancel();
 						this.eggs.remove(this.eggs.get(i));
 					} else {
-					this.eggs.get(i).collidewith(platform);
+						this.eggs.get(i).collidewith(temp);
 					}
 				}
 			}
-
 		}
+		
 		if (!playerPlatformCollisions.isEmpty()) {
 			Platform closestPlatform = playerPlatformCollisions.get(0);
 			double shortestDistance = Double.MAX_VALUE;
@@ -226,7 +197,7 @@ public class GameComponent extends JComponent implements KeyListener {
 		}
 
 		int bounceStrength = 99999999;
-		
+
 		for (Enemy enemy : this.enemies) {
 			if (hero.overlaps(enemy)) {
 				int joustResult = hero.joust(enemy);
@@ -252,7 +223,7 @@ public class GameComponent extends JComponent implements KeyListener {
 		}
 
 	}
-	
+
 	private double getXVelocity() {
 		// TODO Auto-generated method stub
 		return 0;
@@ -262,9 +233,9 @@ public class GameComponent extends JComponent implements KeyListener {
 		this.lives--;
 		if (this.lives == 0) {
 			gameOver = true;
+		} else {
+			loadLevel(this.levelNum);
 		}
-		hero.setXCent(xstart);
-		hero.setYCent(ystart);
 	}
 
 	public void addGameObject(GameObject gameObject) {
@@ -298,7 +269,7 @@ public class GameComponent extends JComponent implements KeyListener {
 
 		return null;
 	}
-	
+
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
@@ -321,7 +292,7 @@ public class GameComponent extends JComponent implements KeyListener {
 		boolean shouldUpdateLevel = false;
 
 		if (e.getKeyCode() == KeyEvent.VK_U) {
-			if(!(levelNum == 10)) {
+			if (!(levelNum == 10)) {
 				levelNum++;
 			}
 			this.loadLevel(this.levelNum);
@@ -349,11 +320,11 @@ public class GameComponent extends JComponent implements KeyListener {
 		this.GameObjects.remove(egg);
 		this.eggs.remove(egg);
 		this.times.remove(egg);
-		
+
 		Enemy newEnemy = egg.getContainedEnemy().getCopy();
 		newEnemy.setXCent(egg.getXCent());
-		newEnemy.setYCent(egg.getYCent() - newEnemy.getHeight()/2);
-		
+		newEnemy.setYCent(egg.getYCent() - newEnemy.getHeight() / 2);
+
 		this.GameObjects.add(newEnemy);
 		this.enemies.add(newEnemy);
 	}
