@@ -38,6 +38,7 @@ public class GameComponent extends JComponent implements KeyListener {
 	//TODO fix hero teleporting through shit
 	//TODO enemies colliding with eachother
 	//TODO fix lava respawning issue
+	//TODO eggs still respawing enemy even if level is reloaeded
 
 	public static final int POINTS_FOR_ENEMY_KILL = 750;
 	public static final int POINTS_FOR_EGG = 500;
@@ -56,12 +57,15 @@ public class GameComponent extends JComponent implements KeyListener {
 	private boolean gameOver = false;
 	private static final String EGG_FILE = "Egg";
 	private boolean tutorial;
+	private int pointsLoss;
+	public static final int NUM_LEVELS = 11;
 
 	Random r;
 	private double xstart;
 	private double ystart;
 
 	public GameComponent() {
+		this.pointsLoss = 0;
 		this.GameObjects = new ArrayList<GameObject>();
 		this.hero = null;
 		this.levelNum = 1;
@@ -77,6 +81,7 @@ public class GameComponent extends JComponent implements KeyListener {
 	public void newGame() {
 		this.levelNum = 1;
 		points = 0;
+		this.pointsLoss = 0;
 		lives = 4;
 		gameOver = false;
 		this.setTutorial(true);
@@ -162,15 +167,15 @@ public class GameComponent extends JComponent implements KeyListener {
 			this.GameObjects.removeAll(enemiesToRemove);
 
 		// moves to next level when all enemies are dead
-			if (this.enemies.size() == 0 && this.eggs.size() == 0) {
-				if (!(levelNum == 10)) {
-					this.setTutorial(false);
-					loadLevel(levelNum + 1);
-				}
+		if (this.enemies.size() == 0 && this.eggs.size() == 0) {
+			if (!(levelNum == GameComponent.NUM_LEVELS)) {
+				this.setTutorial(false);
+				this.pointsLoss = 0;
+				loadLevel(levelNum + 1);
 			}
-
 			handleColisions();
 		}
+	}
 	}
 
 	public void removeDeadEnemy(Enemy enemy, ArrayList<GameObject> enemiesToRemove) {
@@ -188,11 +193,12 @@ public class GameComponent extends JComponent implements KeyListener {
 				replaceEgg(egg.getXCent(), egg.getYCent(), egg);
 			}
 
-		}, 10000);
+		}, 7000);
 
 		this.times.put(egg, time);
 
 		this.points += GameComponent.POINTS_FOR_ENEMY_KILL;
+		this.pointsLoss += GameComponent.POINTS_FOR_ENEMY_KILL;
 		enemiesToRemove.add(enemy);
 	}
 
@@ -205,40 +211,41 @@ public class GameComponent extends JComponent implements KeyListener {
 		ArrayList<Platform> playerPlatformCollisions = new ArrayList<Platform>();
 
 		for (int p = 0; p < this.platforms.size(); p++) {
-			Platform temp = this.platforms.get(p);
-			if (hero.overlaps(temp)) {
-				if (temp.isLava()) {
+			Platform platform = this.platforms.get(p);
+			if (hero.overlaps(platform)) {
+				if (platform.isLava()) {
 					respawn();
 				}
-				if (temp.isIce()) {
+				if (platform.isIce()) {
 					hero.addXVelocity(5 * Math.signum(hero.getXVelocity()));
 				}
-				if (temp.isSlime()) {
+				if (platform.isSlime()) {
 					hero.setXVelocity(0);
 				}
-				if (temp.isCool()) {
-					temp.setName(0);
-					temp.SetCool(false);
+				if (platform.isCool()) {
+					platform.setName(0);
+					platform.SetCool(false);
 					this.lives++;
 				}
-				playerPlatformCollisions.add(temp);
+				playerPlatformCollisions.add(platform);
 			}
 
 			for (int e = 0; e < this.enemies.size(); e++) {
-				if (this.enemies.get(e).overlaps(temp)) {
-					this.enemies.get(e).collidewith(temp);
+				if (this.enemies.get(e).overlaps(platform)) {
+					this.enemies.get(e).collidewith(platform);
 				}
 			}
 
 			for (int i = 0; i < this.eggs.size(); i++) {
 
-				if (this.eggs.get(i).overlaps(temp)) {
-					if (temp.isLava()) {
+				
+				if (this.eggs.get(i).overlaps(platform)) {
+					if (platform.isLava()) {
 						this.GameObjects.remove(this.eggs.get(i));
 						this.times.get(this.eggs.get(i)).cancel();
 						this.eggs.remove(this.eggs.get(i));
 					} else {
-						this.eggs.get(i).collidewith(temp);
+						this.eggs.get(i).collidewith(platform);
 					}
 				}
 			}
@@ -274,13 +281,15 @@ public class GameComponent extends JComponent implements KeyListener {
 			}
 		}
 
+		//eggs collide with hero
 		for (int i = 0; i < this.eggs.size(); i++) {
 
 			if (this.eggs.get(i).overlaps(hero)) {
 				this.GameObjects.remove(this.eggs.get(i));
 				this.times.get(this.eggs.get(i)).cancel();
 				this.eggs.remove(this.eggs.get(i));
-				points += this.POINTS_FOR_EGG;
+				this.pointsLoss += GameComponent.POINTS_FOR_EGG;
+				this.points += GameComponent.POINTS_FOR_EGG;
 			}
 		}
 
@@ -288,19 +297,15 @@ public class GameComponent extends JComponent implements KeyListener {
 
 	public void respawn() {
 		// when you die, you lose the amount of points equal to enemies on the screen
-		for (Enemy enemies : this.enemies) {
-			this.points -= GameComponent.POINTS_FOR_ENEMY_KILL + GameComponent.POINTS_FOR_EGG;
-		}
+		this.points -= pointsLoss;
+		
 		this.lives--;
 		if (this.lives == 0) {
 			this.setTutorial(false);
 			gameOver = true;
 		} else {
-			//loadLevel(this.levelNum);
-			this.hero.setXCent(this.xstart);
-			this.hero.setYCent(this.ystart);
-			this.hero.setXVelocity(0);
-			this.hero.setYVelocity(0);
+			pointsLoss = 0;
+			loadLevel(this.levelNum);
 		}
 	}
 
@@ -319,7 +324,10 @@ public class GameComponent extends JComponent implements KeyListener {
 			this.enemies = this.fileReader.getBad();
 			this.platforms = this.fileReader.getPlatforms();
 			this.player = this.fileReader.getPlayer();
-			this.hero = (Hero) this.player.get(0);
+			//this.hero = (Hero) this.player.get(0);
+			this.hero = this.fileReader.getHero();
+			System.out.println(this.hero.getXCent() + " " + this.hero.getYCent());
+			//this.hero.move(this.hero.getXCent(), this.hero.getYCent());
 			this.xstart = this.hero.getXCent();
 			this.ystart = this.hero.getYCent();
 			this.levelNum = levelNumberToLoad;
@@ -358,12 +366,16 @@ public class GameComponent extends JComponent implements KeyListener {
 		boolean shouldUpdateLevel = false;
 
 		if (e.getKeyCode() == KeyEvent.VK_U) {
-			if (!(levelNum == 10)) {
+			this.pointsLoss = 0;
+			if (!(levelNum == GameComponent.NUM_LEVELS)) {
 				this.setTutorial(false);
-				levelNum++;
+				if(levelNum < GameComponent.NUM_LEVELS) {
+					levelNum++;
+				}
 			}
 			this.loadLevel(this.levelNum);
 		} else if (e.getKeyCode() == KeyEvent.VK_D) {
+			this.pointsLoss = 0;
 			if (this.levelNum > 0) {
 				this.levelNum--;
 				if(this.levelNum == 0) {
