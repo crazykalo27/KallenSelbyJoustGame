@@ -1,9 +1,12 @@
 package mainApp;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
@@ -12,7 +15,9 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JPanel;
 
 //TODO: Dedicated input manager class?
 
@@ -59,6 +64,13 @@ public class GameComponent extends JComponent implements KeyListener {
 		points = 0;
 		lives = 4;
 		r = new Random();
+	}
+
+	public void newGame() {
+		this.levelNum = 1;
+		points = 0;
+		lives = 4;
+		loadLevel(levelNum);
 	}
 
 	protected void paintComponent(Graphics g) {
@@ -304,6 +316,10 @@ public class GameComponent extends JComponent implements KeyListener {
 				this.levelNum--;
 				this.loadLevel(this.levelNum);
 			}
+		}
+
+		if (e.getKeyCode() == KeyEvent.VK_N) {
+			this.newGame();
 		}
 	}
 
