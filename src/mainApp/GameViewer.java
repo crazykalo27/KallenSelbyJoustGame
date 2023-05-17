@@ -38,7 +38,7 @@ public class GameViewer {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		GameComponent gameComponent = new GameComponent();
-		gameComponent.loadLevel(1);
+		gameComponent.loadLevel(0);
 		frame.addKeyListener(gameComponent);
 		
 		GameAdvanceListener advanceListener = new GameAdvanceListener(gameComponent);

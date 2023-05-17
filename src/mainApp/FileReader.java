@@ -42,13 +42,18 @@ public class FileReader {
 	private static final String TRACKER_ENEMY_FILE = "WaddleD";
 	private static final String HERO_FILE = "DigDug";
 	private static final String GHOST_FILE = "PacMan";
+	
+	private boolean tutorial;
 
 	
 	private ArrayList<Enemy> bad = new ArrayList<Enemy>();
 	private ArrayList<Platform> platforms = new ArrayList<Platform>();
 	private ArrayList<GameObject> player = new ArrayList<GameObject>();
 	FileReader() {
-
+	}
+	
+	public void setTutorial(boolean bruh){
+		this.tutorial = bruh;
 	}
 	
 	// think ab JFileChooser for promting for a fiel
@@ -189,7 +194,12 @@ public class FileReader {
 					heroLoc = ans.indexOf(temp);
 					player.add(temp);
 				}else if (change.get(i).get(j).equals(FileReader.GHOST_STRING)) {
-					LeftRightEnemy temp = new LeftRightEnemy(x,y,4,FileReader.GHOST_FILE);
+					LeftRightEnemy temp;
+					if(tutorial) {
+						temp = new LeftRightEnemy(x,y,0,FileReader.GHOST_FILE);
+					} else {
+						temp = new LeftRightEnemy(x,y,4,FileReader.GHOST_FILE);
+					}
 					ans.add(temp);
 					bad.add(temp);
 				}
