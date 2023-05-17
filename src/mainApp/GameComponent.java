@@ -163,9 +163,9 @@ public class GameComponent extends JComponent implements KeyListener {
 				playerPlatformCollisions.add(temp);
 			}
 			
-			for (Enemy enemy : this.enemies) {
-				if (enemy.overlaps(temp)) {
-					enemy.collidewith(temp);
+			for(int e = 0; e < this.enemies.size(); e++) {
+				if(this.enemies.get(e).overlaps(temp)) {
+					this.enemies.get(e).collidewith(temp);
 				}
 			}
 
@@ -197,8 +197,9 @@ public class GameComponent extends JComponent implements KeyListener {
 		}
 
 		int bounceStrength = 99999999;
-
-		for (Enemy enemy : this.enemies) {
+		
+		for(int e = 0; e < this.enemies.size(); e++) {
+			Enemy enemy = this.enemies.get(e);
 			if (hero.overlaps(enemy)) {
 				int joustResult = hero.joust(enemy);
 				if (joustResult == 2) {
