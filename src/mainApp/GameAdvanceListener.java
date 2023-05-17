@@ -1,4 +1,5 @@
 package mainApp;
+
 /**
  * Class: GameAdvanceListener
  * @author Team 303
@@ -19,13 +20,15 @@ import mainApp.GameComponent;
 
 /**
  * Class: GameAdvanceListener
- * @author Team 303
- * <br>Purpose: Tells GameComponent to update and draw objects.
- * <br>Usage: 
- * <pre>
- *    GameAdvanceListener advanceListener = new GameAdvanceListener(gameComponent);
-	  Timer timer = new Timer(DELAY, advanceListener);
- * </pre>
+ * 
+ * @author Team 303 <br>
+ *         Purpose: Tells GameComponent to update and draw objects. <br>
+ *         Usage:
+ * 
+ *         <pre>
+ *         GameAdvanceListener advanceListener = new GameAdvanceListener(gameComponent);
+ *         Timer timer = new Timer(DELAY, advanceListener);
+ *         </pre>
  */
 public class GameAdvanceListener implements ActionListener {
 
