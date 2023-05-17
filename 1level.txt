@@ -11,6 +11,6 @@ o..............o
 ooo............o
 ob......o......o
 ooooooooo......o
-o..............o
+o............c.o
 o.h.........oooo
 oooooooooooooooo
