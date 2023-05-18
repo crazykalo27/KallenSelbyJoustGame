@@ -215,6 +215,7 @@ public class GameComponent extends JComponent implements KeyListener {
 			if (hero.overlaps(platform)) {
 				if (platform.isLava()) {
 					respawn();
+					return;
 				}
 				if (platform.isIce()) {
 					hero.addXVelocity(5 * Math.signum(hero.getXVelocity()));
