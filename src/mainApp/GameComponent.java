@@ -95,7 +95,7 @@ public class GameComponent extends JComponent implements KeyListener {
 		g2.setColor(Color.black);
 		
 		if (tutorial) {
-			g2.setColor(Color.black);
+			g2.setColor(Color.white);
 			g2.setFont(new Font("TimesRoman", Font.PLAIN, 60));
 			g2.drawString("Welcome to Joust!", 150, 150);
 
@@ -119,7 +119,7 @@ public class GameComponent extends JComponent implements KeyListener {
 		}
 
 		if (gameOver == true) {
-			g2.setColor(Color.black);
+			g2.setColor(Color.white);
 			g2.setFont(new Font("TimesRoman", Font.PLAIN, 80));
 			g2.drawString("GAME OVER", 150, 250);
 
