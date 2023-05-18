@@ -1,27 +1,24 @@
 package mainApp;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.swing.JButton;
+import javax.imageio.ImageIO;
 import javax.swing.JComponent;
-import javax.swing.JPanel;
 
 //TODO: Dedicated input manager class?
 
@@ -127,6 +124,17 @@ public class GameComponent extends JComponent implements KeyListener {
 			g2.drawString("Press 'N' to quick restart!", 150, 400);
 
 			drawScore(this.getWidth() / 2 - 182, 32, g2);
+			
+			String fileName = "images/" + "gameover.png";
+			
+			BufferedImage img;
+			try {
+				img = ImageIO.read(new File(fileName));
+				g2.drawImage(img, 250, 400, 200, 200, null);
+			} catch (IOException e) {
+				System.out.println("fail");
+			}
+			
 			return;
 		}
 
