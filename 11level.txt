@@ -4,10 +4,10 @@ o........llllllo
 o...........bbbo
 o..lllls....bbbo
 oee.....lllllllo
-oee...c...lll..o
-oee...l.ll...llo
-oee...l........o
-o.....l....l...o
+lee...c...lll..o
+lee...l.ll...llo
+lee...l........o
+l.....l....l...o
 oiiiiilslllll..o
 lllllllll......l
 oh....l........o
