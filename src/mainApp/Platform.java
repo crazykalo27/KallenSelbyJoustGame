@@ -34,7 +34,7 @@ public class Platform extends GameObject {
 		this.isCool = false;
 		this.setName(type);
 		if(isLava) {
-			HEIGHT = HEIGHT*.8;
+			HEIGHT = HEIGHT*.6;
 			this.setHeight(HEIGHT);
 		}
 	}
