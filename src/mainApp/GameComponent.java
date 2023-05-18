@@ -19,6 +19,7 @@ import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 
 //TODO: Dedicated input manager class?
 
@@ -331,8 +332,8 @@ public class GameComponent extends JComponent implements KeyListener {
 		this.GameObjects = array;
 	}
 
-	public void loadLevel(int levelNumberToLoad) {
-		ArrayList<GameObject> objects = fileReader.getObjectsFromFile(Integer.toString(levelNumberToLoad) + "level");
+	public void loadLevel(String levelNameToLoad) {
+		ArrayList<GameObject> objects = fileReader.getObjectsFromFile(levelNameToLoad);
 		if (!objects.isEmpty()) {
 
 			for (Egg key : this.times.keySet()) {
@@ -351,9 +352,15 @@ public class GameComponent extends JComponent implements KeyListener {
 			// this.hero.move(this.hero.getXCent(), this.hero.getYCent());
 			this.xstart = this.hero.getXCent();
 			this.ystart = this.hero.getYCent();
-			this.levelNum = levelNumberToLoad;
 		}
 	}
+	
+	public void loadLevel(int levelNumberToLoad) {
+		this.levelNum = levelNumberToLoad;
+		this.loadLevel(Integer.toString(levelNumberToLoad) + "level");
+	}
+	
+	
 
 	public Hero findHeroInArray() {
 		for (GameObject gO : this.GameObjects) {
@@ -420,10 +427,12 @@ public class GameComponent extends JComponent implements KeyListener {
 			this.hero.setRightKeyHeld(false);
 		} else if (e.getKeyCode() == KeyEvent.VK_UP) {
 			this.hero.setUpKeyHeld(false);
-		} else if (e.getKeyCode() == KeyEvent.VK_M) {
+			
+		//Open level editor
+		} else if (e.getKeyCode() == KeyEvent.VK_Q) {
 			PrintWriter pw = null;
 			try {
-				String content = "Welcome to the Level Editor!\nEach character below the line represents a platform, enemy, or empty space.\nSymbols are case-sensitive!\n. - Air\no - Platform\nl - Lava\ni - Ice\ns - Slime\nc - Extra Life\nh - Hero Spawn (1 per level!)\nb - Ghost\ne - Koopa\nt - Tracker\nREMOVE ALL TEXT ABOVE THE LINE\n---------------------------------------\noooooooooooooooo\no..............o\no..............o\no..............o\no..............o\no..............o\no..............o\no..............o\no..............o\no..............o\no..............o\no..............o\no..............o\no..............o\no..h...........o\noooooooooooooooo";
+				String content = "Welcome to the Level Editor!\nEach character below the line represents a platform, enemy, or empty space.\nSymbols are case-sensitive!\nThere must also be at least 1 Enemy and 1 Player in your level.\n. - Air\no - Platform\nl - Lava\ni - Ice\ns - Slime\nc - Extra Life\nh - Hero Spawn (1 per level!)\nb - Ghost\ne - Koopa\nt - Tracker\nREMOVE ALL TEXT ABOVE THE LINE\n---------------------------------------\noooooooooooooooo\no..............o\no..............o\no..............o\no..............o\no..............o\no..............o\no..............o\no..............o\no..............o\no..............o\no..............o\no..............o\no..............o\no..h...........o\noooooooooooooooo";
 				pw = new PrintWriter("new_level.txt");
 				pw.append(content);
 				pw.close();
@@ -439,6 +448,21 @@ public class GameComponent extends JComponent implements KeyListener {
 					e1.printStackTrace();
 				}
 			}
+			
+		//Open file chooser to select custom levels
+		} else if (e.getKeyCode() == KeyEvent.VK_W) {
+			JFileChooser fc = new JFileChooser();
+			int returnVal = fc.showOpenDialog(GameComponent.this);
+
+	        if (returnVal == JFileChooser.APPROVE_OPTION) {
+	            File file = fc.getSelectedFile();
+	            String fileName = file.getAbsolutePath();
+	            fileName = fileName.substring(0, fileName.length() - 4);
+	            this.tutorial = false;
+	            loadLevel(fileName);
+	        } else {
+	        	System.out.println("Loading custom level cancelled");
+	        }
 		}
 	}
 
