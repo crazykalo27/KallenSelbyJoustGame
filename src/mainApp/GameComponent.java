@@ -1,17 +1,16 @@
 package mainApp;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -19,9 +18,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
-import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JPanel;
 
 //TODO: Dedicated input manager class?
 
@@ -423,6 +420,25 @@ public class GameComponent extends JComponent implements KeyListener {
 			this.hero.setRightKeyHeld(false);
 		} else if (e.getKeyCode() == KeyEvent.VK_UP) {
 			this.hero.setUpKeyHeld(false);
+		} else if (e.getKeyCode() == KeyEvent.VK_M) {
+			PrintWriter pw = null;
+			try {
+				String content = "Welcome to the Level Editor!\nEach character below the line represents a platform, enemy, or empty space.\nSymbols are case-sensitive!\n. - Air\no - Platform\nl - Lava\ni - Ice\ns - Slime\nc - Extra Life\nh - Hero Spawn (1 per level!)\nb - Ghost\ne - Koopa\nt - Tracker\nREMOVE ALL TEXT ABOVE THE LINE\n---------------------------------------\noooooooooooooooo\no..............o\no..............o\no..............o\no..............o\no..............o\no..............o\no..............o\no..............o\no..............o\no..............o\no..............o\no..............o\no..............o\no..h...........o\noooooooooooooooo";
+				pw = new PrintWriter("new_level.txt");
+				pw.append(content);
+				pw.close();
+			} catch (FileNotFoundException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+			if (pw != null) {
+				File file = new File("new_level.txt");
+				try {
+					java.awt.Desktop.getDesktop().edit(file);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			}
 		}
 	}
 
