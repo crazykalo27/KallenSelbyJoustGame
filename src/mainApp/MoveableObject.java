@@ -26,6 +26,8 @@ public class MoveableObject extends GameObject {
 	private boolean hasGravity;
 	private boolean hasFriction;
 	private String name;
+	private double previousXPos;
+	private double previousYPos;
 	
 	public MoveableObject(double xCent, double yCent, String name) {
 		super(xCent, yCent);
@@ -34,8 +36,10 @@ public class MoveableObject extends GameObject {
 		this.hasGravity = true;
 		this.hasFriction = true;
 		this.name = name;
+		this.previousXPos = 0;
+		this.previousYPos = 0;
 	}
-	
+
 	@Override
 	public void drawOn(Graphics2D g2) {
 		//un comment to see bounding box
@@ -84,6 +88,7 @@ public class MoveableObject extends GameObject {
 
 	@Override
 	public void update() throws DeadException {
+		this.updatePreviousPosition();
 		super.update();
 		this.move(getXVelocity(), getYVelocity());
 		
@@ -133,4 +138,24 @@ public class MoveableObject extends GameObject {
 		return true;
 	}
 
+	public double getPreviousXPos() {
+		return previousXPos;
+	}
+
+	public void setPreviousXPos(double previousXPos) {
+		this.previousXPos = previousXPos;
+	}
+
+	public double getPreviousYPos() {
+		return previousYPos;
+	}
+
+	public void setPreviousYPos(double previousYPos) {
+		this.previousYPos = previousYPos;
+	}
+	
+	public void updatePreviousPosition() {
+		this.previousXPos = this.getXCent();
+		this.previousYPos = this.getYCent();
+	}
 }

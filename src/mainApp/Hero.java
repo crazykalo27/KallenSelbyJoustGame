@@ -28,9 +28,6 @@ public class Hero extends MoveableObject {
 	private boolean upKeyHeld;
 	private double speed;
 	
-	private double previousXPos;
-	private double previousYPos;
-	
 	public Hero(int xCent, int yCent, double speed, String name) {
 		super(xCent, yCent, name);
 		this.speed = speed;
@@ -39,8 +36,6 @@ public class Hero extends MoveableObject {
 		this.upKeyHeld = false;
 		this.setWidth(this.getWidth()*SCALER);
 		this.setHeight(this.getHeight()*SCALER);
-		this.previousXPos = 0;
-		this.previousYPos = 0;
 	}
 	
 	@Override
@@ -75,8 +70,8 @@ public class Hero extends MoveableObject {
 	}
 
 	public void collidewith(GameObject other) {
-		double previousXDist = other.getXCent() - this.previousXPos;
-		double previousYDist = other.getYCent() - this.previousYPos;
+		double previousXDist = other.getXCent() - this.getPreviousXPos();
+		double previousYDist = other.getYCent() - this.getPreviousYPos();
 		Rectangle2D Recth = this.getBoundingBox();
 		Rectangle2D Recto = other.getBoundingBox();
 		Rectangle2D overlap = Recth.createIntersection(Recto);
@@ -88,17 +83,12 @@ public class Hero extends MoveableObject {
 			this.setXVelocity(0);
 			double direction = Math.signum(other.getXCent() - this.getXCent());
 			this.move(-direction*overlapWidth, 0);
-			updatePreviousPosition();
+			this.updatePreviousPosition();
 		} else {
 			this.move(0, -Math.signum(previousYDist)*overlapHeight);
 			this.setYVelocity(0);
-			updatePreviousPosition();
+			this.updatePreviousPosition();
 		}
-	}
-	
-	private void updatePreviousPosition() {
-		this.previousXPos = this.getXCent();
-		this.previousYPos = this.getYCent();
 	}
 	
 	// 0 = Enemy higher, player dies

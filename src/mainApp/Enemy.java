@@ -35,20 +35,25 @@ public class Enemy extends MoveableObject{
 	
 	
 	public void collidewith(GameObject other) {
+		double previousXDist = other.getXCent() - this.getPreviousXPos();
+		double previousYDist = other.getYCent() - this.getPreviousYPos();
 		Rectangle2D Recth = this.getBoundingBox();
 		Rectangle2D Recto = other.getBoundingBox();
 		Rectangle2D overlap = Recth.createIntersection(Recto);
-		double otherh = overlap.getHeight();
-		double otherw = overlap.getWidth();
-		if(otherh>=otherw) {
-			int direction = (int) Math.signum(other.getXCent() - this.getXCent());
-			this.move(-direction*otherw, 0);
+		double overlapHeight = overlap.getHeight();
+		double overlapWidth = overlap.getWidth();
+		if (Math.abs(previousYDist) == Math.abs(previousXDist)) {
+			return;
+		} else if (Math.abs(previousYDist) < Math.abs(previousXDist)) {
 			this.setXVelocity(0);
-		}else {
-			this.move(0, -Math.signum(this.getYVelocity())*otherh);
+			double direction = Math.signum(other.getXCent() - this.getXCent());
+			this.move(-direction*overlapWidth, 0);
+			updatePreviousPosition();
+		} else {
+			this.move(0, -Math.signum(previousYDist)*overlapHeight);
 			this.setYVelocity(0);
+			updatePreviousPosition();
 		}
-		
 	}
 	
 	public Enemy getCopy() {
