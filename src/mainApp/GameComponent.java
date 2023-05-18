@@ -281,11 +281,12 @@ public class GameComponent extends JComponent implements KeyListener {
 
 		// eggs collide with hero
 		for (int i = 0; i < this.eggs.size(); i++) {
+			Egg egg = this.eggs.get(i);
 
-			if (this.eggs.get(i).overlaps(hero)) {
-				this.GameObjects.remove(this.eggs.get(i));
-				this.times.get(this.eggs.get(i)).cancel();
-				this.eggs.remove(this.eggs.get(i));
+			if (egg.overlaps(hero)) {
+				this.GameObjects.remove(egg);
+				this.times.get(egg).cancel();
+				this.eggs.remove(egg);
 				this.pointsLoss += GameComponent.POINTS_FOR_EGG;
 				this.points += GameComponent.POINTS_FOR_EGG;
 			}
@@ -321,6 +322,8 @@ public class GameComponent extends JComponent implements KeyListener {
 
 			for (Egg key : this.times.keySet()) {
 				this.times.get(key).cancel();
+				this.eggs.remove(key);
+			//	this.times.remove(key);
 			}
 			this.times.clear();
 
@@ -330,7 +333,6 @@ public class GameComponent extends JComponent implements KeyListener {
 			this.player = this.fileReader.getPlayer();
 			// this.hero = (Hero) this.player.get(0);
 			this.hero = this.fileReader.getHero();
-			System.out.println(this.hero.getXCent() + " " + this.hero.getYCent());
 			// this.hero.move(this.hero.getXCent(), this.hero.getYCent());
 			this.xstart = this.hero.getXCent();
 			this.ystart = this.hero.getYCent();
