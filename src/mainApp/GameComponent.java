@@ -35,8 +35,6 @@ import javax.swing.JPanel;
  */
 public class GameComponent extends JComponent implements KeyListener {
 
-	// TODO enemies colliding with eachother
-
 	public static final int POINTS_FOR_ENEMY_KILL = 750;
 	public static final int POINTS_FOR_EGG = 500;
 
