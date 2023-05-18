@@ -34,11 +34,11 @@ import javax.swing.JPanel;
  *         </pre>
  */
 public class GameComponent extends JComponent implements KeyListener {
-	
-	//TODO fix hero teleporting through shit
-	//TODO enemies colliding with eachother
-	//TODO fix lava respawning issue
-	//TODO eggs still respawing enemy even if level is reloaeded
+
+	// TODO fix hero teleporting through shit
+	// TODO enemies colliding with eachother
+	// TODO fix lava respawning issue
+	// TODO eggs still respawing enemy even if level is reloaeded
 
 	public static final int POINTS_FOR_ENEMY_KILL = 750;
 	public static final int POINTS_FOR_EGG = 500;
@@ -95,35 +95,31 @@ public class GameComponent extends JComponent implements KeyListener {
 			g2.setColor(Color.black);
 			g2.setFont(new Font("TimesRoman", Font.PLAIN, 60));
 			g2.drawString("Welcome to Joust!", 150, 150);
-			
+
 			g2.setFont(new Font("TimesRoman", Font.PLAIN, 25));
 			g2.drawString("Use Arrow Keys to fly", 500, 430);
 			g2.drawString("up to this health box!", 500, 455);
-			
+
 			g2.drawString("During Collisions, if you are higher", 75, 200);
 			g2.drawString("than the enemy it will die. Don't hit", 75, 225);
 			g2.drawString("them while they are higher!", 75, 250);
 
 			g2.drawString("Kill all enemies to move", 75, 525);
 			g2.drawString("to the next level!", 75, 550);
-			
+
 			g2.drawString("Press 'N' to quick restart!", 75, 600);
-			
+
 			g2.drawString("Watch out for blocks", 450, 675);
 			g2.drawString("with special properties!", 450, 700);
 
-
-
-
-			
 			drawScore(this.getWidth() / 2 - 182, 32, g2);
 		}
-		
+
 		if (gameOver == true) {
 			g2.setColor(Color.black);
 			g2.setFont(new Font("TimesRoman", Font.PLAIN, 80));
 			g2.drawString("GAME OVER", 150, 250);
-			
+
 			g2.setFont(new Font("TimesRoman", Font.PLAIN, 30));
 			g2.drawString("Press 'N' to quick restart!", 150, 400);
 
@@ -151,7 +147,7 @@ public class GameComponent extends JComponent implements KeyListener {
 		this.fileReader.setTutorial(bruh);
 		this.tutorial = bruh;
 	}
-	
+
 	public void updateObjects() {
 		ArrayList<GameObject> enemiesToRemove = new ArrayList<GameObject>();
 
@@ -239,7 +235,6 @@ public class GameComponent extends JComponent implements KeyListener {
 
 			for (int i = 0; i < this.eggs.size(); i++) {
 
-				
 				if (this.eggs.get(i).overlaps(platform)) {
 					if (platform.isLava()) {
 						this.GameObjects.remove(this.eggs.get(i));
@@ -282,7 +277,7 @@ public class GameComponent extends JComponent implements KeyListener {
 			}
 		}
 
-		//eggs collide with hero
+		// eggs collide with hero
 		for (int i = 0; i < this.eggs.size(); i++) {
 
 			if (this.eggs.get(i).overlaps(hero)) {
@@ -299,7 +294,7 @@ public class GameComponent extends JComponent implements KeyListener {
 	public void respawn() {
 		// when you die, you lose the amount of points equal to enemies on the screen
 		this.points -= pointsLoss;
-		
+
 		this.lives--;
 		if (this.lives == 0) {
 			this.setTutorial(false);
@@ -321,14 +316,20 @@ public class GameComponent extends JComponent implements KeyListener {
 	public void loadLevel(int levelNumberToLoad) {
 		ArrayList<GameObject> objects = fileReader.getObjectsFromFile(Integer.toString(levelNumberToLoad) + "level");
 		if (!objects.isEmpty()) {
+
+			for (Egg key : this.times.keySet()) {
+				this.times.get(key).cancel();
+			}
+			this.times.clear();
+
 			this.setGameObjectsArray(objects);
 			this.enemies = this.fileReader.getBad();
 			this.platforms = this.fileReader.getPlatforms();
 			this.player = this.fileReader.getPlayer();
-			//this.hero = (Hero) this.player.get(0);
+			// this.hero = (Hero) this.player.get(0);
 			this.hero = this.fileReader.getHero();
 			System.out.println(this.hero.getXCent() + " " + this.hero.getYCent());
-			//this.hero.move(this.hero.getXCent(), this.hero.getYCent());
+			// this.hero.move(this.hero.getXCent(), this.hero.getYCent());
 			this.xstart = this.hero.getXCent();
 			this.ystart = this.hero.getYCent();
 			this.levelNum = levelNumberToLoad;
@@ -370,7 +371,7 @@ public class GameComponent extends JComponent implements KeyListener {
 			this.pointsLoss = 0;
 			if (!(levelNum == GameComponent.NUM_LEVELS)) {
 				this.setTutorial(false);
-				if(levelNum < GameComponent.NUM_LEVELS) {
+				if (levelNum < GameComponent.NUM_LEVELS) {
 					levelNum++;
 				}
 			}
@@ -379,7 +380,7 @@ public class GameComponent extends JComponent implements KeyListener {
 			this.pointsLoss = 0;
 			if (this.levelNum > 0) {
 				this.levelNum--;
-				if(this.levelNum == 0) {
+				if (this.levelNum == 0) {
 					this.setTutorial(true);
 				}
 				this.loadLevel(this.levelNum);
