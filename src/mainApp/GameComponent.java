@@ -93,7 +93,7 @@ public class GameComponent extends JComponent implements KeyListener {
 		g2.setColor(Color.BLACK);
 		g2.fillRect(0, 0, this.getWidth(), this.getHeight());
 		g2.setColor(Color.black);
-		
+
 		if (tutorial) {
 			g2.setColor(Color.white);
 			g2.setFont(new Font("TimesRoman", Font.PLAIN, 60));
@@ -127,17 +127,23 @@ public class GameComponent extends JComponent implements KeyListener {
 			g2.drawString("Press 'N' to quick restart!", 150, 400);
 
 			drawScore(this.getWidth() / 2 - 182, 32, g2);
-			
-			String fileName = "images/" + "gameover.png";
-			
+
+			ArrayList<String> fileNames = new ArrayList<String>();
+			for (int i = 0; i < 4; i++) {
+				fileNames.add("images/gameover" + i + ".png");
+			}
+
 			BufferedImage img;
 			try {
-				img = ImageIO.read(new File(fileName));
-				g2.drawImage(img, 250, 400, 200, 200, null);
+				for (int i = 0; i < 4; i++) {
+					img = ImageIO.read(new File(fileNames.get(i)));
+					g2.drawImage(img, 25 + (215 * i), 450, 190, 190, null);
+				}
+
 			} catch (IOException e) {
 				System.out.println("fail");
 			}
-			
+
 			return;
 		}
 
@@ -335,7 +341,7 @@ public class GameComponent extends JComponent implements KeyListener {
 			for (Egg key : this.times.keySet()) {
 				this.times.get(key).cancel();
 				this.eggs.remove(key);
-			//	this.times.remove(key);
+				// this.times.remove(key);
 			}
 			this.times.clear();
 
