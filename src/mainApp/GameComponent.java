@@ -35,10 +35,7 @@ import javax.swing.JPanel;
  */
 public class GameComponent extends JComponent implements KeyListener {
 
-	// TODO fix hero teleporting through shit
 	// TODO enemies colliding with eachother
-	// TODO fix lava respawning issue
-	// TODO eggs still respawing enemy even if level is reloaeded
 
 	public static final int POINTS_FOR_ENEMY_KILL = 750;
 	public static final int POINTS_FOR_EGG = 500;
@@ -90,9 +87,7 @@ public class GameComponent extends JComponent implements KeyListener {
 
 	protected void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
-		g2.setColor(Color.BLACK);
-		g2.fillRect(0, 0, this.getWidth(), this.getHeight());
-		
+
 		if (tutorial) {
 			g2.setColor(Color.black);
 			g2.setFont(new Font("TimesRoman", Font.PLAIN, 60));
