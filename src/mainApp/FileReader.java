@@ -198,7 +198,6 @@ public class FileReader {
 					ans.add(temp);
 					heroLoc = ans.indexOf(temp);
 					player.add(temp);
-					System.out.println("NEW HERO " + x + " " + y);
 					hero = temp;
 				}else if (change.get(i).get(j).equals(FileReader.GHOST_STRING)) {
 					LeftRightEnemy temp;
