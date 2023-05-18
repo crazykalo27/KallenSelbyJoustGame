@@ -35,7 +35,7 @@ public class FileReader {
 	private static final String LAVA_STRING = "l";
 	private static final String ICE_STRING = "i";
 	private static final String SLIME_STRING = "s";
-	private static final String COOL_STRING = "c";
+	private static final String REGEN_STRING = "c";
 	private static final int COORDINATE_SCALE = 50;
 	
 	private static final String KOOPA_FILE = "BlueKoopa";
@@ -233,7 +233,7 @@ public class FileReader {
 					Platform temp = new Platform(x,y,3);
 					ans.add(temp);
 					platforms.add(temp);
-				}else if (change.get(i).get(j).equals(FileReader.COOL_STRING)) {
+				}else if (change.get(i).get(j).equals(FileReader.REGEN_STRING)) {
 					Platform temp = new Platform(x,y,4);
 					ans.add(temp);
 					platforms.add(temp);
@@ -310,7 +310,7 @@ public class FileReader {
 				}else if (s.getClass().equals(new Platform(0,0,3).getClass()) && ((Platform) s).isSlime()) {
 					line.add(FileReader.SLIME_STRING);
 				}else if (s.getClass().equals(new Platform(0,0,4).getClass()) && ((Platform) s).isCool()) {
-					line.add(FileReader.COOL_STRING);
+					line.add(FileReader.REGEN_STRING);
 				}
 					else {
 					throw new InvalidLevelFormatException("File of gameobjects is not correctly set up");
