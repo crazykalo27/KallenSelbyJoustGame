@@ -92,6 +92,7 @@ public class GameComponent extends JComponent implements KeyListener {
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setColor(Color.BLACK);
 		g2.fillRect(0, 0, this.getWidth(), this.getHeight());
+		g2.setColor(Color.black);
 		
 		if (tutorial) {
 			g2.setColor(Color.black);
