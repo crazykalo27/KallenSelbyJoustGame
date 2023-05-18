@@ -12,6 +12,7 @@ package mainApp;
 
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -23,7 +24,7 @@ import javax.swing.Timer;
 public class GameViewer {
 	
 	public static final int DELAY=40;
-
+	
 	public void viewerMain() {
 		final String frameTitle = "CSSE220 Final Project - Joust";
 		final int frameWidth = 800;
