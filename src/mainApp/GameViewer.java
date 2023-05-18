@@ -37,6 +37,7 @@ public class GameViewer {
 		frame.setSize(frameWidth, frameHeight);
 		frame.setLocation(frameXLoc, frameYLoc);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setResizable(false);
 		
 		GameComponent gameComponent = new GameComponent();
 		gameComponent.loadLevel(0);
