@@ -55,7 +55,7 @@ public class GameComponent extends JComponent implements KeyListener {
 	private static final String EGG_FILE = "Egg";
 	private boolean tutorial;
 	private int pointsLoss;
-	public static final int NUM_LEVELS = 11;
+	public static final int NUM_LEVELS = 12;
 
 	Random r;
 	private double xstart;
