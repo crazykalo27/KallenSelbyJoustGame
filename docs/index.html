@@ -13,18 +13,13 @@
     window.addEventListener('load', async function() {
       try {
         console.log('Starting initialization...');
-        await cheerpjInit({
-          status: true,
-          javaProperties: [
-            "java.class.path=."
-          ]
-        });
+        await cheerpjInit({version: 11});
         
         console.log('Creating display...');
         cheerpjCreateDisplay(800, 600);
         
         console.log('Running game...');
-        await cheerpjRunMain("mainApp.MainApp", "/app/KallenSelbyJoustGame/JoustGame.jar");
+        await cheerpjRunJar("/app/KallenSelbyJoustGame/JoustGame.jar");
 
       } catch (error) {
         console.error('Error:', error);
