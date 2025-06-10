@@ -4,25 +4,32 @@
   <meta charset="utf-8">
   <title>Joust Game (CheerpJ)</title>
 
-  <!-- Always pin to a specific CheerpJ version -->
-  <script src="https://cjrtnc.leaningtech.com/4.1/cheerpj.js"></script>
+  <!-- CheerpJ -->
+  <script src="https://cjrtnc.leaningtech.com/2.3/loader.js"></script>
 </head>
 <body>
   <div id="loading">Loading Java Game...</div>
-  <script type="module">
-    try {
-      console.log('Starting initialization...');
-      await cheerpjInit();
-      
-      console.log('Creating display...');
-      cheerpjCreateDisplay(800, 600);
-      
-      console.log('Running game...');
-      await cheerpjRunJar("/app/JoustGame.jar");
-    } catch (error) {
-      console.error('Error:', error);
-      document.getElementById('loading').innerHTML = `Error loading game: ${error.message}<br>Please check the console for details.`;
-    }
+  <script>
+    window.addEventListener('load', async function() {
+      try {
+        console.log('Starting initialization...');
+        await cheerpjInit({
+          status: true,
+          javaProperties: [
+            "java.class.path=."
+          ]
+        });
+        
+        console.log('Creating display...');
+        cheerpjCreateDisplay(800, 600);
+        
+        console.log('Running game...');
+        await cheerpjRunJar("./JoustGame.jar");
+      } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('loading').innerHTML = `Error loading game: ${error.message}<br>Please check the console for details.`;
+      }
+    });
   </script>
 
   <style>
