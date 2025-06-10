@@ -4,19 +4,18 @@
   <meta charset="utf-8">
   <title>Joust Game — CheerpJ</title>
 
-  <!-- Always pin to a specific CheerpJ release                         -->
-  <!-- 4.1 is the current Community CDN with Java-11 support            -->
+  <!-- Use CheerpJ 4.1 - latest stable version -->
   <script src="https://cjrtnc.leaningtech.com/4.1/cheerpj.js"></script>
 </head>
 
 <body>
   <div id="loading">Loading Java game…</div>
 
-  <!--  Use a module so we can ‘await’ cheerpjInit()                    -->
+  <!--  Use a module so we can 'await' cheerpjInit()                    -->
   <script type="module">
     try {
       console.log('Starting CheerpJ…');
-      await cheerpjInit({ version: 11 });             // Java-11 runtime
+      await cheerpjInit({ version: 8 });             // Java-8 runtime
 
       console.log('Creating AWT/Swing display…');
       cheerpjCreateDisplay(800, 600);                 // optional but nice
