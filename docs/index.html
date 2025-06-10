@@ -2,18 +2,34 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+
+    <!-- allow CheerpJ’s runtime (uses eval internally) -->
+    <meta http-equiv="Content-Security-Policy"
+          content="script-src 'self' https://cjrtnc.leaningtech.com 'unsafe-eval';">
+
     <title>Kallen Selby | Joust Game</title>
-    <script src="https://cjo.leaningtech.com/loader.js"></script>
+
+    <!-- correct CDN for the free loader -->
+    <script src="https://cjrtnc.leaningtech.com/2.3.0/loader.js"></script>
+    <!-- ^  use /latest/ or a specific version (2.3.0 is the current stable) -->
+
     <style>
       body { margin:0; background:#000; display:flex; height:100vh; }
       #cj-container { margin:auto; }
     </style>
   </head>
+
   <body>
     <script>
-      cheerpjInit();                        // initialize CheerpJ runtime
+      // initialize CheerpJ
+      cheerpjInit();
+
+      // create full-window Swing canvas
       cheerpjCreateDisplay(window.innerWidth, window.innerHeight);
-      cheerpjRunJar("JoustGame.jar", "mainApp.MainApp");
+
+      // run your JAR (case-sensitive path + main class)
+      cheerpjRunJar("JoustGame.jar", "mainAPP.MainApp");
+      //              ↑ JAR file in docs/     ↑ package.MainClass
     </script>
   </body>
 </html>
