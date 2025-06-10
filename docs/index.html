@@ -2,34 +2,44 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Joust Game (CheerpJ)</title>
+  <title>Joust Game — CheerpJ</title>
 
-  <!-- CheerpJ -->
-  <script src="https://cjrtnc.leaningtech.com/2.3/loader.js"></script>
+  <!-- Always pin to a specific CheerpJ release                         -->
+  <!-- 4.1 is the current Community CDN with Java-11 support            -->
+  <script src="https://cjrtnc.leaningtech.com/4.1/cheerpj.js"></script>
 </head>
-<body>
-  <div id="loading">Loading Java Game...</div>
-  <script>
-    window.addEventListener('load', async function() {
-      try {
-        console.log('Starting initialization...');
-        await cheerpjInit({version: 11});
-        
-        console.log('Creating display...');
-        cheerpjCreateDisplay(800, 600);
-        
-        console.log('Running game...');
-        await cheerpjRunJar("/app/KallenSelbyJoustGame/JoustGame.jar");
 
-      } catch (error) {
-        console.error('Error:', error);
-        document.getElementById('loading').innerHTML = `Error loading game: ${error.message}<br>Please check the console for details.`;
-      }
-    });
+<body>
+  <div id="loading">Loading Java game…</div>
+
+  <!--  Use a module so we can ‘await’ cheerpjInit()                    -->
+  <script type="module">
+    try {
+      console.log('Starting CheerpJ…');
+      await cheerpjInit({ version: 11 });             // Java-11 runtime
+
+      console.log('Creating AWT/Swing display…');
+      cheerpjCreateDisplay(800, 600);                 // optional but nice
+
+      console.log('Running game JAR…');
+      /*  ───────────────────────────────────────────────────────────
+          If the JAR sits alongside index.html, keep just:
+               "/app/JoustGame.jar"
+          If it is inside a sub-folder, prepend that folder name.
+         ─────────────────────────────────────────────────────────── */
+      await cheerpjRunJar("/app/JoustGame.jar");
+
+      document.getElementById('loading').remove();
+    } catch (e) {
+      console.error(e);
+      document.getElementById('loading').innerHTML =
+        'Error: ' + e.message + '<br>See DevTools console for details.';
+    }
   </script>
 
   <style>
-    html,body{margin:0;height:100%;background:#000;display:flex;align-items:center;justify-content:center}
+    html,body{margin:0;height:100%;background:#000;
+              display:flex;align-items:center;justify-content:center}
     #loading{color:#fff;font-family:sans-serif}
   </style>
 </body>
