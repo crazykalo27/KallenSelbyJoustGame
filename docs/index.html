@@ -7,16 +7,15 @@
   <!-- CSP -->
   <meta http-equiv="Content-Security-Policy"
         content="script-src 'self' https://cjrtnc.leaningtech.com 'unsafe-inline' 'unsafe-eval';">
-
-  <!-- Ensure relative URLs point into repo folder -->
-  <base href="/KallenSelbyJoustGame/">
-
   <!-- CheerpJ -->
-  <script src="https://cjrtnc.leaningtech.com/latest/loader.js"
-          onload="
-            cheerpjInit({disableFeedback:true});
-            cheerpjRunJar('JoustGame.jar','mainApp.MainApp');
-          "></script>
+  <script src="https://cjrtnc.leaningtech.com/latest/loader.js"></script>
+  <script>
+    window.addEventListener('load', function() {
+      cheerpjInit({disableFeedback:true}).then(function() {
+        cheerpjRunJar('./JoustGame.jar', 'mainApp.MainApp');
+      });
+    });
+  </script>
 
   <style>
     html,body{margin:0;height:100%;background:#000;display:flex;align-items:center;justify-content:center}
