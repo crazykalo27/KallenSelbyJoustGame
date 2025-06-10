@@ -3,15 +3,14 @@
   <head>
     <meta charset="UTF-8" />
 
-    <!-- allow CheerpJ’s runtime (uses eval internally) -->
-    <meta http-equiv="Content-Security-Policy"
-          content="script-src 'self' https://cjrtnc.leaningtech.com 'unsafe-eval';">
-
     <title>Kallen Selby | Joust Game</title>
+	
+	<!-- Allow CheerpJ loader + inline/eval -->
+	<meta http-equiv="Content-Security-Policy"
+		content="script-src 'self' https://cjrtnc.leaningtech.com 'unsafe-inline' 'unsafe-eval';">
 
     <!-- correct CDN for the free loader -->
     <script src="https://cjrtnc.leaningtech.com/latest/loader.js"></script>
-    <!-- ^  use /latest/ or a specific version (2.3.0 is the current stable) -->
 
     <style>
       body { margin:0; background:#000; display:flex; height:100vh; }
