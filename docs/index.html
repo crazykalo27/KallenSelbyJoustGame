@@ -24,7 +24,8 @@
         cheerpjCreateDisplay(800, 600);
         
         console.log('Running game...');
-        await cheerpjRunJar("/app/KallenSelbyJoustGame/JoustGame.jar");
+        await cheerpjRunMain("mainApp.MainApp", "/app/KallenSelbyJoustGame/JoustGame.jar");
+
       } catch (error) {
         console.error('Error:', error);
         document.getElementById('loading').innerHTML = `Error loading game: ${error.message}<br>Please check the console for details.`;
