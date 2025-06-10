@@ -2,29 +2,28 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Joust Game (Web)</title>
-  <!-- CSP -->
+  <title>Joust Game (Web)</title>  <!-- CSP -->
   <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self' https://cjrtnc.leaningtech.com 'unsafe-inline' 'unsafe-eval' blob:;">
+        content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;">
 
-  <!-- Base path for repository -->
-  <base href="/csse220-spring-2023-final-project-s23_a303/">
-  
   <!-- CheerpJ -->
   <script src="https://cjrtnc.leaningtech.com/latest/loader.js"></script>
   <script>
     window.addEventListener('load', function() {
       cheerpjInit({
         disableFeedback: true,
-        preloadResources: [
-          "JoustGame.jar",
-          "images/*"
-        ],
+        nativeResolutions: ["BlueKoopaLeft.PNG", "BlueKoopaRight.PNG", "DigDugLeft.png", "DigDugRight.PNG",
+                          "Egg.png", "PacManLeft.PNG", "PacManRight.PNG", "PlatHealth.png", "PlatIce.PNG",
+                          "PlatLava.PNG", "PlatSlime.png", "PlatTruss.PNG", "WaddleDLeft.PNG", "WaddleDRight.PNG",
+                          "gameover0.png", "gameover1.png", "gameover2.png", "gameover3.png"].map(f => "images/" + f),
         javaProperties: [
-          "java.class.path=/app/JoustGame.jar"
+          "java.class.path=."
         ]
       }).then(function() {
-        cheerpjRunJar('/app/JoustGame.jar', 'mainApp.MainApp');
+        cheerpjCreateDisplay(800, 600);
+        cheerpjRunJar("JoustGame.jar", "mainApp.MainApp");
+      }).catch(function(error) {
+        console.error("Error initializing CheerpJ:", error);
       });
     });
   </script>
