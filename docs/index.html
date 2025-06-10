@@ -3,10 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <title>Joust Game (Web)</title>
-
   <!-- CSP -->
   <meta http-equiv="Content-Security-Policy"
         content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;">
+
+  <!-- Base path -->
+  <base href="/KallenSelbyJoustGame/">
 
   <!-- CheerpJ -->
   <script src="https://cjrtnc.leaningtech.com/latest/loader.js"></script>
@@ -16,22 +18,29 @@
         console.log('Starting initialization...');
         await cheerpjInit({
           disableFeedback: true,
-          resourceRoot: '.',
+          resourceRoot: '/KallenSelbyJoustGame',
           status: true,
           javaProperties: [
-            "java.class.path=./JoustGame.jar"
+            "java.class.path=/KallenSelbyJoustGame"
           ]
         });
 
         console.log('Creating display...');
         cheerpjCreateDisplay(800, 600);
+          console.log('Running jar...');
+        // First verify the JAR file is accessible
+        const response = await fetch('JoustGame.jar');
+        if (!response.ok) {
+          throw new Error(`JAR file not accessible: ${response.status} ${response.statusText}`);
+        }
+        console.log('JAR file found, starting game...');
         
-        console.log('Running jar...');
-        const mainClass = 'mainApp.MainApp';
-        await cheerpjRunMain(mainClass, './JoustGame.jar');
+        await cheerpjAddStringFile("/str/META-INF/MANIFEST.MF",
+          'Manifest-Version: 1.0\nMain-Class: mainApp.MainApp\n');
+        await cheerpjRunJar("/KallenSelbyJoustGame/JoustGame.jar");
       } catch (error) {
         console.error('Error:', error);
-        document.body.innerHTML = 'Error loading game: ' + error.message;
+        document.body.innerHTML = `Error loading game: ${error.message}<br>Please check the console for details.`;
       }
     });
   </script>
