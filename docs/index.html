@@ -1,28 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Kallen Selby | Joust Game</title>
+<head>
+  <meta charset="UTF-8" />
+  <title>Kallen Selby | Joust Game</title>
 
-    <!--  Allow CheerpJ runtime (uses inline script + eval)  -->
-    <meta http-equiv="Content-Security-Policy"
-          content="script-src 'self' https://cjrtnc.leaningtech.com 'unsafe-inline' 'unsafe-eval';">
+  <!-- CSP for CheerpJ -->
+  <meta http-equiv="Content-Security-Policy"
+        content="script-src 'self' https://cjrtnc.leaningtech.com 'unsafe-inline' 'unsafe-eval';">
 
-    <!--  CheerpJ loader – use latest free CDN path  -->
-    <script src="https://cjrtnc.leaningtech.com/latest/loader.js"
-            onload="
-              cheerpjInit();
-              cheerpjCreateDisplay(window.innerWidth, window.innerHeight);
-              cheerpjRunJar('./JoustGame.jar', 'mainApp.MainApp');
-            "></script>
+  <!-- CheerpJ loader -->
+  <script src="https://cjrtnc.leaningtech.com/latest/loader.js"
+          onload="
+            cheerpjInit({disableFeedback:true});          /* stop Google-Forms POST */
+            /* create display automatically – no crash */
+            cheerpjRunJar('./JoustGame.jar','mainApp.MainApp');
+          "></script>
 
-    <style>
-      html,body{margin:0;height:100%;background:#000}
-      body{display:flex;align-items:center;justify-content:center}
-    </style>
-  </head>
+  <style>
+    html,body{margin:0;height:100%;background:#000;display:flex;align-items:center;justify-content:center}
+  </style>
+</head>
 
-  <body>
-    <!-- CheerpJ will inject its canvas & status overlay here -->
-  </body>
+<body>
+  <!-- optional explicit target; not strictly needed if you auto-display -->
+  <div id="cj-container"></div>
+</body>
 </html>
