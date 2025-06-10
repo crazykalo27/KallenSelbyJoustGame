@@ -1,48 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Joust Game (Web)</title>
-  <!-- CSP -->  <meta http-equiv="Content-Security-Policy"
-        content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;">
+  <meta charset="utf-8">
+  <title>Joust Game (CheerpJ)</title>
 
-  <!-- CheerpJ -->
-  <script src="https://cjrtnc.leaningtech.com/latest/loader.js"></script>
-  <script>
-    window.addEventListener('load', async function() {
-      try {
-        console.log('Starting initialization...');
-        await cheerpjInit({
-          disableFeedback: true,
-          status: true,
-          logLevel: 'DEBUG'
-        });        console.log('Creating display...');
-        cheerpjCreateDisplay(800, 600);
-        
-        // Copy the compiled JAR to docs folder
-        console.log('Preparing JAR file...');
-        await cheerpjAddStringFile("/str/META-INF/MANIFEST.MF",
-          'Manifest-Version: 1.0\nMain-Class: mainApp.MainApp\n');
-
-        console.log('Running game...');
-        try {
-          await cheerpjRunJar("JoustGame.jar");
-        } catch (jarError) {
-          console.error('JAR error:', jarError);
-          throw new Error('Failed to run JAR: ' + jarError.message);
-        }
-      } catch (error) {
-        console.error('Error:', error);
-        document.body.innerHTML = `Error loading game: ${error.message}<br>Please check the console for details.`;
-      }
-    });
+  <!-- Always pin to a specific CheerpJ version -->
+  <script src="https://cjrtnc.leaningtech.com/4.1/cheerpj.js"></script>
+</head>
+<body>
+  <div id="loading">Loading Java Game...</div>
+  <script type="module">
+    try {
+      console.log('Starting initialization...');
+      await cheerpjInit();
+      
+      console.log('Creating display...');
+      cheerpjCreateDisplay(800, 600);
+      
+      console.log('Running game...');
+      await cheerpjRunJar("/app/JoustGame.jar");
+    } catch (error) {
+      console.error('Error:', error);
+      document.getElementById('loading').innerHTML = `Error loading game: ${error.message}<br>Please check the console for details.`;
+    }
   </script>
 
   <style>
     html,body{margin:0;height:100%;background:#000;display:flex;align-items:center;justify-content:center}
+    #loading{color:#fff;font-family:sans-serif}
   </style>
-</head>
-<body>
-  <div id="loading">Loading Java Game...</div>
 </body>
 </html>
