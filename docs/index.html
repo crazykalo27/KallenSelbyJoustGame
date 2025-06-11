@@ -10,23 +10,42 @@
 
 <body>
   <div id="loading">Loading Java game…</div>
+  <div id="gameContainer"></div>
 
   <!--  Use a module so we can 'await' cheerpjInit()                    -->
   <script type="module">
     try {
       console.log('Starting CheerpJ…');
-      await cheerpjInit({ version: 11 });             // Java-8 runtime
+      await cheerpjInit({ version: 11 });             // Java-11 runtime
 
       console.log('Creating AWT/Swing display…');
-      cheerpjCreateDisplay(800, 600);                 // optional but nice
+      // Fix: Use correct game dimensions (800x850 to match Java code)
+      cheerpjCreateDisplay(800, 850, document.getElementById('gameContainer'));
 
       console.log('Running game JAR…');
-      /*  ───────────────────────────────────────────────────────────
-          If the JAR sits alongside index.html, keep just:
-               "/app/JoustGame.jar"
-          If it is inside a sub-folder, prepend that folder name.
-         ─────────────────────────────────────────────────────────── */
       await cheerpjRunJar("/app/KallenSelbyJoustGame/JoustGame.jar");
+
+      // Fix: Add key event handling for browser
+      console.log('Setting up key event handlers…');
+      
+      // Focus the canvas to receive key events
+      const canvas = document.querySelector('canvas');
+      if (canvas) {
+        canvas.tabIndex = 0; // Make canvas focusable
+        canvas.focus();
+        
+        // Prevent default browser behavior for arrow keys
+        canvas.addEventListener('keydown', function(e) {
+          if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'].includes(e.code)) {
+            e.preventDefault();
+          }
+        });
+        
+        // Ensure canvas stays focused
+        canvas.addEventListener('click', function() {
+          this.focus();
+        });
+      }
 
       document.getElementById('loading').remove();
     } catch (e) {
@@ -37,9 +56,45 @@
   </script>
 
   <style>
-    html,body{margin:0;height:100%;background:#000;
-              display:flex;align-items:center;justify-content:center}
-    #loading{color:#fff;font-family:sans-serif}
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: sans-serif;
+    }
+    
+    #loading {
+      color: #fff;
+      font-size: 18px;
+    }
+    
+    #gameContainer {
+      border: 2px solid #333;
+      background: #000;
+    }
+    
+    /* Ensure canvas gets focus and handles keys properly */
+    canvas {
+      outline: none;
+      display: block;
+    }
+    
+    /* Click instruction */
+    #gameContainer::after {
+      content: "Click on the game area to enable keyboard controls";
+      position: absolute;
+      bottom: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #888;
+      font-size: 12px;
+      pointer-events: none;
+    }
   </style>
 </body>
 </html>
