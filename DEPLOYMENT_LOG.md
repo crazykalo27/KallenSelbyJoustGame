@@ -49,22 +49,34 @@
 - ✅ Maven build successful: `mvn clean package` completed without errors
 **Status**: ✅ RESOLVED - Ready for deployment
 
-### JAR-Only Deployment Test (Current)
+### CheerpJ Display & Input Fixes ✅ COMPLETED
+**Issues Identified:**
+- ❌ Display problem: Game cut off (CheerpJ: 800x600 vs Game: 800x850)
+- ❌ Input problem: Key presses not detected (canvas focus issues)
+**Solutions Applied:**
+- ✅ Fixed dimensions: Updated `cheerpjCreateDisplay(800, 850)` to match Java game size
+- ✅ Added canvas focus handling: `tabIndex=0`, auto-focus, click-to-focus
+- ✅ Prevented browser default behavior for arrow keys and space
+- ✅ Added visual container with border and user instructions
+- ✅ Improved CSS layout for better game presentation
+**Status**: ✅ DEPLOYED - Game should now display full screen and accept key input
+
+### JAR-Only Deployment ✅ COMPLETED
 **Discovery**: All resources are properly packaged in the JAR file
 - ✅ All 18 images are inside JAR under `images/` directory
 - ✅ All 13 level files are inside JAR under `levels/` directory  
 - ✅ ResourceManager.java designed to try classpath loading first
-**Test Plan**: Deploy with only JoustGame.jar to see if CheerpJ can access internal resources
-**Expected**: Should work without external files, fallback to file system if needed
+**Deployment**: Clean JAR-only deployment completed
+- ✅ Removed all external files from docs/ folder 
+- ✅ Git commit and push successful
+- ✅ GitHub Pages should now serve only: JoustGame.jar, index.html, .nojekyll
+**Status**: ✅ DEPLOYED - Testing if CheerpJ can access internal JAR resources
 
-### Manual Deployment Steps
-**Next steps for deployment:**
+### Manual Deployment Steps ✅ COMPLETED
 - ✅ Copy JAR: `target\KallenSelbyJoustGame-0.0.1-SNAPSHOT.jar` → `docs\JoustGame.jar`
-- Test JAR-only deployment first (resources should be internal)
-- If needed: Copy levels: `src\main\resources\levels\*` → `docs\levels\`
-- If needed: Copy images: `src\main\resources\images\*` → `docs\images\`
-- Commit and push to GitHub
-- Verify GitHub Pages deployment
+- ✅ Clean deployment: Removed external levels and images (all in JAR now)
+- ✅ Commit and push to GitHub
+- ⏳ **NEXT**: Verify GitHub Pages deployment works with JAR-only resources
 
 ### Build Script Removal
 **Change**: Removed build-and-deploy.bat automated script per user request
