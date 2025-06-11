@@ -5,7 +5,7 @@
   <title>Joust Game — CheerpJ</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Use CheerpJ 4.1 - correct loader script -->
+  <!-- Use CheerpJ 4.1 -->
   <script src="https://cjrtnc.leaningtech.com/4.1/loader.js"></script>
 </head>
 
@@ -14,100 +14,103 @@
   <div id="instructions">Click on the game to enable keyboard controls (Arrow Keys + Space)</div>
   <div id="gameContainer"></div>
 
-  <!--  Use a module so we can 'await' cheerpjInit()                    -->
   <script type="module">
     try {
       console.log('Starting CheerpJ with MAXIMUM performance optimizations…');
-      
-      // MAXIMUM PERFORMANCE CheerpJ initialization
+
       await cheerpjInit({
-        version: 11,
-        enablePreciseAppletSizeWorkaround: true,
+        version: "4.1",                          // match your loader
+        enablePreciseAppletSizeWorkaround: true, 
         clipboardMode: "system",
-        enableInputMethods: false, // Disable for performance
-        preloadProgress: function(current, total) {
-          if(total > 0) {
-            const percent = Math.round((current / total) * 100);
-            document.getElementById('loading').innerHTML = 
-              `Loading Java game… ${percent}% <br><small>If stuck, refresh the page (F5)</small>`;
+        enableInputMethods: false,
+        
+        // Offload heavy compute into a Web Worker
+        useWorkers: true,
+
+        // Enable the WebAssembly JIT engine
+        wasm: true,
+
+        // Show % loading
+        preloadProgress(current, total) {
+          if (total > 0) {
+            const p = Math.round((current/total)*100);
+            document.getElementById('loading').innerHTML =
+              `Loading Java game… ${p}% <br><small>If stuck, refresh (F5)</small>`;
           }
         },
-        // AGGRESSIVE Performance optimizations
+
+        // Kick off parallel download of exactly the modules you need
+        preloadResources: await (async()=>{
+          // discover which modules you actually use
+          const list = JSON.parse(cjGetRuntimeResources());
+          // you might filter here if you know some are optional
+          return list;
+        })(),
+
+        // JVM flags tuned for max throughput
         javaProperties: [
-          "-Dsun.java2d.opengl=true",      // Hardware acceleration
-          "-Dsun.java2d.d3d=true",         // Direct3D
-          "-XX:+AggressiveOpts",           // Maximum optimizations
-          "-XX:+UseConcMarkSweepGC",       // Fast garbage collection
-          "-XX:+UseCompressedOops",        // Memory optimization
-          "-Dsun.java2d.noddraw=false",    // Enable DirectDraw
-          "-Dsun.java2d.ddforcevram=true", // Force video RAM
-          "-XX:+UseStringDeduplication",   // String optimization
-          "-Xms64m",                       // Minimum heap
-          "-Xmx512m",                      // Maximum heap
-          "-XX:NewRatio=2"                 // Optimize memory allocation
+          "-Dsun.java2d.opengl=true",      
+          "-Dsun.java2d.d3d=true",         
+          "-XX:+AggressiveOpts",           
+          "-XX:+UseConcMarkSweepGC",       
+          "-XX:+UseCompressedOops",        
+          "-Dsun.java2d.noddraw=false",    
+          "-Dsun.java2d.ddforcevram=true", 
+          "-XX:+UseStringDeduplication",   
+          "-Xms64m",                       
+          "-Xmx512m",                      
+          "-XX:NewRatio=2"                 
         ]
       });
 
       console.log('Creating OPTIMIZED display…');
-      
-      // Account for window decorations - use content area size
       const container = document.getElementById('gameContainer');
-      // Java frame.pack() will size to content + decorations, so we size for content area
       cheerpjCreateDisplay(800, 850, container);
-      
-      // Minimal wait for canvas creation
-      await new Promise(resolve => setTimeout(resolve, 200));
+      await new Promise(r => setTimeout(r, 200));
 
       console.log('Running OPTIMIZED game JAR…');
       await cheerpjRunJar("/app/KallenSelbyJoustGame/JoustGame.jar");
 
-      // MAXIMUM PERFORMANCE event handling
-      console.log('Setting up OPTIMIZED key handlers…');
-      
+      // super-lightweight input handling
       const canvas = document.querySelector('canvas');
       if (canvas) {
-        // Let CheerpJ handle canvas sizing, just ensure it's visible
         canvas.style.display = 'block';
-        canvas.style.margin = '0';
-        canvas.style.padding = '0';
-        
         canvas.tabIndex = 0;
         canvas.focus();
-        
-        // Ultra-fast event handling
-        const keyHandler = function(e) {
-          const keys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space', 'KeyN'];
+
+        const keyHandler = e => {
+          const keys = ['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space','KeyN'];
           if (keys.includes(e.code)) {
             e.preventDefault();
             e.stopImmediatePropagation();
           }
         };
-        
         canvas.addEventListener('keydown', keyHandler, { passive: false, capture: true });
-        canvas.addEventListener('keyup', keyHandler, { passive: false, capture: true });
-        
-        canvas.addEventListener('click', function() {
-          this.focus();
+        canvas.addEventListener('keyup',   keyHandler, { passive: false, capture: true });
+
+        canvas.addEventListener('click', () => {
+          canvas.focus();
           document.getElementById('instructions').style.opacity = '0.5';
         }, { passive: true });
-        
-        // Aggressive focus management
+
+        // keep focus alive
         setInterval(() => {
-          if (document.activeElement !== canvas) {
-            canvas.focus();
-          }
+          if (document.activeElement !== canvas) canvas.focus();
         }, 2000);
-        
-        // Performance monitoring
-        let frameCount = 0;
-        const startTime = Date.now();
-        setInterval(() => {
-          frameCount++;
-          if (frameCount % 60 === 0) {
-            const fps = 60000 / (Date.now() - startTime);
-            console.log(`Approximate FPS: ${fps.toFixed(1)}`);
+
+        // more accurate FPS via requestAnimationFrame
+        let frames = 0;
+        let t0 = performance.now();
+        function tick() {
+          frames++;
+          const t1 = performance.now();
+          if (t1 - t0 >= 1000) {
+            console.log(`FPS: ${(frames*1000/(t1-t0)).toFixed(1)}`);
+            frames = 0; t0 = t1;
           }
-        }, 1000/60);
+          requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
       }
 
       document.getElementById('loading').style.display = 'none';
@@ -116,101 +119,48 @@
       console.error('CheerpJ Error:', e);
       document.getElementById('loading').innerHTML =
         `<div style="color: #ff6b6b;">Error: ${e.message}</div>
-         <div style="font-size: 14px; margin-top: 10px;">
-           Try refreshing the page (F5) or check console for details.
+         <div style="font-size:14px; margin-top:10px;">
+           Try refreshing (F5) or check console.
          </div>`;
     }
   </script>
 
   <style>
     html, body {
-      margin: 0;
-      padding: 10px;
-      min-height: 100vh;
-      background: #111;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Arial', sans-serif;
-      color: #fff;
+      margin:0; padding:10px; min-height:100vh;
+      background:#111; display:flex;
+      flex-direction:column; align-items:center;
+      justify-content:center; font-family:Arial,sans-serif;
+      color:#fff;
     }
-    
-    #loading {
-      color: #fff;
-      font-size: 18px;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-    
-    #loading small {
-      color: #ffeb3b;
-      font-size: 12px;
-      display: block;
-      margin-top: 5px;
-    }
-    
+    #loading { font-size:18px; margin-bottom:20px; text-align:center; }
+    #loading small { color:#ffeb3b; font-size:12px; display:block; margin-top:5px; }
     #instructions {
-      color: #ffeb3b;
-      background: rgba(0,0,0,0.9);
-      padding: 10px 20px;
-      border-radius: 6px;
-      font-size: 14px;
-      font-weight: bold;
-      margin-bottom: 15px;
-      text-align: center;
-      border: 2px solid #ffeb3b;
-      transition: opacity 0.3s ease;
-      max-width: 900px;
-      box-shadow: 0 0 10px rgba(255,235,59,0.3);
+      color:#ffeb3b; background:rgba(0,0,0,0.9);
+      padding:10px 20px; border-radius:6px;
+      font-size:14px; font-weight:bold;
+      margin-bottom:15px; text-align:center;
+      border:2px solid #ffeb3b; transition:opacity .3s;
+      max-width:900px; box-shadow:0 0 10px rgba(255,235,59,0.3);
     }
-    
     #gameContainer {
-      border: 2px solid #555;
-      background: #000;
-      box-shadow: 0 0 30px rgba(255,255,255,0.1);
-      position: relative;
-      /* Let CheerpJ determine size, just provide container */
-      min-width: 800px;
-      min-height: 850px;
-      overflow: visible; /* Allow for window decorations */
+      border:2px solid #555; background:#000;
+      box-shadow:0 0 30px rgba(255,255,255,0.1);
+      position:relative; min-width:800px; min-height:850px;
+      overflow:visible;
     }
-    
-    /* Let CheerpJ handle canvas sizing naturally */
-    canvas {
-      outline: none !important;
-      display: block !important;
-      /* Remove forced sizing - let CheerpJ handle it */
-    }
-    
-    /* Performance indicator */
+    canvas { outline:none!important; display:block!important; }
     #gameContainer::before {
-      content: "🚀 MAXIMUM PERFORMANCE MODE";
-      position: absolute;
-      top: -25px;
-      left: 0;
-      color: #4caf50;
-      font-size: 11px;
-      font-weight: bold;
+      content:"🚀 MAX PERFORMANCE MODE";
+      position:absolute; top:-25px; left:0;
+      color:#4caf50; font-size:11px; font-weight:bold;
     }
-    
-    /* Responsive design for smaller screens */
-    @media (max-width: 950px) {
-      #gameContainer {
-        transform: scale(0.85);
-        transform-origin: center;
-      }
+    @media (max-width:950px) {
+      #gameContainer { transform:scale(0.85); transform-origin:center; }
     }
-    
-    @media (max-width: 800px) {
-      #gameContainer {
-        transform: scale(0.75);
-      }
-      
-      #instructions {
-        font-size: 12px;
-        padding: 8px 16px;
-      }
+    @media (max-width:800px) {
+      #gameContainer { transform:scale(0.75); }
+      #instructions { font-size:12px; padding:8px 16px; }
     }
   </style>
 </body>
