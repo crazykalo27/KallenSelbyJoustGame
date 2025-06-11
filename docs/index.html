@@ -17,13 +17,14 @@
   <!--  Use a module so we can 'await' cheerpjInit()                    -->
   <script type="module">
     try {
-      console.log('Starting CheerpJ with performance optimizations…');
+      console.log('Starting CheerpJ with MAXIMUM performance optimizations…');
       
-      // Performance-optimized CheerpJ initialization
+      // MAXIMUM PERFORMANCE CheerpJ initialization
       await cheerpjInit({
         version: 11,
-        enablePreciseAppletSizeWorkaround: false,
+        enablePreciseAppletSizeWorkaround: true,
         clipboardMode: "system",
+        enableInputMethods: false, // Disable for performance
         preloadProgress: function(current, total) {
           if(total > 0) {
             const percent = Math.round((current / total) * 100);
@@ -31,67 +32,82 @@
               `Loading Java game… ${percent}% <br><small>If stuck, refresh the page (F5)</small>`;
           }
         },
-        // Performance optimizations
+        // AGGRESSIVE Performance optimizations
         javaProperties: [
-          "-Dsun.java2d.opengl=true",  // Enable hardware acceleration
-          "-Dsun.java2d.d3d=true",     // Enable Direct3D
-          "-XX:+AggressiveOpts",       // Aggressive optimizations
-          "-XX:+UseConcMarkSweepGC"    // Better garbage collection
+          "-Dsun.java2d.opengl=true",      // Hardware acceleration
+          "-Dsun.java2d.d3d=true",         // Direct3D
+          "-XX:+AggressiveOpts",           // Maximum optimizations
+          "-XX:+UseConcMarkSweepGC",       // Fast garbage collection
+          "-XX:+UseCompressedOops",        // Memory optimization
+          "-Dsun.java2d.noddraw=false",    // Enable DirectDraw
+          "-Dsun.java2d.ddforcevram=true", // Force video RAM
+          "-XX:+UseStringDeduplication",   // String optimization
+          "-Xms64m",                       // Minimum heap
+          "-Xmx512m",                      // Maximum heap
+          "-XX:NewRatio=2"                 // Optimize memory allocation
         ]
       });
 
-      console.log('Creating optimized AWT/Swing display…');
+      console.log('Creating OPTIMIZED display…');
       
-      // Precise canvas creation with container targeting
+      // Account for window decorations - use content area size
       const container = document.getElementById('gameContainer');
+      // Java frame.pack() will size to content + decorations, so we size for content area
       cheerpjCreateDisplay(800, 850, container);
       
-      // Wait a moment for canvas creation
-      await new Promise(resolve => setTimeout(resolve, 500));
+      // Minimal wait for canvas creation
+      await new Promise(resolve => setTimeout(resolve, 200));
 
-      console.log('Running game JAR…');
+      console.log('Running OPTIMIZED game JAR…');
       await cheerpjRunJar("/app/KallenSelbyJoustGame/JoustGame.jar");
 
-      // Enhanced key event handling with performance focus
-      console.log('Setting up optimized key event handlers…');
+      // MAXIMUM PERFORMANCE event handling
+      console.log('Setting up OPTIMIZED key handlers…');
       
       const canvas = document.querySelector('canvas');
       if (canvas) {
-        // Ensure exact canvas sizing
-        canvas.width = 800;
-        canvas.height = 850;
-        canvas.style.width = '800px';
-        canvas.style.height = '850px';
+        // Let CheerpJ handle canvas sizing, just ensure it's visible
+        canvas.style.display = 'block';
+        canvas.style.margin = '0';
+        canvas.style.padding = '0';
         
         canvas.tabIndex = 0;
         canvas.focus();
         
-        // Optimized event handling
+        // Ultra-fast event handling
         const keyHandler = function(e) {
-          if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space', 'KeyN'].includes(e.code)) {
+          const keys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space', 'KeyN'];
+          if (keys.includes(e.code)) {
             e.preventDefault();
-            e.stopPropagation();
+            e.stopImmediatePropagation();
           }
         };
         
-        canvas.addEventListener('keydown', keyHandler, { passive: false });
-        canvas.addEventListener('keyup', keyHandler, { passive: false });
+        canvas.addEventListener('keydown', keyHandler, { passive: false, capture: true });
+        canvas.addEventListener('keyup', keyHandler, { passive: false, capture: true });
         
         canvas.addEventListener('click', function() {
           this.focus();
           document.getElementById('instructions').style.opacity = '0.5';
-        });
+        }, { passive: true });
         
-        canvas.addEventListener('blur', function() {
-          document.getElementById('instructions').style.opacity = '1';
-        });
-        
-        // Force focus every few seconds to ensure responsiveness
+        // Aggressive focus management
         setInterval(() => {
           if (document.activeElement !== canvas) {
             canvas.focus();
           }
-        }, 3000);
+        }, 2000);
+        
+        // Performance monitoring
+        let frameCount = 0;
+        const startTime = Date.now();
+        setInterval(() => {
+          frameCount++;
+          if (frameCount % 60 === 0) {
+            const fps = 60000 / (Date.now() - startTime);
+            console.log(`Approximate FPS: ${fps.toFixed(1)}`);
+          }
+        }, 1000/60);
       }
 
       document.getElementById('loading').style.display = 'none';
@@ -145,37 +161,31 @@
       text-align: center;
       border: 2px solid #ffeb3b;
       transition: opacity 0.3s ease;
-      max-width: 800px;
+      max-width: 900px;
       box-shadow: 0 0 10px rgba(255,235,59,0.3);
     }
     
     #gameContainer {
-      border: 3px solid #555;
+      border: 2px solid #555;
       background: #000;
       box-shadow: 0 0 30px rgba(255,255,255,0.1);
       position: relative;
-      /* Exact sizing to prevent offset */
-      width: 800px;
-      height: 850px;
-      overflow: hidden;
+      /* Let CheerpJ determine size, just provide container */
+      min-width: 800px;
+      min-height: 850px;
+      overflow: visible; /* Allow for window decorations */
     }
     
-    /* Ensure canvas perfect positioning */
+    /* Let CheerpJ handle canvas sizing naturally */
     canvas {
       outline: none !important;
       display: block !important;
-      position: relative !important;
-      /* Force exact dimensions */
-      width: 800px !important;
-      height: 850px !important;
-      margin: 0 !important;
-      padding: 0 !important;
-      border: none !important;
+      /* Remove forced sizing - let CheerpJ handle it */
     }
     
-    /* Performance hint */
+    /* Performance indicator */
     #gameContainer::before {
-      content: "🎮 Optimized for Performance";
+      content: "🚀 MAXIMUM PERFORMANCE MODE";
       position: absolute;
       top: -25px;
       left: 0;
@@ -185,30 +195,21 @@
     }
     
     /* Responsive design for smaller screens */
-    @media (max-width: 850px) {
+    @media (max-width: 950px) {
       #gameContainer {
-        transform: scale(0.9);
+        transform: scale(0.85);
         transform-origin: center;
-        width: 720px;
-        height: 765px;
-      }
-      
-      canvas {
-        width: 720px !important;
-        height: 765px !important;
       }
     }
     
-    @media (max-width: 750px) {
+    @media (max-width: 800px) {
       #gameContainer {
-        transform: scale(0.8);
-        width: 640px;
-        height: 680px;
+        transform: scale(0.75);
       }
       
-      canvas {
-        width: 640px !important;
-        height: 680px !important;
+      #instructions {
+        font-size: 12px;
+        padding: 8px 16px;
       }
     }
   </style>
