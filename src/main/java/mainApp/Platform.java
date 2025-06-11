@@ -2,10 +2,6 @@ package mainApp;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 
 /**
  * Class: Platform
@@ -66,14 +62,9 @@ public class Platform extends GameObject {
 	public void drawOn(Graphics2D g2) {
 		g2.translate(this.getXCent(), this.getYCent());
 		
-		String fileName = "images/" + "Plat" + name;
-		
-		fileName += ".PNG";
-		BufferedImage img;
-		try {
-			img = ImageIO.read(new File(fileName));
+		BufferedImage img = ResourceManager.loadImage("Plat" + name);
+		if (img != null) {
 			g2.drawImage(img, (int) -WIDTH/2, (int) -HEIGHT/2, (int) WIDTH, (int) HEIGHT, null);
-		} catch (IOException e) {
 		}
 		
 //		g2.setColor(Color.red);

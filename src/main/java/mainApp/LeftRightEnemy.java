@@ -3,7 +3,7 @@ package mainApp;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 //TODO: add collionsons and gravity 
 /**
@@ -12,7 +12,6 @@ import java.util.Random;
  * <br>Purpose: Swaps between moving left and right on a random interval
  */
 public class LeftRightEnemy extends Enemy {
-	Random r = new Random();
 	private static final Color COL = Color.green;
 	// private static final int WIDTH = 100;
 	// private static final int HEIGHT = 100;
@@ -23,7 +22,7 @@ public class LeftRightEnemy extends Enemy {
 		super(xCent, yCent, speed, name);
 		this.setHasGravity(false);
 		this.ticks = 0;
-		this.waitNum = r.nextInt(40, 90);
+		this.waitNum = ThreadLocalRandom.current().nextInt(40,90);
 		this.setSpeed(this.getSpeed()*.6);
 
 	}
@@ -36,14 +35,14 @@ public class LeftRightEnemy extends Enemy {
 
 		if (ticks == waitNum) {
 			int diry = -1;
-			if(r.nextBoolean()) {
+			if(ThreadLocalRandom.current().nextBoolean()) {
 				diry *= -1;
 			}
 			this.setYVelocity(super.getSpeed() * diry);
 			//System.out.println("updated " + waitNum);
 			super.setSpeed(super.getSpeed() * -1);
 			ticks = 0;
-			waitNum = r.nextInt(50, 100);
+			waitNum = ThreadLocalRandom.current().nextInt(50,100);
 		}
 
 		super.update();

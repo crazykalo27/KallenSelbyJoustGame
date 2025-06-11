@@ -2,10 +2,6 @@ package mainApp;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 
 public class Egg extends Enemy {
 	private Enemy containedEnemy;
@@ -25,14 +21,9 @@ public class Egg extends Enemy {
 
 	@Override
 	public void drawOn(Graphics2D g2) {
-		String fileName = "images/" + super.getName();
-		
-		fileName += ".PNG";
-		BufferedImage img;
-		try {
-			img = ImageIO.read(new File(fileName));
+		BufferedImage img = ResourceManager.loadImage(super.getName());
+		if (img != null) {
 			g2.drawImage(img, (int) (this.getXCent()-(this.getWidth()/2)), (int) (this.getYCent()-(this.getHeight()/2)), (int) this.getHeight(), (int) this.getWidth(), null);
-		} catch (IOException e) {
 		}
 	}
 	

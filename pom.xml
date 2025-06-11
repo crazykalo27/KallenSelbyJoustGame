@@ -1,35 +1,69 @@
+<!-- pom.xml -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                             https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-  <groupId>ArcadeGameGit-S23-A303</groupId>
-  <artifactId>KallenSelbyJoustGame</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <packaging>jar</packaging>
-  <name>KallenSelbyJoustGame</name>
+	<groupId>ArcadeGameGit-S23-A303</groupId>
+	<artifactId>KallenSelbyJoustGame</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+	<name>KallenSelbyJoustGame</name>
 
-  <properties>
-    <maven.compiler.source>17</maven.compiler.source>
-    <maven.compiler.target>17</maven.compiler.target>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
+	<!--  ────────────────────────────────────────────────────────────────  -->
+	<!--  Java version + encoding                                          -->
+	<!--  ────────────────────────────────────────────────────────────────  -->
+	<properties>
+		<!-- compile *and* target JVM 11 for compatibility -->
+		<maven.compiler.release>11</maven.compiler.release>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 
-  <build>
-    <sourceDirectory>src/main/java</sourceDirectory>
+	<build>
+		<sourceDirectory>src/main/java</sourceDirectory>
 
-    <plugins>
-      <!-- Standard Maven Compiler Plugin -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.8.1</version>
-        <configuration>
-          <release>17</release>
-        </configuration>
-      </plugin>
+		<plugins>
 
-    </plugins>
-  </build>
+			<!-- 1️⃣  Standard compiler – obeys maven.compiler.release above -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.11.0</version>
+				<configuration>
+					<release>11</release>
+					<compilerArgs>
+						<arg>-XDstringConcat=inline</arg>
+					</compilerArgs>
+				</configuration>
+			</plugin>
+
+			<!-- 2️⃣  Shade plugin – creates one fat, runnable JAR -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>3.5.1</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<!-- keep original POM intact -->
+							<createDependencyReducedPom>false</createDependencyReducedPom>
+
+							<!-- put your real main class here -->
+							<transformers>
+								<transformer
+									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									<mainClass>mainApp.MainApp</mainClass>
+								</transformer>
+							</transformers>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+	</build>
 </project>

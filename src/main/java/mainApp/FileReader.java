@@ -12,6 +12,7 @@ package mainApp;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -109,6 +110,29 @@ public class FileReader {
 	public ArrayList<ArrayList<String>> readFile(String fileName) {
 		ArrayList<ArrayList<String>> chars = new ArrayList<ArrayList<String>>();
 
+		// Try to read from resources/levels first, fallback to direct file access
+		try {
+			InputStream inputStream = getClass().getClassLoader().getResourceAsStream("levels/" + fileName + ".txt");
+			if (inputStream != null) {
+				Scanner scan = new Scanner(inputStream);
+				while (scan.hasNextLine()) {
+					String line = scan.nextLine();
+					String[] fromLine = line.split("");
+
+					ArrayList<String> temp = new ArrayList<>();
+					for (int i = 0; i < fromLine.length; i++) {
+						temp.add(fromLine[i]);
+					}
+					chars.add(temp);
+				}
+				scan.close();
+				return chars;
+			}
+		} catch (Exception e) {
+			// Fall through to file-based approach
+		}
+
+		// Fallback to direct file access for local development/CheerpJ
 		File file = new File(fileName + ".txt");
 		Scanner scan;
 		try {

@@ -126,20 +126,12 @@ public class GameComponent extends JComponent implements KeyListener {
 
 			drawScore(this.getWidth() / 2 - 182, 32, g2);
 
-			ArrayList<String> fileNames = new ArrayList<String>();
+			// Load and draw gameover images using ResourceManager
 			for (int i = 0; i < 4; i++) {
-				fileNames.add("images/gameover" + i + ".png");
-			}
-
-			BufferedImage img;
-			try {
-				for (int i = 0; i < 4; i++) {
-					img = ImageIO.read(new File(fileNames.get(i)));
+				BufferedImage img = ResourceManager.loadImage("gameover" + i, ".png");
+				if (img != null) {
 					g2.drawImage(img, 25 + (215 * i), 450, 190, 190, null);
 				}
-
-			} catch (IOException e) {
-				System.out.println("fail");
 			}
 
 			return;
