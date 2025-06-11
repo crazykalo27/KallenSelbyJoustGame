@@ -98,6 +98,20 @@
 - All image loading now uses consistent dual strategy (classpath/file system)
 **Status**: Complete - All images should now load correctly in both development and CheerpJ deployment
 
+### Performance & UX Improvements ✅ COMPLETED
+**Issues Identified:**
+- ❌ Right side slightly cut off (canvas sizing)  
+- ❌ Instruction text too low and hard to read
+- ❌ Game running slowly (25 FPS)
+**Solutions Applied:**
+- ✅ **Performance**: Improved from 25 FPS to 60 FPS (DELAY: 40ms → 16ms)
+- ✅ **Canvas sizing**: Added responsive design with overflow protection
+- ✅ **UX**: Moved instruction above game, bright yellow with border
+- ✅ **Interactive feedback**: Instruction fades when game is focused
+- ✅ **Responsive design**: Game scales on smaller screens
+- ✅ **Better styling**: Improved colors, shadows, padding
+**Status**: ✅ DEPLOYED - Game should now be smooth, fully visible, and user-friendly
+
 ## File Structure After Fixes
 
 ```
