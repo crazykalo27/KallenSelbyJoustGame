@@ -16,7 +16,7 @@ gwt {
     maxHeapSize = "2G" // Increased for better compilation performance
     minHeapSize = "1G"
 
-    src = files(file("src/")) // Needs to be in front of "modules" below.
+    src = files(project(":core").sourceSets.main.java.srcDirs, file("src/"))
     modules 'com.joust.GdxDefinition'
     devModules 'com.joust.GdxDefinitionSuperdev'
     project.webAppDirName = 'webapp'
@@ -57,6 +57,6 @@ task addSource {
 tasks.compileGwt.dependsOn(addSource)
 
 sourceCompatibility = JavaVersion.VERSION_1_8
-sourceSets.main.java.srcDirs = [ "src/" ]
+sourceSets.main.java.srcDirs = [ "src/", "../core/src" ]
 
 eclipse.project.name = appName + "-html" 
