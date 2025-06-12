@@ -12,7 +12,7 @@ import java.awt.image.BufferedImage;
 public class Platform extends GameObject {
 
 	private double WIDTH;
-	private double HEIGHT;
+private double HEIGHT;
 	private boolean isLava;
 	private boolean isIce;
 	private boolean isSlime;

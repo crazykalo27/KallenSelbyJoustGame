@@ -23,7 +23,7 @@ import javax.swing.Timer;
 
 public class GameViewer {
 	
-	public static final int DELAY=25;  // ~40 FPS - optimal for web/CheerpJ performance
+	public static final int DELAY=10;  // ~100 FPS - MAXIMUM aggressive performance for web
 	
 	public void viewerMain() {
 		final String frameTitle = "CSSE220 Final Project - Joust";
@@ -34,21 +34,36 @@ public class GameViewer {
 		
 		JFrame frame = new JFrame();
 		frame.setTitle(frameTitle);
-		frame.setSize(frameWidth, frameHeight);
-		frame.setLocation(frameXLoc, frameYLoc);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setResizable(false);
 		
+		// Create game component first to get preferred size
 		GameComponent gameComponent = new GameComponent();
 		gameComponent.loadLevel(0);
+		
+		// Set game component to exact desired size
+		gameComponent.setPreferredSize(new java.awt.Dimension(frameWidth, frameHeight));
+		gameComponent.setSize(frameWidth, frameHeight);
+		
+		// Configure frame for web performance
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setResizable(false);
+		frame.setUndecorated(true); // Remove decorations to fix sizing
+		
+		frame.add(gameComponent);
+		frame.pack(); // This will size frame to content + decorations
+		frame.setLocationRelativeTo(null); // Center on screen
+		
 		frame.addKeyListener(gameComponent);
 		
+		// Optimized timer with higher priority
 		GameAdvanceListener advanceListener = new GameAdvanceListener(gameComponent);
 		Timer timer = new Timer(DELAY, advanceListener);
+		timer.setCoalesce(true); // Combine multiple events
 		timer.start();
 	
-		frame.add(gameComponent);
 		frame.setVisible(true);
+		
+		// Request focus for better input responsiveness
+		gameComponent.requestFocusInWindow();
 	}
 	
 }
