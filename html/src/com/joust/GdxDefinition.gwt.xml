@@ -4,27 +4,19 @@
 	<inherits name='com.badlogic.gdx.backends.gdx_backends_gwt' />
 	<inherits name='com.badlogic.gdx.physics.box2d.box2d-gwt' />
 
-	<!-- Source paths -->
 	<source path="client" />
-	<source path="entities" />
-	<source path="managers" />
-	<source path="screens" />
-	<source path="" />
 	
-	<entry-point class='com.joust.client.HtmlLauncher' />	<!-- Asset configuration -->
+	<entry-point class='com.joust.client.HtmlLauncher' />
+	
+	<!-- Asset configuration -->
 	<set-configuration-property name="gdx.assetpath" value="../assets" />
+	<set-configuration-property name='xsiframe.failIfScriptTag' value='FALSE'/>
 	
 	<!-- Add reflection support for game classes -->
 	<extend-configuration-property name="gdx.reflect.include" value="com.joust" />
 	<extend-configuration-property name="gdx.reflect.include" value="com.joust.entities" />
 	<extend-configuration-property name="gdx.reflect.include" value="com.joust.managers" />
 	<extend-configuration-property name="gdx.reflect.include" value="com.joust.screens" />
-	
-	<!-- Specify source paths for all game packages -->
-	<source path="../../core/src/com/joust"/>
-	<source path="../../core/src/com/joust/entities"/>
-	<source path="../../core/src/com/joust/managers"/>
-	<source path="../../core/src/com/joust/screens"/>
 	
 	<!-- Browser compatibility -->
 	<set-property name="user.agent" value="gecko1_8, safari"/>
