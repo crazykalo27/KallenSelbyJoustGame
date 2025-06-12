@@ -4,7 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.joust.managers.GameAssetManager;
-import com.joust.screens.MenuScreen;
+import com.joust.screens.LoadingScreen;
 
 public class JoustGame extends Game {
     private SpriteBatch batch;
@@ -19,9 +19,13 @@ public class JoustGame extends Game {
             batch = new SpriteBatch();
             System.out.println("JoustGame: SpriteBatch created");
             
-            // Set initial screen WITHOUT asset manager initially
-            setScreen(new MenuScreen(this));
-            System.out.println("JoustGame: MenuScreen set");
+            // Initialize asset manager (starts async loading)
+            assetManager = GameAssetManager.getInstance();
+            System.out.println("JoustGame: Asset manager initialized, starting async loading");
+            
+            // Show loading screen while assets load
+            setScreen(new LoadingScreen(this));
+            System.out.println("JoustGame: LoadingScreen set");
             
             System.out.println("JoustGame: Initialization complete");
             
@@ -29,19 +33,6 @@ public class JoustGame extends Game {
             System.err.println("JoustGame: Error during initialization: " + e.getMessage());
             e.printStackTrace();
             Gdx.app.exit();
-        }
-    }
-    
-    public void initializeAssets() {
-        try {
-            if (assetManager == null) {
-                System.out.println("JoustGame: Initializing asset manager...");
-                assetManager = GameAssetManager.getInstance();
-                System.out.println("JoustGame: Asset manager initialized");
-            }
-        } catch (Exception e) {
-            System.err.println("JoustGame: Error initializing assets: " + e.getMessage());
-            e.printStackTrace();
         }
     }
     
@@ -69,9 +60,6 @@ public class JoustGame extends Game {
     }
     
     public GameAssetManager getAssetManager() {
-        if (assetManager == null) {
-            initializeAssets();
-        }
         return assetManager;
     }
 } 

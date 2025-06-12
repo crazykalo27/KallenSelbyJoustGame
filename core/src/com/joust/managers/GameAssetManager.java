@@ -10,17 +10,20 @@ import com.badlogic.gdx.utils.Array;
 
 /**
  * AssetManager - handles loading and managing all game assets
- * Replaces the old ResourceManager from the Swing version
+ * Web-compatible with asynchronous loading
  */
 public class GameAssetManager implements Disposable {
     private static GameAssetManager instance;
     private final AssetManager manager;
     private final ObjectMap<String, TextureRegion> textures;
+    private final Array<String> pendingAssets;
+    private boolean assetsLoaded = false;
     
     private GameAssetManager() {
         manager = new AssetManager();
         textures = new ObjectMap<>();
-        loadTextures();
+        pendingAssets = new Array<>();
+        startAsyncLoading();
     }
     
     public static GameAssetManager getInstance() {
@@ -30,58 +33,116 @@ public class GameAssetManager implements Disposable {
         return instance;
     }
     
-    private void loadTextures() {
-        // Load hero textures (using DigDug sprites)
-        loadTexture("hero_left", "images/DigDugLeft.png");
-        loadTexture("hero_right", "images/DigDugRight.PNG");
+    private void startAsyncLoading() {
+        System.out.println("GameAssetManager: Starting async asset loading...");
         
-        // Load enemy textures
-        loadTexture("ghost_left", "images/WaddleDLeft.PNG");      // Ghost enemy sprites
-        loadTexture("ghost_right", "images/WaddleDRight.PNG");    // Ghost enemy sprites
-        loadTexture("blue_koopa_left", "images/BlueKoopaLeft.PNG");  // Koopa enemy sprites
-        loadTexture("blue_koopa_right", "images/BlueKoopaRight.PNG"); // Koopa enemy sprites
-        loadTexture("pacman_left", "images/PacManLeft.PNG");      // Tracker enemy sprites
-        loadTexture("pacman_right", "images/PacManRight.PNG");    // Tracker enemy sprites
+        // Queue all assets for loading (non-blocking)
+        queueTexture("hero_left", "images/DigDugLeft.png");
+        queueTexture("hero_right", "images/DigDugRight.PNG");
         
-        // Load platform textures - using original naming convention
-        loadTexture("platform_truss", "images/PlatTruss.PNG");    // Normal platforms
-        loadTexture("platform_health", "images/PlatHealth.png");  // Health platforms
-        loadTexture("platform_slime", "images/PlatSlime.png");    // Slime platforms
-        loadTexture("platform_ice", "images/PlatIce.PNG");        // Ice platforms
-        loadTexture("platform_lava", "images/PlatLava.PNG");      // Lava platforms
+        // Enemy textures
+        queueTexture("ghost_left", "images/WaddleDLeft.PNG");
+        queueTexture("ghost_right", "images/WaddleDRight.PNG");
+        queueTexture("blue_koopa_left", "images/BlueKoopaLeft.PNG");
+        queueTexture("blue_koopa_right", "images/BlueKoopaRight.PNG");
+        queueTexture("pacman_left", "images/PacManLeft.PNG");
+        queueTexture("pacman_right", "images/PacManRight.PNG");
         
-        // Load egg textures
-        loadTexture("egg", "images/Egg.png");
+        // Platform textures
+        queueTexture("platform_truss", "images/PlatTruss.PNG");
+        queueTexture("platform_health", "images/PlatHealth.png");
+        queueTexture("platform_slime", "images/PlatSlime.png");
+        queueTexture("platform_ice", "images/PlatIce.PNG");
+        queueTexture("platform_lava", "images/PlatLava.PNG");
         
-        // Load menu textures (using placeholders for now)
-        loadTexture("menu_background", "images/PlatHealth.png"); // Placeholder
-        loadTexture("title", "images/PlatHealth.png"); // Placeholder
+        // Egg texture
+        queueTexture("egg", "images/Egg.png");
+        
+        // Menu textures (placeholders)
+        queueTexture("menu_background", "images/PlatHealth.png");
+        queueTexture("title", "images/PlatHealth.png");
+        
+        System.out.println("GameAssetManager: Queued " + pendingAssets.size + " assets for loading");
     }
     
-    private void loadTexture(String name, String fileName) {
-        manager.load(fileName, Texture.class);
-        manager.finishLoading();
-        Texture texture = manager.get(fileName, Texture.class);
-        textures.put(name, new TextureRegion(texture));
+    private void queueTexture(String name, String fileName) {
+        try {
+            manager.load(fileName, Texture.class);
+            pendingAssets.add(name + "|" + fileName); // Store mapping
+            System.out.println("GameAssetManager: Queued " + fileName + " as " + name);
+        } catch (Exception e) {
+            System.err.println("GameAssetManager: Error queuing " + fileName + ": " + e.getMessage());
+        }
     }
     
-    private void createTextureRegion(String name, String fileName) {
-        Texture texture = manager.get(fileName, Texture.class);
-        textures.put(name, new TextureRegion(texture));
+    /**
+     * Update asset loading progress (call this every frame)
+     * @return true if all assets are loaded
+     */
+    public boolean updateLoading() {
+        if (assetsLoaded) return true;
+        
+        // Update manager (processes queued assets)
+        boolean isFinished = manager.update();
+        
+        if (isFinished && !assetsLoaded) {
+            System.out.println("GameAssetManager: All assets loaded, creating texture regions...");
+            createAllTextureRegions();
+            assetsLoaded = true;
+            System.out.println("GameAssetManager: Asset loading complete! " + textures.size + " textures ready");
+        }
+        
+        return assetsLoaded;
+    }
+    
+    private void createAllTextureRegions() {
+        for (String assetMapping : pendingAssets) {
+            String[] parts = assetMapping.split("\\|");
+            if (parts.length == 2) {
+                String name = parts[0];
+                String fileName = parts[1];
+                
+                try {
+                    if (manager.isLoaded(fileName)) {
+                        Texture texture = manager.get(fileName, Texture.class);
+                        textures.put(name, new TextureRegion(texture));
+                        System.out.println("GameAssetManager: Created texture region: " + name);
+                    } else {
+                        System.err.println("GameAssetManager: Asset not loaded: " + fileName);
+                    }
+                } catch (Exception e) {
+                    System.err.println("GameAssetManager: Error creating texture region for " + name + ": " + e.getMessage());
+                }
+            }
+        }
     }
     
     public TextureRegion getTexture(String name) {
+        if (!assetsLoaded) {
+            System.out.println("GameAssetManager: Assets not loaded yet, returning null for: " + name);
+            return null;
+        }
+        
         TextureRegion region = textures.get(name);
         if (region == null) {
             Gdx.app.error("GameAssetManager", "Texture not found: " + name);
-            return null;
         }
         return region;
+    }
+    
+    public boolean isLoaded() {
+        return assetsLoaded;
+    }
+    
+    public float getProgress() {
+        return manager.getProgress();
     }
     
     public void dispose() {
         manager.dispose();
         textures.clear();
+        pendingAssets.clear();
+        assetsLoaded = false;
     }
     
     public int getTextureCount() {
