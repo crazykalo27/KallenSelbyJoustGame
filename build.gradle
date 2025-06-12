@@ -159,9 +159,8 @@ project(':html') {
 
     task deployToGitHubPages(type: Copy) {
         dependsOn war
-        from("build/explodedWar")
-        into "../docs"
-        
+        from("$buildDir/gwt/out/html")
+        into "$rootDir/docs"
         doLast {
             println "==================================="
             println "🚀 Web Deployment Prepared!"
