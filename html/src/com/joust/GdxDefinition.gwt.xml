@@ -14,7 +14,7 @@
 	<entry-point class='com.joust.client.HtmlLauncher' />
 	
 	<!-- Asset configuration -->
-	<set-configuration-property name="gdx.assetpath" value="html/war/assets" />
+	<set-configuration-property name="gdx.assetpath" value="assets" />
 	
 	<!-- Browser compatibility -->
 	<set-property name="user.agent" value="gecko1_8, safari"/>

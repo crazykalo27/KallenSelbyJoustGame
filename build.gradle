@@ -62,40 +62,6 @@ project(':legacy-swing') {
         
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     }
-    
-    // Task for web deployment preparation (for legacy swing version)
-    task prepareWebDeploy(type: Copy) {
-        dependsOn jar
-        
-        from jar.archiveFile
-        from 'src/main/resources/levels'
-        from 'src/main/resources/images'
-        
-        into 'docs'
-        
-        rename { filename ->
-            if (filename.endsWith('.jar')) {
-                return 'JoustGame.jar'
-            }
-            return filename
-        }
-    }
-    
-    // Task for creating GitHub Pages deployment
-    task deployToGitHubPages {
-        dependsOn prepareWebDeploy
-        
-        doLast {
-            println "==================================="
-            println "🚀 Web Deployment Prepared!"
-            println "==================================="
-            println "Next steps for GitHub Pages:"
-            println "1. git add docs/"
-            println "2. git commit -m 'Update web deployment'"
-            println "3. git push origin main"
-            println "==================================="
-        }
-    }
 }
 
 // Configure wrapper task for proper Gradle wrapper generation
@@ -191,55 +157,9 @@ project(':html') {
         }
     }
 
-    task cleanWar(type: Delete) {
-        delete 'war'
-    }
-
-    task copyAssets(type: Copy) {
-        from '../assets'
-        into 'war/assets'
-        exclude '**/*.java'
-        exclude '**/*.gwt.xml'
-        exclude '**/*.log'
-        exclude '**/*.txt'
-    }
-
-    task prepareWar(dependsOn: [cleanWar]) {
-        doLast {
-            file('war').mkdirs()
-            file('war/assets').mkdirs()
-            copy {
-                from '../assets'
-                into 'war/assets'
-                exclude '**/*.java'
-                exclude '**/*.gwt.xml'
-                exclude '**/*.log'
-                exclude '**/*.txt'
-            }
-            copy {
-                from '../assets'
-                into '../docs/assets'
-                exclude '**/*.java'
-                exclude '**/*.gwt.xml'
-                exclude '**/*.log'
-                exclude '**/*.txt'
-            }
-            copy {
-                from 'src/com/joust/assets'
-                into 'war/assets'
-                exclude '**/*.java'
-                exclude '**/*.gwt.xml'
-                exclude '**/*.log'
-                exclude '**/*.txt'
-            }
-        }
-    }
-
     task deployToGitHubPages(type: Copy) {
-        dependsOn prepareWar
-        dependsOn draftCompileGwt
-        
-        from "war"
+        dependsOn war
+        from("build/explodedWar")
         into "../docs"
         
         doLast {
@@ -253,4 +173,7 @@ project(':html') {
             println "==================================="
         }
     }
-} 
+}
+
+// Tasks for running and debugging
+// ... existing code ... 
