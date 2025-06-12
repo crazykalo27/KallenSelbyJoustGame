@@ -3,3 +3,14 @@ bin/
 .gitignore
 *.class
 /target/
+
+# Gradle
+.gradle
+build/
+html/build/
+core/build/
+desktop/build/
+
+# IDE
+.idea/
+*.iml
