@@ -123,7 +123,7 @@ public class MenuScreen implements Screen {
                     game.setScreen(new GameScreen(game));
                     dispose();
                 } catch (Exception e) {
-                    System.out.println("Error starting game: " + e.getMessage());
+                    Gdx.app.error("MenuScreen", "Error starting game: " + e.getMessage(), e);
                     // Don't crash, just stay on menu
                 }
                 break;
@@ -142,7 +142,7 @@ public class MenuScreen implements Screen {
     
     @Override
     public void show() {
-        System.out.println("MenuScreen shown - Simple mode active");
+        Gdx.app.log("MenuScreen", "MenuScreen shown - Simple mode active");
     }
     
     @Override

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.files.FileHandle;
 
 /**
  * AssetManager - handles loading and managing all game assets
@@ -34,7 +35,7 @@ public class GameAssetManager implements Disposable {
     }
     
     private void startAsyncLoading() {
-        System.out.println("GameAssetManager: Starting async asset loading...");
+        Gdx.app.log("GameAssetManager", "Starting async asset loading...");
         
         // Queue all assets for loading (non-blocking)
         queueTexture("hero_left", "images/DigDugLeft.png");
@@ -62,16 +63,16 @@ public class GameAssetManager implements Disposable {
         queueTexture("menu_background", "images/PlatHealth.png");
         queueTexture("title", "images/PlatHealth.png");
         
-        System.out.println("GameAssetManager: Queued " + pendingAssets.size + " assets for loading");
+        Gdx.app.log("GameAssetManager", "Queued " + pendingAssets.size + " assets for loading");
     }
     
     private void queueTexture(String name, String fileName) {
         try {
             manager.load(fileName, Texture.class);
             pendingAssets.add(name + "|" + fileName); // Store mapping
-            System.out.println("GameAssetManager: Queued " + fileName + " as " + name);
+            Gdx.app.log("GameAssetManager", "Queued " + fileName + " as " + name);
         } catch (Exception e) {
-            System.err.println("GameAssetManager: Error queuing " + fileName + ": " + e.getMessage());
+            Gdx.app.error("GameAssetManager", "Error queuing " + fileName + ": " + e.getMessage());
         }
     }
     
@@ -86,10 +87,10 @@ public class GameAssetManager implements Disposable {
         boolean isFinished = manager.update();
         
         if (isFinished && !assetsLoaded) {
-            System.out.println("GameAssetManager: All assets loaded, creating texture regions...");
+            Gdx.app.log("GameAssetManager", "All assets loaded, creating texture regions...");
             createAllTextureRegions();
             assetsLoaded = true;
-            System.out.println("GameAssetManager: Asset loading complete! " + textures.size + " textures ready");
+            Gdx.app.log("GameAssetManager", "Asset loading complete! " + textures.size + " textures ready");
         }
         
         return assetsLoaded;
@@ -106,12 +107,12 @@ public class GameAssetManager implements Disposable {
                     if (manager.isLoaded(fileName)) {
                         Texture texture = manager.get(fileName, Texture.class);
                         textures.put(name, new TextureRegion(texture));
-                        System.out.println("GameAssetManager: Created texture region: " + name);
+                        Gdx.app.log("GameAssetManager", "Created texture region: " + name);
                     } else {
-                        System.err.println("GameAssetManager: Asset not loaded: " + fileName);
+                        Gdx.app.error("GameAssetManager", "Asset not loaded: " + fileName);
                     }
                 } catch (Exception e) {
-                    System.err.println("GameAssetManager: Error creating texture region for " + name + ": " + e.getMessage());
+                    Gdx.app.error("GameAssetManager", "Error creating texture region for " + name + ": " + e.getMessage());
                 }
             }
         }
@@ -119,7 +120,7 @@ public class GameAssetManager implements Disposable {
     
     public TextureRegion getTexture(String name) {
         if (!assetsLoaded) {
-            System.out.println("GameAssetManager: Assets not loaded yet, returning null for: " + name);
+            Gdx.app.error("GameAssetManager", "Assets not loaded yet, returning null for: " + name);
             return null;
         }
         
@@ -156,4 +157,6 @@ public class GameAssetManager implements Disposable {
         }
         return names;
     }
+    
+
 } 

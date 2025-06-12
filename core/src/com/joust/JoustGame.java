@@ -13,25 +13,24 @@ public class JoustGame extends Game {
     @Override
     public void create() {
         try {
-            System.out.println("JoustGame: Starting initialization...");
+            Gdx.app.log("JoustGame", "Starting initialization...");
             
             // Initialize sprite batch first
             batch = new SpriteBatch();
-            System.out.println("JoustGame: SpriteBatch created");
+            Gdx.app.log("JoustGame", "SpriteBatch created");
             
             // Initialize asset manager (starts async loading)
             assetManager = GameAssetManager.getInstance();
-            System.out.println("JoustGame: Asset manager initialized, starting async loading");
+            Gdx.app.log("JoustGame", "Asset manager initialized, starting async loading");
             
             // Show loading screen while assets load
             setScreen(new LoadingScreen(this));
-            System.out.println("JoustGame: LoadingScreen set");
+            Gdx.app.log("JoustGame", "LoadingScreen set");
             
-            System.out.println("JoustGame: Initialization complete");
+            Gdx.app.log("JoustGame", "Initialization complete");
             
         } catch (Exception e) {
-            System.err.println("JoustGame: Error during initialization: " + e.getMessage());
-            e.printStackTrace();
+            Gdx.app.error("JoustGame", "Error during initialization: " + e.getMessage(), e);
             Gdx.app.exit();
         }
     }
@@ -51,7 +50,7 @@ public class JoustGame extends Game {
                 assetManager.dispose();
             }
         } catch (Exception e) {
-            System.err.println("JoustGame: Error during disposal: " + e.getMessage());
+            Gdx.app.error("JoustGame", "Error during disposal: " + e.getMessage(), e);
         }
     }
     

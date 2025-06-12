@@ -12,6 +12,11 @@ public class HtmlLauncher extends GwtApplication {
         GwtApplicationConfiguration cfg = new GwtApplicationConfiguration(1040, 780); // 30% larger (800x600 * 1.3)
         cfg.padHorizontal = 0;
         cfg.padVertical = 0;
+        
+        // Enable better debugging for web version
+        cfg.useDebugGL = true;
+        cfg.disableAudio = false; // Keep audio enabled
+        
         return cfg;
     }
 

@@ -34,7 +34,7 @@ public class LoadingScreen implements Screen {
         this.font.getData().setScale(2.0f);
         this.font.setColor(Color.WHITE);
         
-        System.out.println("LoadingScreen: Initialized");
+        Gdx.app.log("LoadingScreen", "Initialized");
     }
     
     @Override
@@ -47,7 +47,7 @@ public class LoadingScreen implements Screen {
         
         // Check if loading is complete
         if (assetsLoaded) {
-            System.out.println("LoadingScreen: Assets loaded, transitioning to MenuScreen");
+            Gdx.app.log("LoadingScreen", "Assets loaded, transitioning to MenuScreen");
             game.setScreen(new MenuScreen(game));
             dispose();
             return;
@@ -109,7 +109,7 @@ public class LoadingScreen implements Screen {
     
     @Override
     public void show() {
-        System.out.println("LoadingScreen: Shown");
+        Gdx.app.log("LoadingScreen", "Shown");
     }
     
     @Override
@@ -126,6 +126,6 @@ public class LoadingScreen implements Screen {
         batch.dispose();
         font.dispose();
         shapeRenderer.dispose();
-        System.out.println("LoadingScreen: Disposed");
+        Gdx.app.log("LoadingScreen", "Disposed");
     }
 } 

@@ -97,7 +97,7 @@ public class GameScreen implements Screen {
         // Initialize game state and load initial level
         newGame();
         
-        System.out.println("[GameScreen] Game screen initialized");
+        Gdx.app.log("GameScreen", "Game screen initialized");
     }
     
     public void newGame() {
