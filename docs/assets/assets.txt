@@ -1,31 +1,24 @@
-images/BlueKoopaLeft.PNG
-images/BlueKoopaRight.PNG
-images/DigDugLeft.png
-images/DigDugRight.PNG
-images/Egg.png
-images/PacManLeft.PNG
-images/PacManRight.PNG
-images/PlatHealth.png
-images/PlatIce.PNG
-images/PlatLava.PNG
-images/PlatSlime.png
-images/PlatTruss.PNG
-images/WaddleDLeft.PNG
-images/WaddleDRight.PNG
-images/gameover0.png
-images/gameover1.png
-images/gameover2.png
-images/gameover3.png
-levels/0level.txt
-levels/1level.txt
-levels/2level.txt
-levels/3level.txt
-levels/4level.txt
-levels/5level.txt
-levels/6level.txt
-levels/7level.txt
-levels/8level.txt
-levels/9level.txt
-levels/10level.txt
-levels/11level.txt
-levels/12level.txt 
+# Game Assets Structure
+
+## Images
+- DigDugLeft.png - Player character facing left
+- DigDugRight.PNG - Player character facing right
+- WaddleDLeft.PNG - Ghost enemy facing left
+- WaddleDRight.PNG - Ghost enemy facing right
+- BlueKoopaLeft.PNG - Blue Koopa enemy facing left
+- BlueKoopaRight.PNG - Blue Koopa enemy facing right
+- PacManLeft.PNG - Pacman enemy facing left
+- PacManRight.PNG - Pacman enemy facing right
+- PlatTruss.PNG - Truss platform texture
+- PlatHealth.png - Health platform texture
+- PlatSlime.png - Slime platform texture
+- PlatIce.PNG - Ice platform texture
+- PlatLava.PNG - Lava platform texture
+- Egg.png - Egg collectible
+- gameover0.png - Game over screen frame 0
+- gameover1.png - Game over screen frame 1
+- gameover2.png - Game over screen frame 2
+- gameover3.png - Game over screen frame 3
+
+## Levels
+- 0level.txt through 12level.txt - Game level definitions 
