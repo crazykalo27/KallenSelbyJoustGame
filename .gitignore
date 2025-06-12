@@ -39,6 +39,9 @@ dist/
 *.tar.gz
 *.rar
 
+# Allow Gradle wrapper JAR (required for CI)
+!gradle/wrapper/gradle-wrapper.jar
+
 # Docs build artefacts we *don't* need:
 docs/WEB-INF/
 docs/**/symbolMaps/
