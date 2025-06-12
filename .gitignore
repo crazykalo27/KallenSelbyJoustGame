@@ -1,28 +1,49 @@
-bin/
-.DS_Store
-.gitignore
-*.class
-/target/
-
-# Gradle
-.gradle
+# Gradle build artifacts
+.gradle/
 build/
-html/build/
-core/build/
-desktop/build/
+*/build/
+bin/
+*/bin/
 
-# IDE
+# GWT specific
+html/build/
+html/war/
+html/gwt-unitCache/
+html/war/WEB-INF/
+.gwt/
+gwt-unitCache/
+**/gwt-unitCache/
+**/symbolMaps/
+**/compile-report/
+
+# IDE specific
 .idea/
 *.iml
+.settings/
+.classpath
+.project
 
-# ----- Web deployment (docs/) large build artifacts -----
-# We only need the static files in docs/ (index.html, *.nocache.js, cache.js, assets/, styles.css, .nojekyll, etc.)
-# All generated servlet containers, symbol maps and debug info are unnecessary and can be rebuilt.
+# Logs and crash reports
+hs_err_pid*
+*.log
+
+# Build artifacts
+target/
+out/
+dist/
+
+# Large binary files
+*.jar
+*.war
+*.zip
+*.tar.gz
+*.rar
+
+# Docs build artifacts
 docs/WEB-INF/
-docs/**/symbolMaps/
-docs/**/rpcPolicyManifest/
-# Exclude the large cache directories produced by gradle dist that are not required for runtime.
-docs/**/compile-report/
+docs/html/gwt/
+docs/symbolMaps/
+docs/compile-report/
 
 # ----- General large binary formats we don't want in git -----
 *.wav
