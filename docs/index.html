@@ -1,220 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Joust Game — CheerpJ</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!doctype html>
+<html>
+       <head>
+        <title>Joust Game - LibGDX Web Version</title>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta id="gameViewport" name="viewport" content="width=device-width initial-scale=1">
+        <link href="styles.css" rel="stylesheet" type="text/css">
+       </head>
 
-  <!-- Use CheerpJ 4.1 -->
-  <script src="https://cjrtnc.leaningtech.com/4.1/loader.js"></script>
-</head>
+       <body>
+          <a class="superdev" href="javascript:%7B%20window.__gwt_bookmarklet_params%20%3D%20%7B'server_url'%3A'http%3A//localhost%3A9876/'%7D%3B%20var%20s%20%3D%20document.createElement('script')%3B%20s.src%20%3D%20'http%3A//localhost%3A9876/dev_mode_on.js'%3B%20void(document.getElementsByTagName('head')%5B0%5D.appendChild(s))%3B%7D">&#8635;</a>
+          
+          <div id="embed-html"></div>
+          
+          <div id="gameContainer">
+              <div id="loadingMessage">Loading Joust Game...</div>
+          </div>
+          
+          <script type="text/javascript" src="html/html.nocache.js"></script>
+       </body>
 
-<body>
-  <div id="loading">Loading Java game… <br><small>If stuck, refresh the page (F5)</small></div>
-  <div id="instructions">Click on the game to enable keyboard controls (Arrow Keys + Space)</div>
-  <div id="gameContainer"></div>
-
-  <script type="module">
-    try {
-      console.log('Starting CheerpJ with MAXIMUM performance optimizations…');
-
-      await cheerpjInit({
-        version: 11,                             // Java version (not CheerpJ version)
-        enablePreciseAppletSizeWorkaround: true, 
-        clipboardMode: "system",
-        enableInputMethods: false,               // Disable for performance
-        
-        // Show % loading progress
-        preloadProgress: function(current, total) {
-          if (total > 0) {
-            const percent = Math.round((current / total) * 100);
-            document.getElementById('loading').innerHTML =
-              `Loading Java game… ${percent}% <br><small>If stuck, refresh (F5)</small>`;
-          }
-        },
-
-        // AGGRESSIVE Performance optimizations - all valid CheerpJ properties
-        javaProperties: [
-          "-Dsun.java2d.opengl=true",      // Hardware acceleration
-          "-Dsun.java2d.d3d=true",         // Direct3D
-          "-XX:+AggressiveOpts",           // Maximum optimizations
-          "-XX:+UseConcMarkSweepGC",       // Fast garbage collection
-          "-XX:+UseCompressedOops",        // Memory optimization
-          "-Dsun.java2d.noddraw=false",    // Enable DirectDraw
-          "-Dsun.java2d.ddforcevram=true", // Force video RAM
-          "-XX:+UseStringDeduplication",   // String optimization
-          "-Xms64m",                       // Minimum heap
-          "-Xmx512m",                      // Maximum heap
-          "-XX:NewRatio=2"                 // Optimize memory allocation
-        ]
-      });
-
-      console.log('Creating OPTIMIZED display…');
-      const container = document.getElementById('gameContainer');
-      cheerpjCreateDisplay(800, 850, container);
-      
-      // Minimal wait for canvas creation
-      await new Promise(resolve => setTimeout(resolve, 200));
-
-      console.log('Running OPTIMIZED game JAR…');
-      await cheerpjRunJar("/app/KallenSelbyJoustGame/JoustGame.jar");
-
-      // MAXIMUM PERFORMANCE event handling
-      console.log('Setting up OPTIMIZED key handlers…');
-      
-      const canvas = document.querySelector('canvas');
-      if (canvas) {
-        // Let CheerpJ handle canvas sizing, just ensure it's visible
-        canvas.style.display = 'block';
-        canvas.style.margin = '0';
-        canvas.style.padding = '0';
-        
-        canvas.tabIndex = 0;
-        canvas.focus();
-
-        // Ultra-fast event handling
-        const keyHandler = function(e) {
-          const keys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space', 'KeyN'];
-          if (keys.includes(e.code)) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-          }
-        };
-        
-        canvas.addEventListener('keydown', keyHandler, { passive: false, capture: true });
-        canvas.addEventListener('keyup', keyHandler, { passive: false, capture: true });
-
-        canvas.addEventListener('click', function() {
-          this.focus();
-          document.getElementById('instructions').style.opacity = '0.5';
-        }, { passive: true });
-
-        // Aggressive focus management
-        setInterval(() => {
-          if (document.activeElement !== canvas) {
-            canvas.focus();
-          }
-        }, 2000);
-
-        // Enhanced FPS monitoring via requestAnimationFrame
-        let frameCount = 0;
-        let startTime = performance.now();
-        function measureFPS() {
-          frameCount++;
-          const currentTime = performance.now();
-          if (currentTime - startTime >= 1000) {
-            const fps = (frameCount * 1000) / (currentTime - startTime);
-            console.log(`Game FPS: ${fps.toFixed(1)}`);
-            frameCount = 0;
-            startTime = currentTime;
-          }
-          requestAnimationFrame(measureFPS);
+       <script>
+        function handleMouseDown(evt) {
+          evt.preventDefault();
+          evt.stopPropagation();
+          evt.target.style.cursor = 'default';
         }
-        requestAnimationFrame(measureFPS);
-      }
 
-      document.getElementById('loading').style.display = 'none';
-      
-    } catch (e) {
-      console.error('CheerpJ Error:', e);
-      document.getElementById('loading').innerHTML =
-        `<div style="color: #ff6b6b;">Error: ${e.message}</div>
-         <div style="font-size: 14px; margin-top: 10px;">
-           Try refreshing the page (F5) or check console for details.
-         </div>`;
-    }
-  </script>
+        function handleMouseUp(evt) {
+          evt.preventDefault();
+          evt.stopPropagation();
+          evt.target.style.cursor = '';
+        }
 
-  <style>
-    html, body {
-      margin: 0;
-      padding: 10px;
-      min-height: 100vh;
-      background: #111;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Arial', sans-serif;
-      color: #fff;
-    }
-    
-    #loading {
-      color: #fff;
-      font-size: 18px;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-    
-    #loading small {
-      color: #ffeb3b;
-      font-size: 12px;
-      display: block;
-      margin-top: 5px;
-    }
-    
-    #instructions {
-      color: #ffeb3b;
-      background: rgba(0,0,0,0.9);
-      padding: 10px 20px;
-      border-radius: 6px;
-      font-size: 14px;
-      font-weight: bold;
-      margin-bottom: 15px;
-      text-align: center;
-      border: 2px solid #ffeb3b;
-      transition: opacity 0.3s ease;
-      max-width: 900px;
-      box-shadow: 0 0 10px rgba(255,235,59,0.3);
-    }
-    
-    #gameContainer {
-      border: 2px solid #555;
-      background: #000;
-      box-shadow: 0 0 30px rgba(255,255,255,0.1);
-      position: relative;
-      /* Let CheerpJ determine size, just provide container */
-      min-width: 800px;
-      min-height: 850px;
-      overflow: visible; /* Allow for window decorations */
-    }
-    
-    /* Let CheerpJ handle canvas sizing naturally */
-    canvas {
-      outline: none !important;
-      display: block !important;
-      /* Remove forced sizing - let CheerpJ handle it */
-    }
-    
-    /* Performance indicator */
-    #gameContainer::before {
-      content: "🚀 MAXIMUM PERFORMANCE MODE";
-      position: absolute;
-      top: -25px;
-      left: 0;
-      color: #4caf50;
-      font-size: 11px;
-      font-weight: bold;
-    }
-    
-    /* Responsive design for smaller screens */
-    @media (max-width: 950px) {
-      #gameContainer {
-        transform: scale(0.85);
-        transform-origin: center;
-      }
-    }
-    
-    @media (max-width: 800px) {
-      #gameContainer {
-        transform: scale(0.75);
-      }
-      
-      #instructions {
-        font-size: 12px;
-        padding: 8px 16px;
-      }
-    }
-  </style>
-</body>
-</html>
+        document.addEventListener('mousedown', handleMouseDown, false);
+        document.addEventListener('mouseup', handleMouseUp, false);
+       </script>
+</html> 
