@@ -8,93 +8,18 @@
        </head>
 
        <body>
-          <!-- Removed Super Dev Mode link that was causing localhost:9876 connection errors -->
+          <a class="superdev" href="javascript:%7B%20window.__gwt_bookmarklet_params%20%3D%20%7B'server_url'%3A'http%3A//localhost%3A9876/'%7D%3B%20var%20s%20%3D%20document.createElement('script')%3B%20s.src%20%3D%20'http%3A//localhost%3A9876/dev_mode_on.js'%3B%20void(document.getElementsByTagName('head')%5B0%5D.appendChild(s))%3B%7D">&#8635;</a>
           
           <div id="embed-html"></div>
           
           <div id="gameContainer">
               <div id="loadingMessage">Loading Joust Game...</div>
-              <div id="debugInfo" style="color: yellow; font-size: 12px; margin-top: 10px;"></div>
           </div>
           
           <script type="text/javascript" src="html/html.nocache.js"></script>
        </body>
 
        <script>
-        // Debug logging function
-        function debugLog(message) {
-          console.log('[DEBUG] ' + message);
-          const debugDiv = document.getElementById('debugInfo');
-          if (debugDiv) {
-            debugDiv.innerHTML += '<br>' + new Date().toISOString() + ': ' + message;
-          }
-        }
-
-        // Log when page loads
-        debugLog('Page loaded, starting game initialization...');
-
-        // Better GWT detection - look for actual signs of GWT completion
-        let gwtCheckInterval = setInterval(function() {
-          // Check for common GWT indicators
-          if (window.__gwtStatsEvent || window.$wnd || window.gwtOnLoad) {
-            debugLog('GWT framework detected');
-          }
-          
-          // Check for canvas in the correct div
-          const embedDiv = document.getElementById('embed-html');
-          if (embedDiv && embedDiv.children.length > 0) {
-            debugLog('GWT content found in embed-html div');
-            clearInterval(gwtCheckInterval);
-            
-            // Look for canvas specifically
-            const canvas = embedDiv.querySelector('canvas');
-            if (canvas) {
-              debugLog('Game canvas found - game should be running!');
-              document.getElementById('loadingMessage').style.display = 'none';
-            } else {
-              debugLog('No canvas found yet - checking for other content...');
-            }
-          } else {
-            debugLog('Waiting for GWT to create content in embed-html div...');
-          }
-        }, 1000);
-
-        // Stop checking after 60 seconds and provide detailed error info
-        setTimeout(function() {
-          clearInterval(gwtCheckInterval);
-          const embedDiv = document.getElementById('embed-html');
-          debugLog('Stopped waiting for GWT after 60 seconds');
-          debugLog('embed-html div contents: ' + (embedDiv ? embedDiv.innerHTML.length + ' chars' : 'null'));
-          debugLog('Available window properties: ' + Object.keys(window).filter(k => k.includes('gwt') || k.includes('html')).join(', '));
-          
-          // Check if GWT compilation failed
-          if (!embedDiv || embedDiv.children.length === 0) {
-            debugLog('ERROR: GWT compilation appears to have failed - no content generated');
-            debugLog('This usually means there is a Java compilation error or missing dependencies');
-          }
-        }, 60000);
-
-        // Monitor for any DOM changes in the embed div
-        const embedDiv = document.getElementById('embed-html');
-        if (embedDiv) {
-          const observer = new MutationObserver(function(mutations) {
-            mutations.forEach(function(mutation) {
-              if (mutation.addedNodes) {
-                for (let node of mutation.addedNodes) {
-                  debugLog('New element added: ' + node.tagName);
-                  if (node.tagName === 'CANVAS') {
-                    debugLog('Game canvas created - game should be starting!');
-                    document.getElementById('loadingMessage').style.display = 'none';
-                  } else if (node.tagName === 'DIV') {
-                    debugLog('DIV element added - checking contents...');
-                  }
-                }
-              }
-            });
-          });
-          observer.observe(embedDiv, { childList: true, subtree: true });
-        }
-
         function handleMouseDown(evt) {
           evt.preventDefault();
           evt.stopPropagation();
@@ -109,19 +34,5 @@
 
         document.addEventListener('mousedown', handleMouseDown, false);
         document.addEventListener('mouseup', handleMouseUp, false);
-
-        // Log any JavaScript errors
-        window.addEventListener('error', function(e) {
-          debugLog('JavaScript Error: ' + e.message + ' at ' + e.filename + ':' + e.lineno);
-        });
-
-        // Log GWT-specific events if they occur
-        if (window.addEventListener) {
-          window.addEventListener('gwt-log', function(e) {
-            debugLog('GWT Log: ' + e.detail);
-          });
-        }
-
-        debugLog('Debug logging initialized');
        </script>
 </html> 
