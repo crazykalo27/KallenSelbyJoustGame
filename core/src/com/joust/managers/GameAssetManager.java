@@ -59,17 +59,24 @@ public class GameAssetManager implements Disposable {
         // Egg texture
         queueTexture("egg", "images/Egg.png");
         
-        // Menu textures (placeholders)
-        queueTexture("menu_background", "images/PlatHealth.png");
-        queueTexture("title", "images/PlatHealth.png");
+        // Game over textures
+        queueTexture("gameover0", "images/gameover0.png");
+        queueTexture("gameover1", "images/gameover1.png");
+        queueTexture("gameover2", "images/gameover2.png");
+        queueTexture("gameover3", "images/gameover3.png");
         
         Gdx.app.log("GameAssetManager", "Queued " + pendingAssets.size + " assets for loading");
     }
     
     private void queueTexture(String name, String fileName) {
         try {
+            FileHandle file = Gdx.files.internal(fileName);
+            if (!file.exists()) {
+                Gdx.app.error("GameAssetManager", "Asset file not found: " + fileName);
+                return;
+            }
             manager.load(fileName, Texture.class);
-            pendingAssets.add(name + "|" + fileName); // Store mapping
+            pendingAssets.add(name + "|" + fileName);
             Gdx.app.log("GameAssetManager", "Queued " + fileName + " as " + name);
         } catch (Exception e) {
             Gdx.app.error("GameAssetManager", "Error queuing " + fileName + ": " + e.getMessage());

@@ -111,10 +111,25 @@ project(':core') {
     dependencies {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+        
+        // Add GWT dependencies for core project
+        compileOnly "com.google.gwt:gwt-user:2.8.2"
+        compileOnly "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
     }
     
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
+
+    sourceSets {
+        main {
+            java {
+                srcDirs = ['src/']
+            }
+            resources {
+                srcDirs = ['../assets/']
+            }
+        }
+    }
 }
 
 // LibGDX Desktop module  
@@ -148,5 +163,94 @@ project(':html') {
         api "com.badlogicgames.gdx:gdx-ai:$aiVersion:sources"
         api "com.badlogicgames.ashley:ashley:$ashleyVersion:sources"
         api "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion:sources"
+        
+        // Add core project sources for GWT compilation
+        api project(':core').sourceSets.main.allJava
+        api project(':core').sourceSets.main.resources
+    }
+    
+    gwt {
+        gwtVersion = '2.8.2'
+        maxHeapSize = "1G"
+        minHeapSize = "512M"
+        
+        sourceSets {
+            main {
+                java {
+                    srcDirs = ['src/', '../core/src/']
+                }
+            }
+        }
+        
+        modules = ['com.joust.GdxDefinition']
+        devModules = ['com.joust.GdxDefinitionSuperdev']
+        
+        compiler {
+            strict = true
+            disableCastChecking = true
+        }
+    }
+
+    task cleanWar(type: Delete) {
+        delete 'war'
+    }
+
+    task copyAssets(type: Copy) {
+        from '../assets'
+        into 'war/assets'
+        exclude '**/*.java'
+        exclude '**/*.gwt.xml'
+        exclude '**/*.log'
+        exclude '**/*.txt'
+    }
+
+    task prepareWar(dependsOn: [cleanWar]) {
+        doLast {
+            file('war').mkdirs()
+            file('war/assets').mkdirs()
+            copy {
+                from '../assets'
+                into 'war/assets'
+                exclude '**/*.java'
+                exclude '**/*.gwt.xml'
+                exclude '**/*.log'
+                exclude '**/*.txt'
+            }
+            copy {
+                from '../assets'
+                into '../docs/assets'
+                exclude '**/*.java'
+                exclude '**/*.gwt.xml'
+                exclude '**/*.log'
+                exclude '**/*.txt'
+            }
+            copy {
+                from 'src/com/joust/assets'
+                into 'war/assets'
+                exclude '**/*.java'
+                exclude '**/*.gwt.xml'
+                exclude '**/*.log'
+                exclude '**/*.txt'
+            }
+        }
+    }
+
+    task deployToGitHubPages(type: Copy) {
+        dependsOn prepareWar
+        dependsOn draftCompileGwt
+        
+        from "war"
+        into "../docs"
+        
+        doLast {
+            println "==================================="
+            println "🚀 Web Deployment Prepared!"
+            println "==================================="
+            println "Next steps for GitHub Pages:"
+            println "1. git add docs/"
+            println "2. git commit -m 'Update web deployment'"
+            println "3. git push origin main"
+            println "==================================="
+        }
     }
 } 

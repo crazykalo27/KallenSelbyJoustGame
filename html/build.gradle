@@ -28,10 +28,19 @@ gwt {
     }
 }
 
+// Clean task to ensure proper asset handling
+task cleanAssets(type: Delete) {
+    delete fileTree(dir: 'war/assets')
+}
+
+clean.dependsOn cleanAssets
+
 // Simple dist task that compiles GWT and prepares the web deployment
 task dist(dependsOn: [clean, compileGwt]) {
     doLast {
         file("build/dist/").mkdirs()
+        
+        // Copy GWT output
         copy {
             from "build/gwt/out/"
             into "build/dist/"
@@ -39,14 +48,24 @@ task dist(dependsOn: [clean, compileGwt]) {
             exclude "**/symbolMaps/**"
             exclude "**/compile-report/**"
         }
+        
+        // Copy webapp files
         copy {
             from "webapp/"
             into "build/dist/"
         }
+        
+        // Copy assets
         copy {
             from "../assets/"
             into "build/dist/assets/"
             exclude '**/*.wav' // GWT doesn't support .wav files
+        }
+        
+        // Ensure assets.txt is in the right place
+        copy {
+            from "../assets/assets.txt"
+            into "build/dist/"
         }
     }
 }

@@ -4,17 +4,25 @@
 	<inherits name='com.badlogic.gdx.backends.gdx_backends_gwt' />
 	<inherits name='com.badlogic.gdx.physics.box2d.box2d-gwt' />
 
-	<!-- Core game module (should be the GWT module, not the class) -->
-	<inherits name='JoustGame' />
+	<!-- Source paths -->
+	<source path="client" />
+	<source path="entities" />
+	<source path="managers" />
+	<source path="screens" />
+	<source path="" />
 	
 	<entry-point class='com.joust.client.HtmlLauncher' />
 	
-	<set-configuration-property name="gdx.assetpath" value="../assets" />
-	<set-configuration-property name="xsiframe.failIfScriptTag" value="FALSE"/>
+	<!-- Asset configuration -->
+	<set-configuration-property name="gdx.assetpath" value="html/war/assets" />
 	
-	<!-- These two lines reduce the work GWT has to do during compilation and also shrink output size -->
+	<!-- Browser compatibility -->
 	<set-property name="user.agent" value="gecko1_8, safari"/>
 	<collapse-property name="user.agent" values="*" />
 	
-	<!-- Remove the "user.agent" lines above if you encounter issues with Safari or other Gecko browsers -->
+	<!-- Logging configuration -->
+	<inherits name="com.google.gwt.logging.Logging"/>
+	<set-property name="gwt.logging.logLevel" value="INFO"/>
+	<set-property name="gwt.logging.enabled" value="TRUE"/>
+	<set-property name="gwt.logging.consoleHandler" value="ENABLED"/>
 </module> 

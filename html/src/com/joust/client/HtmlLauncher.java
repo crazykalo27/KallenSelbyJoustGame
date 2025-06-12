@@ -8,20 +8,26 @@ import com.joust.JoustGame;
 public class HtmlLauncher extends GwtApplication {
 
     @Override
-    public GwtApplicationConfiguration getConfig () {
-        GwtApplicationConfiguration cfg = new GwtApplicationConfiguration(1040, 780); // 30% larger (800x600 * 1.3)
+    public GwtApplicationConfiguration getConfig() {
+        GwtApplicationConfiguration cfg = new GwtApplicationConfiguration(800, 600);
         cfg.padHorizontal = 0;
         cfg.padVertical = 0;
         
         // Enable better debugging for web version
         cfg.useDebugGL = true;
-        cfg.disableAudio = false; // Keep audio enabled
+        cfg.disableAudio = false;
         
         return cfg;
     }
 
     @Override
-    public ApplicationListener createApplicationListener () {
+    public ApplicationListener createApplicationListener() {
         return new JoustGame();
+    }
+    
+    @Override
+    public void onModuleLoad() {
+        super.onModuleLoad();
+        System.out.println("Module loaded, initializing game...");
     }
 } 
