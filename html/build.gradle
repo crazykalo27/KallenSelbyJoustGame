@@ -35,6 +35,9 @@ task dist(dependsOn: [clean, compileGwt]) {
         copy {
             from "build/gwt/out/"
             into "build/dist/"
+            exclude "**/WEB-INF/**"
+            exclude "**/symbolMaps/**"
+            exclude "**/compile-report/**"
         }
         copy {
             from "webapp/"

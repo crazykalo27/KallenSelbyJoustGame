@@ -14,3 +14,19 @@ desktop/build/
 # IDE
 .idea/
 *.iml
+
+# ----- Web deployment (docs/) large build artifacts -----
+# We only need the static files in docs/ (index.html, *.nocache.js, cache.js, assets/, styles.css, .nojekyll, etc.)
+# All generated servlet containers, symbol maps and debug info are unnecessary and can be rebuilt.
+docs/WEB-INF/
+docs/**/symbolMaps/
+docs/**/rpcPolicyManifest/
+# Exclude the large cache directories produced by gradle dist that are not required for runtime.
+docs/**/compile-report/
+
+# ----- General large binary formats we don't want in git -----
+*.wav
+*.psd
+*.mp4
+*.zip
+# Track the above with Git-LFS instead if ever needed.
