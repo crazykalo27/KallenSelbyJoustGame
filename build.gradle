@@ -164,7 +164,7 @@ tasks.register('deployToGitHubPages', Copy) {
     group = 'distribution'
     description = 'Build and deploy web output to docs for GitHub Pages'
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    dependsOn ':html:compileGwt'
+    dependsOn ':html:clean', ':html:compileGwt'
     doFirst {
         // Remove entire docs directory recursively
         delete "$rootDir/docs"
