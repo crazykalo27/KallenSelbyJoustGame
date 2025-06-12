@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.files.FileHandle;
+import com.google.gwt.core.client.GWT;
 
 /**
  * AssetManager - handles loading and managing all game assets
@@ -19,11 +20,13 @@ public class GameAssetManager implements Disposable {
     private final ObjectMap<String, TextureRegion> textures;
     private final Array<String> pendingAssets;
     private boolean assetsLoaded = false;
+    private boolean isGwtPlatform;
     
     private GameAssetManager() {
         manager = new AssetManager();
         textures = new ObjectMap<>();
         pendingAssets = new Array<>();
+        isGwtPlatform = Gdx.app.getType().toString().equals("WebGL");
         startAsyncLoading();
     }
     
@@ -70,16 +73,31 @@ public class GameAssetManager implements Disposable {
     
     private void queueTexture(String name, String fileName) {
         try {
-            FileHandle file = Gdx.files.internal(fileName);
-            if (!file.exists()) {
-                Gdx.app.error("GameAssetManager", "Asset file not found: " + fileName);
-                return;
+            if (isGwtPlatform) {
+                // In GWT, we need to ensure the asset is in the preload list
+                boolean exists = true; // Assets are embedded in GWT
+                if (!exists) {
+                    Gdx.app.error("GameAssetManager", "[GWT] Asset not found in preload list: " + fileName);
+                    return;
+                }
+            } else {
+                // Desktop platform - check if file exists
+                FileHandle file = Gdx.files.internal(fileName);
+                if (!file.exists()) {
+                    Gdx.app.error("GameAssetManager", "Asset file not found: " + fileName);
+                    return;
+                }
             }
+            
             manager.load(fileName, Texture.class);
             pendingAssets.add(name + "|" + fileName);
             Gdx.app.log("GameAssetManager", "Queued " + fileName + " as " + name);
         } catch (Exception e) {
-            Gdx.app.error("GameAssetManager", "Error queuing " + fileName + ": " + e.getMessage());
+            String errorMsg = "Error queuing " + fileName + ": " + e.getMessage();
+            Gdx.app.error("GameAssetManager", errorMsg);
+            if (isGwtPlatform) {
+                handleGwtError(errorMsg);
+            }
         }
     }
     
@@ -90,17 +108,26 @@ public class GameAssetManager implements Disposable {
     public boolean updateLoading() {
         if (assetsLoaded) return true;
         
-        // Update manager (processes queued assets)
-        boolean isFinished = manager.update();
-        
-        if (isFinished && !assetsLoaded) {
-            Gdx.app.log("GameAssetManager", "All assets loaded, creating texture regions...");
-            createAllTextureRegions();
-            assetsLoaded = true;
-            Gdx.app.log("GameAssetManager", "Asset loading complete! " + textures.size + " textures ready");
+        try {
+            // Update manager (processes queued assets)
+            boolean isFinished = manager.update();
+            
+            if (isFinished && !assetsLoaded) {
+                Gdx.app.log("GameAssetManager", "All assets loaded, creating texture regions...");
+                createAllTextureRegions();
+                assetsLoaded = true;
+                Gdx.app.log("GameAssetManager", "Asset loading complete! " + textures.size + " textures ready");
+            }
+            
+            return assetsLoaded;
+        } catch (Exception e) {
+            String errorMsg = "Error updating asset load: " + e.getMessage();
+            Gdx.app.error("GameAssetManager", errorMsg);
+            if (isGwtPlatform) {
+                handleGwtError(errorMsg);
+            }
+            return false;
         }
-        
-        return assetsLoaded;
     }
     
     private void createAllTextureRegions() {
@@ -116,24 +143,46 @@ public class GameAssetManager implements Disposable {
                         textures.put(name, new TextureRegion(texture));
                         Gdx.app.log("GameAssetManager", "Created texture region: " + name);
                     } else {
-                        Gdx.app.error("GameAssetManager", "Asset not loaded: " + fileName);
+                        String errorMsg = "Asset not loaded: " + fileName;
+                        Gdx.app.error("GameAssetManager", errorMsg);
+                        if (isGwtPlatform) {
+                            handleGwtError(errorMsg);
+                        }
                     }
                 } catch (Exception e) {
-                    Gdx.app.error("GameAssetManager", "Error creating texture region for " + name + ": " + e.getMessage());
+                    String errorMsg = "Error creating texture region for " + name + ": " + e.getMessage();
+                    Gdx.app.error("GameAssetManager", errorMsg);
+                    if (isGwtPlatform) {
+                        handleGwtError(errorMsg);
+                    }
                 }
             }
         }
     }
     
+    private native void handleGwtError(String message) /*-{
+        if ($wnd.handleGameError) {
+            $wnd.handleGameError(message);
+        }
+    }-*/;
+    
     public TextureRegion getTexture(String name) {
         if (!assetsLoaded) {
-            Gdx.app.error("GameAssetManager", "Assets not loaded yet, returning null for: " + name);
+            String errorMsg = "Assets not loaded yet, returning null for: " + name;
+            Gdx.app.error("GameAssetManager", errorMsg);
+            if (isGwtPlatform) {
+                handleGwtError(errorMsg);
+            }
             return null;
         }
         
         TextureRegion region = textures.get(name);
         if (region == null) {
-            Gdx.app.error("GameAssetManager", "Texture not found: " + name);
+            String errorMsg = "Texture not found: " + name;
+            Gdx.app.error("GameAssetManager", errorMsg);
+            if (isGwtPlatform) {
+                handleGwtError(errorMsg);
+            }
         }
         return region;
     }
@@ -164,6 +213,4 @@ public class GameAssetManager implements Disposable {
         }
         return names;
     }
-    
-
-} 
+}

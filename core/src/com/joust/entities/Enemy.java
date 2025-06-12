@@ -1,7 +1,5 @@
 package com.joust.entities;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.joust.managers.GameAssetManager;
 
@@ -14,11 +12,10 @@ public class Enemy extends GameObject {
 
     // Reduced speeds for better gameplay (original scaling was too high)
     private static final float GHOST_SPEED = 80f;           // Reduced from 200f (4*50) - much slower
-    private static final float KOOPA_SPEED = 60f;           // Reduced from 150f (3*50) - much slower  
+    private static final float KOOPA_SPEED = 60f;           // Reduced from 150f (3*50) - much slower
     private static final float TRACKER_SPEED = 40f;         // Reduced from 100f (2*50) - much slower
     private static final float KOOPA_JUMP_VELOCITY = 800f;  // Much higher jumps for better gameplay
     private static final float KOOPA_JUMP_CHANCE = 0.02f;   // 2% chance per frame (60fps = 0.02/frame)
-    private static final float TRACKER_FOLLOW_FACTOR = 0.02f; // Reduced from 0.03f for slower tracking
     
     // Ghost enemy timer variables (matching original LeftRightEnemy)
     private int ticks = 0;
@@ -126,12 +123,17 @@ public class Enemy extends GameObject {
             setVelocity(xVel * Math.signum(direction), getVelocity().y);
         }
     }
-
+    
     private void updateKoopa(float deltaTime) {
         // RandomMoveEnemy behavior - Enhanced with timer-based jumping (2-5 seconds)
         koopaJumpTimer += deltaTime;
         
-        // Random jumping every 2-5 seconds (user requested)
+        // Random jumping based on probability per frame
+        if (Math.random() < KOOPA_JUMP_CHANCE) {
+            addVelocity(0, KOOPA_JUMP_VELOCITY);
+        }
+        
+        // Additional random jumps every 2-5 seconds for variety
         if (koopaJumpTimer >= nextKoopaJumpTime) {
             addVelocity(0, KOOPA_JUMP_VELOCITY);
             koopaJumpTimer = 0f;
@@ -139,39 +141,28 @@ public class Enemy extends GameObject {
         }
         
         // Continuous horizontal movement in current direction
-        setVelocity(KOOPA_SPEED * direction, getVelocity().y);
-    }
-
+        setVelocity(KOOPA_SPEED * direction, getVelocity().y);    }
+    
     private void updateTracker(float deltaTime) {
-        // Tracker behavior - EXACT port from original Tracker.java (flies towards player)
+        // Tracker behavior - follows player when available
         if (playerPosition != null) {
-            float playerX = playerPosition.x;
-            float playerY = playerPosition.y;
-            float enemyX = getPosition().x;
-            float enemyY = getPosition().y;
+            // Calculate velocity towards player using simplified approach
+            float dx = playerPosition.x - getPosition().x;
+            float dy = playerPosition.y - getPosition().y;
+            float length = (float)Math.sqrt(dx * dx + dy * dy);
             
-            // Original Tracker logic: direct velocity calculation towards player
-            float xVel = (enemyX - playerX) * -TRACKER_FOLLOW_FACTOR * 60f; // Scale for LibGDX frame rate
-            float yVel = (enemyY - playerY) * -TRACKER_FOLLOW_FACTOR * 60f; // Scale for LibGDX frame rate
-            
-            // Minimum speed boost (from original: if velocity <= 2, double it)
-            if (Math.abs(xVel) <= 2f) {
-                xVel *= 2f;
-                yVel *= 2f;
-            }
-            
-            // Set velocity directly (no gravity, flies freely)
-            setVelocity(xVel, yVel);
-            
-            // Update direction for sprite
-            if (xVel < 0) {
-                direction = -1;
-            } else if (xVel > 0) {
-                direction = 1;
+            if (length > 0) {
+                // Normalize and apply tracker speed
+                float velX = (dx / length) * TRACKER_SPEED;
+                float velY = (dy / length) * TRACKER_SPEED;
+                setVelocity(velX, velY);
+                
+                // Update direction based on horizontal movement
+                direction = (velX < 0) ? -1 : 1;
             }
         } else {
-            // No player reference, hover in place
-            setVelocity(0, 0);
+            // No player reference, hover in current direction
+            setVelocity(TRACKER_SPEED * direction, 0);
         }
     }
 

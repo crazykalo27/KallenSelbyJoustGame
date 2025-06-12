@@ -1,21 +1,27 @@
-DigDugLeft.png
-DigDugRight.PNG
-BlueKoopaLeft.PNG
-BlueKoopaRight.PNG
-PacManLeft.PNG
-PacManRight.PNG
-WaddleDLeft.PNG
-WaddleDRight.PNG
-Egg.png
-PlatHealth.png
-PlatSlime.png
-PlatIce.PNG
-PlatLava.PNG
-PlatTruss.PNG
-gameover0.png
-gameover1.png
-gameover2.png
-gameover3.png
+# Asset manifest for GWT preloading
+# Format: one asset path per line, relative to assets directory
+
+# Images
+images/DigDugLeft.png
+images/DigDugRight.PNG
+images/WaddleDLeft.PNG
+images/WaddleDRight.PNG
+images/BlueKoopaLeft.PNG
+images/BlueKoopaRight.PNG
+images/PacManLeft.PNG
+images/PacManRight.PNG
+images/PlatTruss.PNG
+images/PlatHealth.png
+images/PlatSlime.png
+images/PlatIce.PNG
+images/PlatLava.PNG
+images/Egg.png
+images/gameover0.png
+images/gameover1.png
+images/gameover2.png
+images/gameover3.png
+
+# Levels
 levels/0level.txt
 levels/1level.txt
 levels/2level.txt
@@ -28,4 +34,4 @@ levels/8level.txt
 levels/9level.txt
 levels/10level.txt
 levels/11level.txt
-levels/12level.txt 
+levels/12level.txt

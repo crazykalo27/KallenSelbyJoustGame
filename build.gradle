@@ -157,22 +157,37 @@ project(':html') {
         }
     }
 
-    task deployToGitHubPages(type: Copy) {
-        dependsOn war
-        from("$buildDir/gwt/out/html")
-        into "$rootDir/docs"
-        doLast {
-            println "==================================="
-            println "🚀 Web Deployment Prepared!"
-            println "==================================="
-            println "Next steps for GitHub Pages:"
-            println "1. git add docs/"
-            println "2. git commit -m 'Update web deployment'"
-            println "3. git push origin main"
-            println "==================================="
-        }
+    // Nested deployToGitHubPages removed; using top-level `deployToGitHubPages` task instead
+}
+
+tasks.register('deployToGitHubPages', Copy) {
+    group = 'distribution'
+    description = 'Build and deploy web output to docs for GitHub Pages'
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    dependsOn ':html:compileGwt'
+    doFirst {
+        // Remove entire docs directory recursively
+        delete "$rootDir/docs"
     }
+    // Copy GWT compiled output into docs/html
+    from("$projectDir/html/build/gwt/out/html") {
+        into 'html'
+        exclude 'WEB-INF/**'
+        exclude 'symbolMaps/**'
+        exclude 'compile-report/**'
+    }
+    // Copy webapp static shell
+    from("$projectDir/html/webapp/index.html")
+    from("$projectDir/html/webapp/styles.css")
+    // Copy only required assets: manifest, images and levels
+    from("$projectDir/assets") {
+        into 'assets'
+        include 'assets.txt'
+        include 'images/**'
+        include 'levels/**'
+    }
+    into "$rootDir/docs"
 }
 
 // Tasks for running and debugging
-// ... existing code ... 
+// ... existing code ...

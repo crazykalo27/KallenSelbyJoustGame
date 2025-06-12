@@ -1,6 +1,5 @@
 package com.joust.entities;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.joust.managers.GameAssetManager;
 
@@ -11,8 +10,8 @@ import com.joust.managers.GameAssetManager;
  */
 public class Egg extends GameObject {
     
-    private static final float EGG_WIDTH = 24;
-    private static final float EGG_HEIGHT = 24;
+    private static final float EGG_WIDTH = 24f;
+    private static final float EGG_HEIGHT = 24f;
     private static final float HATCH_TIME = 7.0f; // 7 seconds like original Swing version
     private static final float GRAVITY = 800;
     
@@ -21,9 +20,8 @@ public class Egg extends GameObject {
     private boolean collected;
     private boolean shouldSpawnEnemy;
     private Enemy.EnemyType enemyType; // Store the type of enemy that was killed
-    
-    public Egg(Vector2 position, Enemy.EnemyType enemyType) {
-        super(position, 16, 16);
+      public Egg(Vector2 position, Enemy.EnemyType enemyType) {
+        super(position, EGG_WIDTH, EGG_HEIGHT);
         this.hatchTimer = 0;
         this.isHatching = true; // Start hatching immediately like original
         this.collected = false;

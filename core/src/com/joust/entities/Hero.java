@@ -1,12 +1,6 @@
 package com.joust.entities;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-
-import com.joust.managers.CollisionManager;
 import com.joust.managers.GameAssetManager;
 
 /**
@@ -16,14 +10,12 @@ import com.joust.managers.GameAssetManager;
 public class Hero extends GameObject {
     
     private static final float HERO_WIDTH = 32;
-    private static final float HERO_HEIGHT = 48;
-    // Reduced speeds for better gameplay feel
+    private static final float HERO_HEIGHT = 48;    // Reduced speeds for better gameplay feel
     private static final float SPEED = 0.3f; // Much slower movement speed
     private static final float FLY_FORCE = 1.5f; // Much slower flying force
     private static final float GRAVITY_STRENGTH = -0.2f; // Gentler gravity
     private static final float FRICTION_STRENGTH = 0.2f; // Gentler friction
     private static final float MAX_SPEED = 4f; // Lower max speed
-    private static final float BOUNCE_AREA_WIDTH = 10;
     
     private boolean facingRight = true;
     private boolean leftPressed = false;
@@ -204,12 +196,11 @@ public class Hero extends GameObject {
         }
         updateBounds();
     }
-    
-    private void handleEnemyCollision(Enemy enemy) {
-        // Original joust logic from Swing Hero.joust() method 
+      private void handleEnemyCollision(Enemy enemy) {
+        // Original joust logic from Swing Hero.joust() method
         float enemyY = enemy.getPosition().y;
         float heroY = getPosition().y;
-        int bounceAreaWidth = 10; // From original
+        float bounceAreaWidth = 10f; // Width of area for equal-height jousting
         
         // Original joust logic: In Swing Y-down, in LibGDX Y-up - need to flip comparison
         // In original: enemy.getYCent() > this.getYCent() meant enemy LOWER on screen (wins)
@@ -237,38 +228,5 @@ public class Hero extends GameObject {
     private void handleEggCollision(Egg egg) {
         if (!egg.isCollected()) {
             egg.collect();
-        }
-    }
-
-    @Override
-    public void render(SpriteBatch batch) {
-        if (getTexture() != null) {
-            batch.draw(getTexture(), getPosition().x, getPosition().y, getWidth(), getHeight());
-        }
-    }
-    
-    private void keepInBounds() {
-        // Screen dimensions matching the viewport
-        float screenWidth = 800f;
-        float screenHeight = 600f;
-        
-        // Horizontal bounds
-        if (getPosition().x < 0) {
-            setPosition(0, getPosition().y);
-            setVelocity(0, getVelocity().y);
-        } else if (getPosition().x + getWidth() > screenWidth) {
-            setPosition(screenWidth - getWidth(), getPosition().y);
-            setVelocity(0, getVelocity().y);
-        }
-        
-        // Vertical bounds - add ground floor
-        if (getPosition().y < 0) {
-            setPosition(getPosition().x, 0);
-            setVelocity(getVelocity().x, 0);
-            onGround = true;
-        } else if (getPosition().y > screenHeight) {
-            setPosition(getPosition().x, screenHeight - getHeight());
-            setVelocity(getVelocity().x, Math.min(0, getVelocity().y)); // Only allow downward movement
-        }
-    }
+        }    }
 } 

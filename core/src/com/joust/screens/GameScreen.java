@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.joust.JoustGame;
@@ -19,7 +18,6 @@ import com.joust.entities.Platform;
 import com.joust.entities.Egg;
 import com.joust.managers.LevelLoader;
 import com.joust.managers.CollisionManager;
-import com.joust.entities.GameEntity;
 import com.joust.managers.LevelLoader.LevelData;
 import com.joust.managers.InputManager;
 import com.joust.entities.GameObject;
@@ -62,7 +60,7 @@ public class GameScreen implements Screen {
     private int lives;
     private boolean gameOver;
     private boolean tutorial;
-    private float gameTime;
+    private float gameTime;  // Time elapsed in current level
     private boolean isPaused = false;
     
     // Rendering
