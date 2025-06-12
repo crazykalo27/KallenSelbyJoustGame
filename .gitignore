@@ -39,11 +39,10 @@ dist/
 *.tar.gz
 *.rar
 
-# Docs build artifacts
+# Docs build artefacts we *don't* need:
 docs/WEB-INF/
-docs/html/gwt/
-docs/symbolMaps/
-docs/compile-report/
+docs/**/symbolMaps/
+docs/**/compile-report/
 
 # ----- General large binary formats we don't want in git -----
 *.wav
