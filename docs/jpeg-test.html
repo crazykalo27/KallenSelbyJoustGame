@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate JPEG Test Image</title>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        canvas {
+            border: 1px solid #ddd;
+            margin: 20px auto;
+            display: block;
+        }
+        img {
+            max-width: 300px;
+            border: 1px solid #ddd;
+            margin: 20px auto;
+            display: block;
+        }
+        .button {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .container {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <h1>Generate JPEG Test Image</h1>
+    
+    <div class="container">
+        <h2>Source PNG Image</h2>
+        <img id="source" src="images/DigDugRight.PNG" alt="Source PNG">
+        <div id="sourceStatus">Loading source image...</div>
+    </div>
+    
+    <div class="container">
+        <h2>Convert to JPEG</h2>
+        <canvas id="canvas"></canvas>
+        <div id="jpegStatus">Ready to convert...</div>
+        <button id="convertButton" class="button">Convert to JPEG</button>
+        <div id="downloadContainer"></div>
+    </div>
+    
+    <a href="index.html" class="button" style="background-color: #2196F3;">Back to main test page</a>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sourceImg = document.getElementById('source');
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            const sourceStatus = document.getElementById('sourceStatus');
+            const jpegStatus = document.getElementById('jpegStatus');
+            const downloadContainer = document.getElementById('downloadContainer');
+            const convertButton = document.getElementById('convertButton');
+            
+            // Check if source image loaded
+            sourceImg.onload = function() {
+                sourceStatus.textContent = "Source PNG loaded successfully!";
+                sourceStatus.style.color = "green";
+                
+                // Set canvas size to match image
+                canvas.width = sourceImg.naturalWidth;
+                canvas.height = sourceImg.naturalHeight;
+            };
+            
+            sourceImg.onerror = function() {
+                sourceStatus.textContent = "Error loading source PNG!";
+                sourceStatus.style.color = "red";
+                convertButton.disabled = true;
+            };
+            
+            // Convert to JPEG when button is clicked
+            convertButton.addEventListener('click', function() {
+                if (sourceImg.complete && sourceImg.naturalWidth) {
+                    try {
+                        // Clear canvas and draw image
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        
+                        // Fill with white background (since JPEG doesn't support transparency)
+                        ctx.fillStyle = 'white';
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                        
+                        // Draw image on top of white background
+                        ctx.drawImage(sourceImg, 0, 0);
+                        
+                        // Convert to JPEG
+                        const jpegDataURL = canvas.toDataURL('image/jpeg', 0.9);
+                        
+                        // Create download link
+                        const downloadLink = document.createElement('a');
+                        downloadLink.href = jpegDataURL;
+                        downloadLink.download = 'digdug.jpg';
+                        downloadLink.className = 'button';
+                        downloadLink.style.backgroundColor = '#ff9800';
+                        downloadLink.textContent = 'Download JPEG Image';
+                        
+                        downloadContainer.innerHTML = '';
+                        downloadContainer.appendChild(downloadLink);
+                        
+                        jpegStatus.textContent = "Successfully converted to JPEG! Click the button below to download.";
+                        jpegStatus.style.color = "green";
+                        
+                        // Also create an image preview
+                        const previewImg = document.createElement('img');
+                        previewImg.src = jpegDataURL;
+                        previewImg.alt = "JPEG Preview";
+                        downloadContainer.appendChild(document.createElement('br'));
+                        downloadContainer.appendChild(previewImg);
+                        
+                    } catch (e) {
+                        jpegStatus.textContent = "Error converting to JPEG: " + e.message;
+                        jpegStatus.style.color = "red";
+                    }
+                } else {
+                    jpegStatus.textContent = "Cannot convert: source image not loaded properly.";
+                    jpegStatus.style.color = "red";
+                }
+            });
+        });
+    </script>
+</body>
+</html>

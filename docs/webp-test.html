@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebP Image Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            text-align: center;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .image-container {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        img {
+            max-width: 100%;
+            max-height: 300px;
+            border: 1px solid #ccc;
+            margin: 10px;
+        }
+        canvas {
+            border: 1px solid #ddd;
+            margin: 10px;
+        }
+        .button {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .download-link {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            background-color: #2196F3;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        .status {
+            margin: 10px 0;
+            padding: 10px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>WebP Image Test</h1>
+        
+        <div class="image-container">
+            <h2>Original PNG Image</h2>
+            <img id="original-image" src="images/DigDugRight.PNG" alt="Original PNG Image">
+            <div id="original-status" class="status">Loading original image...</div>
+        </div>
+        
+        <div class="image-container">
+            <h2>WebP Conversion</h2>
+            <canvas id="canvas" style="display:none;"></canvas>
+            <div id="webp-container"></div>
+            <div id="webp-status" class="status">Ready to convert...</div>
+            <button id="convert-button" class="button">Convert to WebP</button>
+            <div id="download-container"></div>
+        </div>
+        
+        <div class="image-container">
+            <h2>WebP Test</h2>
+            <p>After converting and downloading the WebP image, upload it to your project and test if it displays correctly:</p>
+            <div id="webp-test-container">
+                <p>WebP image will be shown here after conversion.</p>
+            </div>
+        </div>
+        
+        <a href="index.html" class="button">Back to Main Test Page</a>
+    </div>
+    
+    <script>
+        // Check if browser supports WebP
+        function checkWebPSupport(callback) {
+            const webP = new Image();
+            webP.onload = function() { callback(true); };
+            webP.onerror = function() { callback(false); };
+            webP.src = 'data:image/webp;base64,UklGRiQAAABXRUJQVlA4IBgAAAAwAQCdASoBAAEAAwA0JaQAA3AA/vuUAAA=';
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const originalImg = document.getElementById('original-image');
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            const originalStatus = document.getElementById('original-status');
+            const webpStatus = document.getElementById('webp-status');
+            const webpContainer = document.getElementById('webp-container');
+            const downloadContainer = document.getElementById('download-container');
+            const convertButton = document.getElementById('convert-button');
+            
+            // Check if browser supports WebP
+            checkWebPSupport(function(supported) {
+                if (supported) {
+                    webpStatus.textContent = "Your browser supports WebP format. You can proceed with conversion.";
+                    webpStatus.className = "status success";
+                } else {
+                    webpStatus.textContent = "Your browser does not support WebP format. Please use a modern browser like Chrome, Edge, or Firefox.";
+                    webpStatus.className = "status error";
+                    convertButton.disabled = true;
+                }
+            });
+            
+            // Check if original image loaded
+            originalImg.onload = function() {
+                originalStatus.textContent = "Original PNG image loaded successfully!";
+                originalStatus.className = "status success";
+                
+                // Set canvas size to match image
+                canvas.width = originalImg.naturalWidth;
+                canvas.height = originalImg.naturalHeight;
+            };
+            
+            originalImg.onerror = function() {
+                originalStatus.textContent = "Error loading original PNG image!";
+                originalStatus.className = "status error";
+                convertButton.disabled = true;
+            };
+            
+            // Convert to WebP when button is clicked
+            convertButton.addEventListener('click', function() {
+                if (originalImg.complete && originalImg.naturalWidth) {
+                    try {
+                        // Draw image on canvas
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        ctx.drawImage(originalImg, 0, 0);
+                        
+                        // Convert to WebP (if supported)
+                        const webpDataURL = canvas.toDataURL('image/webp');
+                        
+                        // Create and display WebP image
+                        const webpImg = new Image();
+                        webpImg.src = webpDataURL;
+                        webpImg.alt = "Converted WebP Image";
+                        
+                        webpContainer.innerHTML = '';
+                        webpContainer.appendChild(webpImg);
+                        
+                        // Create download link
+                        const downloadLink = document.createElement('a');
+                        downloadLink.href = webpDataURL;
+                        downloadLink.download = 'digdug.webp';
+                        downloadLink.className = 'download-link';
+                        downloadLink.textContent = 'Download WebP Image';
+                        
+                        downloadContainer.innerHTML = '';
+                        downloadContainer.appendChild(downloadLink);
+                        
+                        webpStatus.textContent = "Successfully converted to WebP format!";
+                        webpStatus.className = "status success";
+                        
+                        // Show testing instructions
+                        document.getElementById('webp-test-container').innerHTML = `
+                            <p>After downloading:</p>
+                            <ol style="text-align: left;">
+                                <li>Add the WebP image to your project's images folder</li>
+                                <li>Update your code to reference the WebP image instead of PNG</li>
+                                <li>Test in your application</li>
+                            </ol>
+                            <p>WebP images have better compression and are more widely supported by browsers.</p>
+                        `;
+                    } catch (e) {
+                        webpStatus.textContent = "Error converting to WebP: " + e.message;
+                        webpStatus.className = "status error";
+                    }
+                } else {
+                    webpStatus.textContent = "Cannot convert: original image not loaded properly.";
+                    webpStatus.className = "status error";
+                }
+            });
+        });
+    </script>
+</body>
+</html>

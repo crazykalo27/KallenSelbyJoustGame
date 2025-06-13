@@ -1,93 +1,213 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Joust Game - Simple Image Test</title>
+    <title>Joust Game - Image Load Test</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 40px;
-            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
             color: #333;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
+            text-align: center;
         }
-        
         h1 {
             color: #0066cc;
-            text-align: center;
         }
-        
-        .content {
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
+        .test-container {
+            margin: 20px auto;
+            max-width: 800px;
+            background: white;
             padding: 20px;
-            border-radius: 5px;
-            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        
-        .image-container {
-            text-align: center;
-            margin: 30px 0;
+        .image-test {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f8f8;
+            border: 1px solid #ddd;
+            border-radius: 4px;
         }
-        
+        .image-test h2 {
+            margin-top: 0;
+            color: #333;
+            font-size: 18px;
+        }
         img {
-            max-width: 300px;
-            border: 3px solid #ccc;
-            border-radius: 5px;
+            border: 1px solid #ccc;
+            padding: 5px;
+            background: white;
+            max-height: 200px;
+            display: inline-block;
+            margin: 10px;
         }
-        
         .status {
-            text-align: center;
-            margin-top: 20px;
-            font-weight: bold;
+            margin-top: 10px;
+            padding: 8px;
+            border-radius: 4px;
         }
-        
         .success {
-            color: green;
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
         }
-        
         .error {
-            color: red;
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .note {
+            font-style: italic;
+            color: #666;
+            margin-top: 30px;
+        }
+        .button-container {
+            margin: 20px 0;
+        }
+        .button {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
     <h1>Joust Game - Image Loading Test</h1>
-    
-    <div class="content">
-        <p>This page tests if the image can be loaded correctly from the root path, as expected by LibGDX:</p>
+
+    <div class="test-container">
+        <p>This page tests different methods to load the DigDugRight image:</p>
         
-        <div class="image-container">
-            <!-- The image should load from the root-level images directory -->
-            <img id="testImage" src="images/DigDugRight.PNG" alt="DigDug Character">
+        <div class="button-container">
+            <a href="convert-image.html" class="button">Go to Image Converter Tool</a>
         </div>
-        
-        <div id="status" class="status">Checking image loading status...</div>
+
+        <!-- Test 1: Direct image tag with root path (uppercase extension) -->
+        <div class="image-test">
+            <h2>Test 1: Basic Image Tag (Uppercase Extension)</h2>
+            <img id="test1" src="images/DigDugRight.PNG" alt="DigDug Character">
+            <div id="status1" class="status">Testing...</div>
+        </div>
+
+        <!-- Test 2: Try with lowercase extension -->
+        <div class="image-test">
+            <h2>Test 2: Lowercase Extension</h2>
+            <img id="test2" src="images/DigDugRight.png" alt="DigDug Character">
+            <div id="status2" class="status">Testing...</div>
+        </div>
+
+        <!-- Test 3: Try with data URI (loads image directly into HTML) -->
+        <div class="image-test">
+            <h2>Test 3: Data URI Image</h2>
+            <div id="data-uri-container">
+                <p>Loading Data URI image...</p>
+            </div>
+            <div id="status3" class="status">Testing...</div>
+        </div>
+
+        <!-- Test 4: Background image -->
+        <div class="image-test">            <h2>Test 4: CSS Background Image</h2>
+            <div id="bg-test" style="height:150px; width:150px; margin:0 auto; background-size:contain; background-repeat:no-repeat; background-position:center; background-image:url('images/DigDugRight.PNG');"></div>
+            <div id="status4" class="status">Check if background image is visible above</div>
+        </div>
+
+        <div class="note">
+            <p>Direct link to image (right-click and select "Open in new tab"):<br>
+            <a href="images/DigDugRight.PNG" target="_blank">images/DigDugRight.PNG</a></p>
+        </div>
     </div>
-    
+
     <script>
-        // Simple script to verify the image loads
         document.addEventListener('DOMContentLoaded', function() {
-            const img = document.getElementById('testImage');
-            const status = document.getElementById('status');
+            // Test 1: Basic image tag with uppercase extension
+            const img1 = document.getElementById('test1');
+            const status1 = document.getElementById('status1');
             
-            // When image loads successfully
-            img.onload = function() {
-                status.className = 'status success';
-                status.textContent = 'SUCCESS! The image loaded correctly. Size: ' + 
-                                     img.naturalWidth + '×' + img.naturalHeight + 'px';
-                console.log('Image loaded successfully');
+            img1.onload = function() {
+                status1.textContent = 'SUCCESS! Image loaded with uppercase extension. Size: ' + img1.naturalWidth + '×' + img1.naturalHeight + 'px';
+                status1.className = 'status success';
             };
             
-            // When image fails to load
-            img.onerror = function() {
-                status.className = 'status error';
-                status.textContent = 'ERROR: Failed to load image from path: ' + img.src;
-                console.error('Failed to load image:', img.src);
+            img1.onerror = function() {
+                status1.textContent = 'ERROR: Failed to load image with uppercase extension.';
+                status1.className = 'status error';
             };
+
+            // Test 2: Lowercase extension
+            const img2 = document.getElementById('test2');
+            const status2 = document.getElementById('status2');
+            
+            img2.onload = function() {
+                status2.textContent = 'SUCCESS! Image loaded with lowercase extension. Size: ' + img2.naturalWidth + '×' + img2.naturalHeight + 'px';
+                status2.className = 'status success';
+            };
+            
+            img2.onerror = function() {
+                status2.textContent = 'ERROR: Failed to load image with lowercase extension.';
+                status2.className = 'status error';
+            };
+
+            // Test 3: Data URI
+            const dataContainer = document.getElementById('data-uri-container');
+            const status3 = document.getElementById('status3');
+            
+            // Try to load image and convert to data URI
+            const tempImg = new Image();
+            tempImg.crossOrigin = "Anonymous"; // Try to avoid CORS issues
+            tempImg.src = "images/DigDugRight.PNG";
+            
+            tempImg.onload = function() {
+                try {
+                    // Create canvas
+                    const canvas = document.createElement('canvas');
+                    canvas.width = tempImg.naturalWidth;
+                    canvas.height = tempImg.naturalHeight;
+                    
+                    // Draw image to canvas
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(tempImg, 0, 0);
+                    
+                    // Get data URI
+                    const dataURI = canvas.toDataURL('image/png');
+                    
+                    // Create image from data URI
+                    const dataImg = new Image();
+                    dataImg.src = dataURI;
+                    dataImg.alt = "Data URI Image";
+                    
+                    // Replace loading text with image
+                    dataContainer.innerHTML = '';
+                    dataContainer.appendChild(dataImg);
+                    
+                    status3.textContent = 'SUCCESS! Image converted to Data URI and displayed. Size: ' + tempImg.naturalWidth + '×' + tempImg.naturalHeight + 'px';
+                    status3.className = 'status success';
+                } catch (e) {
+                    status3.textContent = 'ERROR: Failed to convert image to Data URI: ' + e.message;
+                    status3.className = 'status error';
+                }
+            };
+            
+            tempImg.onerror = function() {
+                status3.textContent = 'ERROR: Failed to load image for Data URI conversion.';
+                status3.className = 'status error';
+            };
+
+            // Force image refresh for tests 1 and 2
+            [img1, img2].forEach(img => {
+                const currentSrc = img.src;
+                img.src = '';
+                setTimeout(() => img.src = currentSrc, 100);
+            });
         });
     </script>
 </body>

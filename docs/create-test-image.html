@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Transparent PNG Creator</title>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        canvas {
+            border: 1px solid #ddd;
+            margin: 20px auto;
+            display: block;
+        }
+        .button {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #download-container {
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Create Test PNG Image</h1>
+    <p>This tool creates a simple PNG image with a colored shape for testing purposes.</p>
+    
+    <canvas id="canvas" width="200" height="200"></canvas>
+    
+    <div>
+        <button id="create-red-square" class="button">Create Red Square</button>
+        <button id="create-blue-circle" class="button">Create Blue Circle</button>
+        <button id="create-green-triangle" class="button">Create Green Triangle</button>
+    </div>
+    
+    <div id="download-container"></div>
+    
+    <a href="index.html" class="button" style="background-color: #2196F3;">Back to Main Test Page</a>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            const downloadContainer = document.getElementById('download-container');
+            
+            // Clear canvas with transparency
+            function clearCanvas() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // Add a checkerboard pattern to show transparency
+                const squareSize = 10;
+                ctx.fillStyle = 'rgba(200, 200, 200, 0.3)';
+                for (let x = 0; x < canvas.width; x += squareSize * 2) {
+                    for (let y = 0; y < canvas.height; y += squareSize * 2) {
+                        ctx.fillRect(x, y, squareSize, squareSize);
+                        ctx.fillRect(x + squareSize, y + squareSize, squareSize, squareSize);
+                    }
+                }
+            }
+            
+            // Initialize canvas
+            clearCanvas();
+            
+            // Create red square
+            document.getElementById('create-red-square').addEventListener('click', function() {
+                clearCanvas();
+                
+                ctx.fillStyle = 'red';
+                ctx.fillRect(50, 50, 100, 100);
+                
+                createDownloadLink('red-square.png');
+            });
+            
+            // Create blue circle
+            document.getElementById('create-blue-circle').addEventListener('click', function() {
+                clearCanvas();
+                
+                ctx.fillStyle = 'blue';
+                ctx.beginPath();
+                ctx.arc(100, 100, 70, 0, Math.PI * 2);
+                ctx.fill();
+                
+                createDownloadLink('blue-circle.png');
+            });
+            
+            // Create green triangle
+            document.getElementById('create-green-triangle').addEventListener('click', function() {
+                clearCanvas();
+                
+                ctx.fillStyle = 'green';
+                ctx.beginPath();
+                ctx.moveTo(100, 30);
+                ctx.lineTo(170, 150);
+                ctx.lineTo(30, 150);
+                ctx.closePath();
+                ctx.fill();
+                
+                createDownloadLink('green-triangle.png');
+            });
+            
+            // Create and add download link
+            function createDownloadLink(filename) {
+                const dataURL = canvas.toDataURL('image/png');
+                
+                const downloadLink = document.createElement('a');
+                downloadLink.href = dataURL;
+                downloadLink.download = filename;
+                downloadLink.className = 'button';
+                downloadLink.style.backgroundColor = '#ff9800';
+                downloadLink.textContent = 'Download PNG';
+                
+                // Create preview image
+                const previewImg = document.createElement('img');
+                previewImg.src = dataURL;
+                previewImg.alt = "Image Preview";
+                previewImg.style.maxWidth = '150px';
+                previewImg.style.margin = '10px';
+                previewImg.style.border = '1px solid #ddd';
+                
+                // Add to container
+                downloadContainer.innerHTML = '<p>Click to download the image:</p>';
+                downloadContainer.appendChild(downloadLink);
+                downloadContainer.appendChild(document.createElement('br'));
+                downloadContainer.appendChild(previewImg);
+            }
+        });
+    </script>
+</body>
+</html>
