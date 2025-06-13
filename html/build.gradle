@@ -23,26 +23,22 @@ gwt {
 
     compiler {
         strict = true
-        disableClassMetadata = true
-        disableCastChecking = true
+        optimize = 9
+        draftCompile = false
+        // disableClassMetadata = true // Optimizations make these redundant
+        // disableCastChecking = true
     }
 }
 
-// Simplified web deployment
-war {
-    archiveFileName = "${appName}-html.war"
-    from 'webapp'
-    from('../assets') { into 'assets' }
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+// Asset copying task to align with standard practice
+processResources {
+  from("$projectDir/../core/assets") {
+    into "assets"
+  }
 }
 
-task dist(type: Copy) {
-    description = 'Assemble web distribution'
-    group = 'distribution'
-    dependsOn war
-    from("$buildDir/libs/${appName}-html.war")
-    into("$buildDir/dist")
-}
+// The standard gwt:dist task will now handle building the distribution.
+// The old 'dist' and 'war' tasks are no longer necessary for this deployment model.
 
 task addSource {
     doLast {
