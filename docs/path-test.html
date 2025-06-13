@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Joust Game - Image Path Test</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            background-color: #222;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1, h2, h3 {
+            color: #ffcc00;
+            text-shadow: 0 0 5px rgba(255, 204, 0, 0.3);
+        }
+        
+        .test-container {
+            background-color: #333;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .image-test {
+            background-color: #444;
+            border-radius: 8px;
+            padding: 15px;
+            position: relative;
+        }
+        
+        .image-container {
+            height: 180px;
+            border: 2px dashed #666;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+        
+        .image-container img {
+            max-width: 100%;
+            max-height: 100%;
+            display: block;
+        }
+        
+        .image-info {
+            font-size: 12px;
+            color: #aaa;
+            margin-top: 5px;
+            word-break: break-all;
+        }
+        
+        .status-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #888;
+        }
+        
+        .status-success {
+            background-color: #5cb85c;
+        }
+        
+        .status-failure {
+            background-color: #d9534f;
+        }
+        
+        .controls {
+            margin: 20px 0;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            background-color: #ffcc00;
+            color: #000;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        button:hover {
+            background-color: #ffdd44;
+        }
+        
+        .solution-note {
+            background-color: #444;
+            border-left: 4px solid #ffcc00;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-right: 15px;
+            margin-top: 20px;
+            color: #ffcc00;
+            text-decoration: none;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        
+        .image-path {
+            font-family: monospace;
+            background-color: #333;
+            padding: 3px 6px;
+            border-radius: 3px;
+            font-size: 11px;
+        }
+        
+        .nav-links {
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 600px) {
+            .image-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Joust Game - Image Path Test</h1>
+    <p>This page tests loading images using different path structures based on the LibGDX code.</p>
+    
+    <div class="nav-links">
+        <a href="index.html" class="back-link">← Main Page</a>
+        <a href="image-test.html" class="back-link">← Image Test Page</a>
+        <a href="libgdx-test.html" class="back-link">← LibGDX Test</a>
+    </div>
+    
+    <div class="solution-note">
+        <h3>Found the Solution!</h3>
+        <p>Looking at the game code, I discovered that LibGDX loads images from <code>images/</code> directly, not from <code>assets/images/</code>. This is defined in <code>GameAssetManager.java</code>:</p>
+        <pre>queueTexture("hero_right", "images/DigDugRight.PNG");</pre>
+        <p>For GitHub Pages to work correctly, we need to copy images to both locations.</p>
+    </div>
+    
+    <div class="controls">
+        <button onclick="copyImagesToRoot()">Fix: Copy Images to Root</button>
+        <button onclick="testAllImages()">Test All Images</button>
+        <button onclick="document.location.reload()">Refresh Page</button>
+    </div>
+    
+    <div class="test-container">
+        <h2>Test 1: Images in Root Path</h2>
+        <p>These paths match how LibGDX loads images according to the game code:</p>
+        <div class="image-grid" id="root-path-tests">
+            <!-- Will be populated by JavaScript -->
+        </div>
+    </div>
+    
+    <div class="test-container">
+        <h2>Test 2: Images in Assets Path</h2>
+        <p>These are the paths used in the HTML pages:</p>
+        <div class="image-grid" id="assets-path-tests">
+            <!-- Will be populated by JavaScript -->
+        </div>
+    </div>
+    
+    <div class="test-container">
+        <h2>Test 3: Images with Full GitHub URLs</h2>
+        <p>These use absolute URLs to GitHub Pages:</p>
+        <div class="image-grid" id="github-path-tests">
+            <!-- Will be populated by JavaScript -->
+        </div>
+    </div>
+    
+    <script>
+        const imageTestData = [
+            { name: "DigDugRight", path: "DigDugRight.PNG", type: "character" },
+            { name: "DigDugLeft", path: "DigDugLeft.png", type: "character" },
+            { name: "BlueKoopaRight", path: "BlueKoopaRight.PNG", type: "character" },
+            { name: "PacManRight", path: "PacManRight.PNG", type: "character" },
+            { name: "WaddleDRight", path: "WaddleDRight.PNG", type: "character" },
+            { name: "PlatIce", path: "PlatIce.PNG", type: "platform" },
+            { name: "PlatLava", path: "PlatLava.PNG", type: "platform" },
+            { name: "PlatTruss", path: "PlatTruss.PNG", type: "platform" },
+            { name: "PlatHealth", path: "PlatHealth.png", type: "platform" },
+            { name: "PlatSlime", path: "PlatSlime.png", type: "platform" },
+            { name: "Egg", path: "Egg.png", type: "item" },
+            { name: "GameOver0", path: "gameover0.png", type: "ui" }
+        ];
+        
+        // GitHub repository path
+        const githubRepoPath = "https://crazykalo27.github.io/KallenSelbyJoustGame";
+        
+        function createImageTest(container, imagePath, name, fullPath) {
+            const imageTest = document.createElement('div');
+            imageTest.className = 'image-test';
+            
+            const statusIndicator = document.createElement('div');
+            statusIndicator.className = 'status-indicator';
+            imageTest.appendChild(statusIndicator);
+            
+            const imageContainer = document.createElement('div');
+            imageContainer.className = 'image-container';
+            
+            const img = document.createElement('img');
+            img.src = imagePath;
+            img.alt = name;
+            img.onerror = function() {
+                statusIndicator.className = 'status-indicator status-failure';
+                imageContainer.style.borderColor = '#d9534f';
+            };
+            img.onload = function() {
+                statusIndicator.className = 'status-indicator status-success';
+                imageContainer.style.borderColor = '#5cb85c';
+            };
+            
+            imageContainer.appendChild(img);
+            imageTest.appendChild(imageContainer);
+            
+            const imageInfo = document.createElement('div');
+            imageInfo.className = 'image-info';
+            imageInfo.innerHTML = `
+                <strong>${name}</strong><br>
+                <span class="image-path">${fullPath}</span>
+            `;
+            imageTest.appendChild(imageInfo);
+            
+            container.appendChild(imageTest);
+            return img;
+        }
+        
+        function populateTests() {
+            const rootContainer = document.getElementById('root-path-tests');
+            const assetsContainer = document.getElementById('assets-path-tests');
+            const githubContainer = document.getElementById('github-path-tests');
+            
+            // Clear containers
+            rootContainer.innerHTML = '';
+            assetsContainer.innerHTML = '';
+            githubContainer.innerHTML = '';
+            
+            // Create tests for each image
+            imageTestData.forEach(image => {
+                // Root path test (like LibGDX uses)
+                createImageTest(
+                    rootContainer, 
+                    `images/${image.path}`, 
+                    image.name, 
+                    `images/${image.path}`
+                );
+                
+                // Assets path test (like HTML uses)
+                createImageTest(
+                    assetsContainer, 
+                    `assets/images/${image.path}`, 
+                    image.name, 
+                    `assets/images/${image.path}`
+                );
+                
+                // GitHub path test
+                createImageTest(
+                    githubContainer, 
+                    `${githubRepoPath}/images/${image.path}`, 
+                    image.name, 
+                    `${githubRepoPath}/images/${image.path}`
+                );
+            });
+        }
+        
+        function testAllImages() {
+            // Force reload all images
+            const allImages = document.querySelectorAll('img');
+            allImages.forEach(img => {
+                const currentSrc = img.src;
+                img.src = '';
+                setTimeout(() => {
+                    img.src = currentSrc;
+                }, 100);
+            });
+        }
+        
+        function copyImagesToRoot() {
+            alert("In a real deployment, this would copy all images from assets/images/ to images/ at the root level.\n\nTo fix this issue permanently:\n\n1. Create a directory called 'images' in the docs folder\n2. Copy all PNG and png files from assets/images to docs/images\n3. Update your build script to include this step");
+            
+            // Note: We can't actually do this in the browser due to security restrictions,
+            // but this is what you would need to do on the server or in your build process
+        }
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            populateTests();
+            testAllImages();
+        });
+    </script>
+</body>
+</html>

@@ -6,11 +6,25 @@ When deploying the Joust Game to GitHub Pages, we encountered issues with images
 
 1. **Case sensitivity in file extensions**: GitHub Pages is hosted on Linux servers, which treat `.png` and `.PNG` as different file extensions. In Windows development environments, these are treated as the same, leading to inconsistencies.
 
-2. **Path resolution**: The relative paths that work locally might not resolve correctly in the GitHub Pages environment.
+2. **Path resolution**: The LibGDX code in `GameAssetManager.java` loads images from a root-level `images/` directory (e.g., `images/DigDugRight.PNG`), but our HTML deployment was placing images in `assets/images/`.
+
+## Complete Solution
+
+After extensive testing, we've implemented a comprehensive fix:
+
+1. **Dual Path Support**: Images are now copied to both locations:
+   - `docs/assets/images/` (for backward compatibility)
+   - `docs/images/` (for LibGDX compatibility)
+
+2. **Updated HTML**: All image references in `index.html` now use the root-level path (`images/filename.png`) to match LibGDX's expectations.
+
+3. **Updated Deployment Scripts**: Both the batch file and Gradle scripts now automatically copy images to both locations.
+
+4. **JavaScript Fallback**: We've retained the JavaScript-based path correction as a secondary safety mechanism.
 
 ## Solution Files
 
-We've created several files to diagnose and fix the issue:
+We created several files to diagnose and fix the issue:
 
 1. **image-test.html**: A comprehensive test page that tries different methods of loading images to identify which approach works best. This page tests:
    - Loading with lowercase extensions (.png)
@@ -23,24 +37,49 @@ We've created several files to diagnose and fix the issue:
    - Falls back to full GitHub Pages URLs if needed
    - Shows visual indicators of image loading status
 
-3. **html/image-fix.js**: A reusable script that can be included in any HTML page to automatically correct image extensions. This script:
-   - Detects when images fail to load
-   - Tries alternative extension cases
-   - Falls back to full URLs when needed
+3. **libgdx-test.html**: Tests loading images using the same paths that LibGDX uses.
+
+4. **path-test.html**: Tests all possible path combinations and provides a solution button.
+
+5. **html/image-fix.js**: A reusable script that can be included in any HTML page to automatically correct image extensions.
+
+6. **copy-images-to-root.ps1**: A PowerShell script that copies images to the root-level directory.
 
 ## How to Use
 
-1. **For the standard solution**: The main `index.html` now includes the `image-fix.js` script, which should automatically handle most image loading issues.
+1. **Standard Usage**: The main `index.html` has been updated to use root-level image paths and includes the `image-fix.js` script as a fallback.
 
-2. **For testing**: Use the `image-test.html` page to see which loading methods work best for specific images.
+2. **For Testing**: Use any of the test pages to verify image loading:
+   - `image-test.html` - Tests various path and extension combinations
+   - `libgdx-test.html` - Tests the LibGDX-style image paths
+   - `path-test.html` - Tests all path approaches with detailed feedback
 
-3. **For guaranteed results**: The `auto-fixed.html` page implements the most comprehensive fixes and provides visual feedback on image loading status.
+3. **For Development**: When making changes to the project:
+   - Use the updated deployment scripts which copy images to both locations
+   - Or manually run `copy-images-to-root.ps1` to copy images
 
 ## Technical Explanation
 
-The core issue relates to case sensitivity in file systems:
+The core issues were:
 
-- **Windows**: File systems are case-insensitive, so `image.PNG` and `image.png` are considered the same file.
-- **Linux/Unix** (including GitHub Pages servers): File systems are case-sensitive, so `image.PNG` and `image.png` are considered different files.
+1. **Case Sensitivity**: 
+   - **Windows**: File systems are case-insensitive, so `image.PNG` and `image.png` are considered the same file.
+   - **Linux/Unix** (including GitHub Pages servers): File systems are case-sensitive, so `image.PNG` and `image.png` are considered different files.
 
-When developing on Windows, references to images with incorrect case will still work locally but fail when deployed to GitHub Pages. Our solution uses JavaScript to detect loading failures and automatically try alternative case variations.
+2. **LibGDX Path Expectations**:
+   - LibGDX's `GameAssetManager.java` loads images from the root level (`images/filename.png`)
+   - Our HTML deployment was placing images in `assets/images/filename.png`
+
+The solution ensures images are available at both paths, with all HTML references updated to use the LibGDX-compatible root path.
+
+## LibGDX Asset Loading Code
+
+In `GameAssetManager.java`, images are loaded with root-level paths:
+
+```java
+queueTexture("hero_right", "images/DigDugRight.PNG");
+queueTexture("platform_truss", "images/PlatTruss.PNG");
+queueTexture("egg", "images/Egg.png");
+```
+
+This explains why the images needed to be at the root level for proper loading.

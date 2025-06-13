@@ -105,16 +105,24 @@ task deployHtml {
     
     doLast {
         println "Creating HTML placeholder in docs directory..."
-        
-        // Ensure the directories exist
+          // Ensure the directories exist
         mkdir "docs/html"
         mkdir "docs/assets"
         mkdir "docs/assets/images"
+        mkdir "docs/images"  // Root-level images directory for LibGDX compatibility
         
-        // Copy assets
+        // Copy assets to traditional location
         copy {
             from "assets/images"
             into "docs/assets/images"
+            include "*.png"
+            include "*.PNG"
+        }
+        
+        // Copy assets to root-level directory for LibGDX compatibility
+        copy {
+            from "assets/images"
+            into "docs/images"
             include "*.png"
             include "*.PNG"
         }
