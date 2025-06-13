@@ -128,7 +128,8 @@
             imageBox.className = 'image-box';
             
             const img = document.createElement('img');
-            img.src = `../images/${file.path}`;
+            img.src = `images/${file.path}`;
+            img.onerror = () => console.error('Image failed to load:', img.src);
             img.alt = file.name;
             imageElements.push(img);
             
