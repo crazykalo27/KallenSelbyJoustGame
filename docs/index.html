@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Joust Game - Simple Image Test</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        h1 {
+            color: #0066cc;
+            text-align: center;
+        }
+        
+        .content {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        
+        .image-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        img {
+            max-width: 300px;
+            border: 3px solid #ccc;
+            border-radius: 5px;
+        }
+        
+        .status {
+            text-align: center;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        
+        .success {
+            color: green;
+        }
+        
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Joust Game - Image Loading Test</h1>
+    
+    <div class="content">
+        <p>This page tests if the image can be loaded correctly from the root path, as expected by LibGDX:</p>
+        
+        <div class="image-container">
+            <!-- The image should load from the root-level images directory -->
+            <img id="testImage" src="images/DigDugRight.PNG" alt="DigDug Character">
+        </div>
+        
+        <div id="status" class="status">Checking image loading status...</div>
+    </div>
+    
+    <script>
+        // Simple script to verify the image loads
+        document.addEventListener('DOMContentLoaded', function() {
+            const img = document.getElementById('testImage');
+            const status = document.getElementById('status');
+            
+            // When image loads successfully
+            img.onload = function() {
+                status.className = 'status success';
+                status.textContent = 'SUCCESS! The image loaded correctly. Size: ' + 
+                                     img.naturalWidth + '×' + img.naturalHeight + 'px';
+                console.log('Image loaded successfully');
+            };
+            
+            // When image fails to load
+            img.onerror = function() {
+                status.className = 'status error';
+                status.textContent = 'ERROR: Failed to load image from path: ' + img.src;
+                console.error('Failed to load image:', img.src);
+            };
+        });
+    </script>
+</body>
+</html>
