@@ -1,0 +1,37 @@
+name: Optimize Images
+
+on:
+  push:
+    paths:
+      - 'docs/images/**'
+      - 'assets/images/**'
+  workflow_dispatch:
+
+jobs:
+  optimize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          
+      - name: Install dependencies
+        run: |
+          npm install -g imagemin-cli imagemin-pngquant
+          
+      - name: Optimize PNG Images
+        run: |
+          find docs/images -type f -name "*.PNG" -exec sh -c 'convert "$1" -strip -colorspace sRGB -define png:format=png8 "${1%.PNG}.png" && rm "$1"' -- {} \;
+          find docs/images -type f -name "*.png" -exec imagemin {} --plugin=pngquant --out-dir=docs/images \;
+          
+      - name: Commit changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add docs/images
+          git commit -m "Optimize images" || echo "No changes to commit"
+          git push

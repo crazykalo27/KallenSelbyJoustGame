@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LibGDX HTML5 Asset Loading Solution</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f8f9fa;
+            line-height: 1.6;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        code {
+            font-family: monospace;
+            background-color: #f5f5f5;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        .demo-area {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .image-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .image-box {
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 200px;
+        }
+        .image-box img {
+            max-width: 150px;
+            max-height: 150px;
+            margin-bottom: 10px;
+        }
+        .image-caption {
+            font-size: 12px;
+            text-align: center;
+            word-break: break-all;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .console {
+            background-color: #333;
+            color: #fff;
+            font-family: monospace;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            min-height: 100px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="section">
+            <h1>LibGDX HTML5 Asset Loading Solution</h1>
+            <p>This page demonstrates a reliable approach to load images in LibGDX HTML5/GWT projects deployed on GitHub Pages. The solution addresses common issues like case sensitivity, path handling, and extension capitalization.</p>
+        </div>
+
+        <div class="section">
+            <h2>The Problem</h2>
+            <p>LibGDX HTML5/GWT deployments often encounter image loading issues, especially on GitHub Pages, due to:</p>
+            <ul>
+                <li>Case sensitivity differences between file systems and web servers</li>
+                <li>Path handling inconsistencies</li>
+                <li>Extension capitalization (PNG vs png)</li>
+                <li>GWT's asset preloading behavior</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>The Solution</h2>
+            <p>Our comprehensive solution has multiple components:</p>
+            <ol>
+                <li>Using <strong>lowercase filenames</strong> consistently</li>
+                <li>Creating an <strong>image manifest</strong> to map original filenames to web-friendly versions</li>
+                <li>Adding a <strong>.nojekyll</strong> file to disable GitHub Pages processing</li>
+                <li>Implementing a robust <strong>asset loading strategy</strong> in LibGDX code</li>
+            </ol>
+        </div>
+
+        <div class="section">
+            <h2>Demo: Image Loading Methods</h2>
+            <div class="demo-area">
+                <h3>1. Direct HTML Loading</h3>
+                <div class="image-container">
+                    <div class="image-box">
+                        <img src="images/digdugright.png" alt="DigDug Right (lowercase)">
+                        <div class="image-caption">src="images/digdugright.png"</div>
+                    </div>
+                    <div class="image-box">
+                        <img src="images/DigDugRight.png" alt="DigDug Right (original case)">
+                        <div class="image-caption">src="images/DigDugRight.png"</div>
+                    </div>
+                </div>
+
+                <h3>2. JavaScript-based Loading</h3>
+                <p>Click the button to load images using JavaScript (similar to how LibGDX GWT loads assets):</p>
+                <button id="loadJsImages">Load Images with JavaScript</button>
+                <div class="image-container" id="jsContainer"></div>
+                
+                <h3>3. Manifest-based Loading</h3>
+                <p>Click the button to load images using the manifest approach (recommended for LibGDX):</p>
+                <button id="loadManifestImages">Load Images with Manifest</button>
+                <div class="image-container" id="manifestContainer"></div>
+                
+                <div class="console" id="console"></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Java Implementation for LibGDX</h2>
+            <p>Here's how to implement this solution in your LibGDX project:</p>
+            
+            <h3>1. Create an Asset Manager Helper</h3>
+            <pre><code>public class WebAssetManager {
+    private static final boolean isWeb = Gdx.app.getType() == Application.ApplicationType.WebGL;
+    private final AssetManager assetManager;
+    private JsonValue manifest;
+
+    public WebAssetManager(AssetManager assetManager) {
+        this.assetManager = assetManager;
+        if (isWeb) {
+            // Load the manifest first
+            assetManager.load("images/image-manifest.json", JsonValue.class);
+            assetManager.finishLoading();
+            manifest = assetManager.get("images/image-manifest.json", JsonValue.class);
+        }
+    }
+
+    public void loadTexture(String originalPath) {
+        String path = originalPath;
+        if (isWeb && manifest != null) {
+            // Look up the web-friendly path in the manifest
+            if (manifest.has(originalPath)) {
+                path = manifest.get(originalPath).getString("path");
+            } else {
+                // Fallback to lowercase as a last resort
+                path = originalPath.toLowerCase();
+            }
+        }
+        assetManager.load(path, Texture.class);
+    }
+
+    public Texture getTexture(String originalPath) {
+        String path = originalPath;
+        if (isWeb && manifest != null) {
+            // Look up in manifest
+            if (manifest.has(originalPath)) {
+                path = manifest.get(originalPath).getString("path");
+            } else {
+                path = originalPath.toLowerCase();
+            }
+        }
+        return assetManager.get(path, Texture.class);
+    }
+}</code></pre>
+
+            <h3>2. Using the Asset Manager in Your Game</h3>
+            <pre><code>public class MyGame extends Game {
+    private AssetManager assetManager;
+    private WebAssetManager webAssetManager;
+
+    @Override
+    public void create() {
+        assetManager = new AssetManager();
+        webAssetManager = new WebAssetManager(assetManager);
+        
+        // Load assets with the helper
+        webAssetManager.loadTexture("images/DigDugRight.PNG");
+        webAssetManager.loadTexture("images/PacManLeft.PNG");
+        assetManager.finishLoading();
+        
+        // Use the assets
+        Texture digDugTexture = webAssetManager.getTexture("images/DigDugRight.PNG");
+        // ...
+    }
+}</code></pre>
+        </div>
+
+        <div class="section">
+            <h2>Step-by-Step Deployment Instructions</h2>
+            <ol>
+                <li>Run the <code>prepare-libgdx-images.ps1</code> script to create lowercase versions and the manifest</li>
+                <li>Ensure you have a <code>.nojekyll</code> file in your docs folder</li>
+                <li>Update your LibGDX code to use the WebAssetManager helper or simply use lowercase filenames</li>
+                <li>Deploy your HTML5 build to the docs folder</li>
+                <li>Commit and push to GitHub</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        // Function to log messages to our console
+        function log(message, isError = false) {
+            const console = document.getElementById('console');
+            const entry = document.createElement('div');
+            entry.textContent = message;
+            if (isError) {
+                entry.style.color = '#ff6b6b';
+            } else {
+                entry.style.color = '#7fff7f';
+            }
+            console.appendChild(entry);
+            console.scrollTop = console.scrollHeight;
+        }
+        
+        // Test images
+        const testImages = [
+            { original: 'images/DigDugRight.PNG', lower: 'images/digdugright.png' },
+            { original: 'images/BlueKoopaLeft.PNG', lower: 'images/bluekoopaleft.png' }
+        ];
+        
+        // JavaScript direct loading
+        document.getElementById('loadJsImages').addEventListener('click', function() {
+            const container = document.getElementById('jsContainer');
+            container.innerHTML = '';
+            log('Starting JavaScript image loading...');
+            
+            testImages.forEach(imageSet => {
+                // Try original case
+                const imgOriginal = new Image();
+                imgOriginal.onload = () => {
+                    log(`Successfully loaded: ${imageSet.original}`);
+                    
+                    const box = document.createElement('div');
+                    box.className = 'image-box';
+                    box.appendChild(imgOriginal);
+                    
+                    const caption = document.createElement('div');
+                    caption.className = 'image-caption';
+                    caption.textContent = imageSet.original;
+                    box.appendChild(caption);
+                    
+                    container.appendChild(box);
+                };
+                
+                imgOriginal.onerror = () => {
+                    log(`Failed to load original case: ${imageSet.original}`, true);
+                    
+                    // Try lowercase as fallback
+                    const imgLower = new Image();
+                    imgLower.onload = () => {
+                        log(`Successfully loaded lowercase fallback: ${imageSet.lower}`);
+                        
+                        const box = document.createElement('div');
+                        box.className = 'image-box';
+                        box.appendChild(imgLower);
+                        
+                        const caption = document.createElement('div');
+                        caption.className = 'image-caption';
+                        caption.textContent = `${imageSet.original} (fallback to lowercase)`;
+                        box.appendChild(caption);
+                        
+                        container.appendChild(box);
+                    };
+                    
+                    imgLower.onerror = () => {
+                        log(`Failed to load even with lowercase: ${imageSet.lower}`, true);
+                    };
+                    
+                    imgLower.src = imageSet.lower;
+                };
+                
+                imgOriginal.src = imageSet.original;
+            });
+        });
+        
+        // Manifest-based loading
+        document.getElementById('loadManifestImages').addEventListener('click', function() {
+            const container = document.getElementById('manifestContainer');
+            container.innerHTML = '';
+            log('Loading image manifest...');
+            
+            fetch('images/image-manifest.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(manifest => {
+                    log('Manifest loaded successfully');
+                    
+                    testImages.forEach(imageSet => {
+                        const originalName = imageSet.original.split('/').pop();
+                        
+                        if (manifest[originalName]) {
+                            const imgInfo = manifest[originalName];
+                            log(`Found in manifest: ${originalName} -> ${imgInfo.webName}`);
+                            
+                            const img = new Image();
+                            img.onload = () => {
+                                log(`Successfully loaded from manifest: ${imgInfo.path}`);
+                                
+                                const box = document.createElement('div');
+                                box.className = 'image-box';
+                                box.appendChild(img);
+                                
+                                const caption = document.createElement('div');
+                                caption.className = 'image-caption';
+                                caption.textContent = `Original: ${imgInfo.originalName}\nWeb: ${imgInfo.path}`;
+                                box.appendChild(caption);
+                                
+                                container.appendChild(box);
+                            };
+                            
+                            img.onerror = () => {
+                                log(`Failed to load from manifest: ${imgInfo.path}`, true);
+                            };
+                            
+                            img.src = imgInfo.path;
+                        } else {
+                            log(`Image not found in manifest: ${originalName}`, true);
+                        }
+                    });
+                })
+                .catch(error => {
+                    log(`Error loading manifest: ${error.message}`, true);
+                });
+        });
+    </script>
+</body>
+</html>
