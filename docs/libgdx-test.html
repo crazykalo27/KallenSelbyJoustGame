@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LibGDX Direct Image Test</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            background-color: #222;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1, h2 {
+            color: #ffcc00;
+            text-shadow: 0 0 5px rgba(255, 204, 0, 0.3);
+        }
+        
+        .test-container {
+            background-color: #333;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .image-tests {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .image-test {
+            background-color: #444;
+            padding: 15px;
+            border-radius: 8px;
+            width: 300px;
+        }
+        
+        .image-container {
+            height: 200px;
+            border: 2px dashed #666;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .image-container img {
+            max-width: 100%;
+            max-height: 100%;
+            display: block;
+        }
+        
+        .success {
+            color: #00ff00;
+            font-weight: bold;
+        }
+        
+        .failure {
+            color: #ff6666;
+            font-weight: bold;
+        }
+        
+        .info {
+            color: #aaa;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #ffcc00;
+            text-decoration: none;
+            margin-right: 20px;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>LibGDX Direct Image Test</h1>
+    <p>This page tries to load images directly the way LibGDX does in its compiled GWT code.</p>
+    
+    <a href="index.html" class="back-link">← Return to Main Page</a>
+    <a href="image-test.html" class="back-link">← Return to Image Test Page</a>
+    
+    <div class="test-container">
+        <h2>1. Direct Root Path Test</h2>
+        <p>These images are loaded directly from the root path, as LibGDX might do:</p>
+        <div class="image-tests">
+            <div class="image-test">
+                <h3>DigDugRight.PNG</h3>
+                <div class="image-container">
+                    <img src="images/DigDugRight.PNG" alt="DigDug Right">
+                </div>
+                <div class="info">Path: images/DigDugRight.PNG</div>
+            </div>
+            
+            <div class="image-test">
+                <h3>PlatIce.PNG</h3>
+                <div class="image-container">
+                    <img src="images/PlatIce.PNG" alt="Ice Platform">
+                </div>
+                <div class="info">Path: images/PlatIce.PNG</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="test-container">
+        <h2>2. With Assets Path Test</h2>
+        <p>These images are loaded with the assets path:</p>
+        <div class="image-tests">
+            <div class="image-test">
+                <h3>DigDugRight.PNG</h3>
+                <div class="image-container">
+                    <img src="assets/images/DigDugRight.PNG" alt="DigDug Right">
+                </div>
+                <div class="info">Path: assets/images/DigDugRight.PNG</div>
+            </div>
+            
+            <div class="image-test">
+                <h3>PlatIce.PNG</h3>
+                <div class="image-container">
+                    <img src="assets/images/PlatIce.PNG" alt="Ice Platform">
+                </div>
+                <div class="info">Path: assets/images/PlatIce.PNG</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="test-container">
+        <h2>3. Full URL Test</h2>
+        <p>These images are loaded with the full GitHub Pages URL:</p>
+        <div class="image-tests">
+            <div class="image-test">
+                <h3>DigDugRight.PNG</h3>
+                <div class="image-container">
+                    <img src="https://crazykalo27.github.io/KallenSelbyJoustGame/images/DigDugRight.PNG" alt="DigDug Right">
+                </div>
+                <div class="info">Path: https://crazykalo27.github.io/KallenSelbyJoustGame/images/DigDugRight.PNG</div>
+            </div>
+            
+            <div class="image-test">
+                <h3>PlatIce.PNG</h3>
+                <div class="image-container">
+                    <img src="https://crazykalo27.github.io/KallenSelbyJoustGame/images/PlatIce.PNG" alt="Ice Platform">
+                </div>
+                <div class="info">Path: https://crazykalo27.github.io/KallenSelbyJoustGame/images/PlatIce.PNG</div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const images = document.querySelectorAll('img');
+            
+            images.forEach(img => {
+                img.addEventListener('load', function() {
+                    const container = this.closest('.image-container');
+                    container.style.borderColor = '#00cc00';
+                    
+                    const infoDiv = this.closest('.image-test').querySelector('.info');
+                    infoDiv.innerHTML = `<span class="success">✓ SUCCESS</span><br>Path: ${this.src}<br>Size: ${this.naturalWidth}×${this.naturalHeight}px`;
+                });
+                
+                img.addEventListener('error', function() {
+                    const container = this.closest('.image-container');
+                    container.style.borderColor = '#cc0000';
+                    
+                    const infoDiv = this.closest('.image-test').querySelector('.info');
+                    infoDiv.innerHTML = `<span class="failure">✗ FAILED</span><br>Path: ${this.src}`;
+                });
+            });
+        });
+    </script>
+</body>
+</html>
