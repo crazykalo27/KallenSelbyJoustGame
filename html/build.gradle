@@ -51,6 +51,11 @@ task addSource {
 }
 
 tasks.compileGwt.dependsOn(addSource)
+tasks.compileGwt.doFirst {
+    files(project(':core').sourceSets.main.output.classesDirs).each {
+        sourceSets.main.compileClasspath += files(it)
+    }
+}
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 sourceSets.main.java.srcDirs = [ "src/", "../core/src" ]

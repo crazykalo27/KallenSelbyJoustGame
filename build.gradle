@@ -140,14 +140,6 @@ project(':html') {
         maxHeapSize = "1G"
         minHeapSize = "512M"
         
-        sourceSets {
-            main {
-                java {
-                    srcDirs = ['src/', '../core/src/']
-                }
-            }
-        }
-        
         modules = ['com.joust.GdxDefinition']
         devModules = ['com.joust.GdxDefinitionSuperdev']
         

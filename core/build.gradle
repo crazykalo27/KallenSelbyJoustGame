@@ -26,4 +26,22 @@ sourceSets {
             srcDirs = ['test/']
         }
     }
+}
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allJava
+    archiveClassifier.set('sources')
+}
+
+task javadocJar(type: Jar) {
+    from javadoc.destinationDir
+    archiveClassifier.set('javadoc')
+}
+
+jar {
+    archiveBaseName.set(appName)
+    from(sourceSets.main.output)
+    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
 } 
