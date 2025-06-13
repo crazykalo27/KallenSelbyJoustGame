@@ -145,6 +145,44 @@ These changes accomplish the goal of:
 - Demonstrating that assets are properly accessible in the HTML deployment
 - Creating a more engaging placeholder page while GWT compilation issues are addressed
 - Giving users a better preview of the game's visual elements
+
+### 4. Fixed Image Loading Issues (June 14, 2023)
+
+We encountered issues with images not loading properly in the GitHub Pages deployment, specifically with case sensitivity in file extensions. To address this:
+
+1. Created a comprehensive image testing page (`docs/image-test.html`) that tests:
+   - Loading images with lowercase extensions (.png)
+   - Loading images with uppercase extensions (.PNG)
+   - Loading images with full GitHub Pages URLs
+   - Testing auto-correction mechanisms
+
+2. Created an auto-fixed version (`docs/auto-fixed.html`) that implements:
+   - JavaScript-based extension case correction
+   - Fallback to full GitHub Pages URLs when relative paths fail
+   - Visual indicators of image loading status
+
+3. Created a reusable image fix script (`docs/html/image-fix.js`) that can be included in any HTML page:
+   ```javascript
+   // Image extension auto-correction script
+   window.addEventListener('DOMContentLoaded', function() {
+       const images = document.querySelectorAll('img');
+       
+       images.forEach(img => {
+           const originalSrc = img.getAttribute('src');
+           
+           img.addEventListener('error', function() {
+               // Try changing extension case
+               if (this.src.endsWith('.png')) {
+                   this.src = this.src.replace('.png', '.PNG');
+               } else if (this.src.endsWith('.PNG')) {
+                   this.src = this.src.replace('.PNG', '.png');
+               }
+           });
+       });
+   });
+   ```
+
+The image loading issues were primarily due to case sensitivity in file extensions, which is significant in GitHub Pages' Linux-based hosting environment but not in Windows development environments.
 echo     if (loadingMsg) { >> docs\html\game.js
 echo         loadingMsg.innerHTML = "HTML version is currently under maintenance.&lt;br&gt;Please download the desktop version instead."; >> docs\html\game.js
 echo     } >> docs\html\game.js
