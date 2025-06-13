@@ -1,64 +1,65 @@
-apply plugin: "java-library"
-apply plugin: "org.docstr.gwt"
-apply plugin: "war"
+apply plugin: 'java-library'
+apply plugin: 'org.docstr.gwt'
+apply plugin: 'war'
 
 dependencies {
-    implementation project(":core")
-    api "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
-    api "com.badlogicgames.gdx:gdx:$gdxVersion:sources"
-    api "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion:sources"
-    api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion:sources"
-    api "com.badlogicgames.gdx:gdx-box2d-gwt:$gdxVersion:sources"
+  implementation project(':core')
+  api "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
+  api "com.badlogicgames.gdx:gdx:$gdxVersion:sources"
+  api "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion:sources"
+  api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion:sources"
+  api "com.badlogicgames.gdx:gdx-box2d-gwt:$gdxVersion:sources"
+}
+
+// Clean war directory before build to avoid permission issues
+clean.doFirst {
+    delete file("war")
+    file("war").mkdirs()
 }
 
 gwt {
-    gwtVersion = '2.8.2' // Downgraded to match libGDX compatibility
-    maxHeapSize = "2G" // Increased for better compilation performance
-    minHeapSize = "1G"
+  gwtVersion = '2.8.2' // Compatible with LibGDX
+  minHeapSize = "1024M"
+  maxHeapSize = "2G"
 
-    src = files(project(":core").sourceSets.main.java.srcDirs, file("src/"))
-    modules 'com.joust.GdxDefinition'
-    devModules 'com.joust.GdxDefinitionSuperdev'
-    project.webAppDirName = 'webapp'
+  src = files(project(':core').sourceSets.main.java.srcDirs, file('src/main/java'))
+  
+  modules 'com.joust.GdxDefinition'
+  project.webAppDirName = 'webapp'
 
-    compiler {
-        strict = true
-        optimize = 9
-        draftCompile = false
-        // disableClassMetadata = true // Optimizations make these redundant
-        // disableCastChecking = true
-    }
-}
-
-// Asset copying task to align with standard practice
-processResources {
-  from("$projectDir/../core/assets") {
-    into "assets"
+  compiler {
+    strict = true
+    disableCastChecking = true
+    disableClassMetadata = true
+    // Increase compilation timeouts
+    localWorkers = Runtime.runtime.availableProcessors()
+    sourceLevel = "1.8"
   }
 }
 
-// The standard gwt:dist task will now handle building the distribution.
-// The old 'dist' and 'war' tasks are no longer necessary for this deployment model.
+// Task to manually clean the war/assets directory
+task cleanWarAssets(type: Delete) {
+    delete fileTree('war/assets')
+}
 
-task addSource {
+task dist(dependsOn: [clean, cleanWarAssets, compileGwt]) {
     doLast {
-        sourceSets.main.compileClasspath += files(project(':core').sourceSets.main.allJava.srcDirs)
-    }
-}
-
-tasks.compileGwt.dependsOn(addSource)
-tasks.compileGwt.doFirst {
-    files(project(':core').sourceSets.main.output.classesDirs).each {
-        sourceSets.main.compileClasspath += files(it)
-    }
-}
-
-sourceCompatibility = JavaVersion.VERSION_1_8
-sourceSets.main.java.srcDirs = [ "src/", "../core/src" ]
-
-eclipse {
-    project {
-        name = appName + "-html"
-        linkedResource name: 'core_src', type: '2', location: '../core/src'
+        file("build/dist/").mkdirs()
+        copy {
+            from("build/gwt/out/")
+            into("build/dist/")
+        }
+        copy {
+            from("../assets")
+            into("build/dist/assets")
+            exclude("**/*.txt")
+        }
+        // Copy specific assets that need processing
+        copy {
+            from("../assets")
+            into("build/dist/assets")
+            include("**/*.txt")
+            filter { line -> line }  // This will ensure line endings are properly handled
+        }
     }
 }

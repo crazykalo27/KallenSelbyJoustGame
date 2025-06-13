@@ -17,7 +17,8 @@ canvas {
 
 #gameContainer {
     margin: 20px auto;
-    max-width: 800px;
+    max-width: 1040px;
+    position: relative;
 }
 
 #loadingMessage {
@@ -26,6 +27,20 @@ canvas {
     font-weight: bold;
     padding: 20px;
     margin: 50px 0;
+    text-shadow: 0 0 10px rgba(255, 235, 59, 0.5);
+}
+
+#gameInfo {
+    margin: 20px auto;
+    max-width: 800px;
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+h1 {
+    color: #ffcc00;
+    margin-top: 0;
 }
 
 .superdev {
@@ -48,8 +63,7 @@ canvas {
 }
 
 .superdev:hover {
-    background-color: rgb(255, 221, 77);
-    color: black;
+    background-color: rgb(50, 50, 50);
 }
 
 h1 {
@@ -65,4 +79,4 @@ h1 {
 
 .instructions strong {
     color: #ffeb3b;
-} 
+}
