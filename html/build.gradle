@@ -22,7 +22,7 @@ gwt {
   minHeapSize = "1024M"
   maxHeapSize = "2G"
 
-  src = files(project(':core').sourceSets.main.java.srcDirs, file('src/main/java'))
+  src = files(project(':core').sourceSets.main.java.srcDirs, sourceSets.main.java.srcDirs)
   
   modules 'com.joust.GdxDefinition'
   project.webAppDirName = 'webapp'
@@ -42,7 +42,7 @@ task cleanWarAssets(type: Delete) {
     delete fileTree('war/assets')
 }
 
-task dist(dependsOn: [clean, cleanWarAssets, compileGwt]) {
+task dist(dependsOn: [clean, compileGwt]) {
     doLast {
         file("build/dist/").mkdirs()
         copy {
