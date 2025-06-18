@@ -1,0 +1,6 @@
+# Ignore large files
+html/build/gwt/cache/
+html/war/
+**/gwt-unitCache/
+**/gwt-unitCache-*
+*.cache.js

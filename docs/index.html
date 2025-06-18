@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Joust Game</title>
+  <!-- Base URL for asset loading <base href="http://localhost:8000/"> -->
+  <base href="/KallenSelbyJoustGame/">
+
+  <!-- URL fix for assets.txt -->
+  <script>
+    (function() {
+      const orig = XMLHttpRequest.prototype.open;
+      XMLHttpRequest.prototype.open = function(method, url, ...rest) {
+        // Fix the assets.txt URL path issue
+        if (url.includes('KallenSelbyJoustassets/assets.txt')) {
+          const fixedUrl = url.replace('KallenSelbyJoustassets/assets.txt', 'KallenSelbyJoustGame/assets/assets.txt');
+          console.log("[XHR] Fixing URL from", url, "to", fixedUrl);
+          return orig.call(this, method, fixedUrl, ...rest);
+        }
+        console.log("[XHR] open called with URL →", url);
+        return orig.call(this, method, url, ...rest);
+      };
+    })();
+  </script>
+
+  <script src="html.nocache.js"></script>
+</head>
+<body>
+  <h1>Loading Joust…</h1>
+</body>
+</html>

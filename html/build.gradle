@@ -1,0 +1,134 @@
+/*
+ * HTML module build.gradle for a libGDX GWT project
+ */
+
+plugins {
+    id 'java-library'
+    id 'war'
+}
+
+// Legacy GWT plugin already on the classpath
+apply plugin: 'org.docstr.gwt'
+
+// Set Java compatibility
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    jcenter()
+    gradlePluginPortal()
+}
+
+// Shared libGDX version (override in gradle.properties if desired)
+ext {
+    gdxVersion = findProperty('gdxVersion') ?: '1.9.14'
+}
+
+dependencies {
+    implementation project(':core')
+    api "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"         // GWT backend runtime
+    api "com.badlogicgames.gdx:gdx:$gdxVersion:sources"            // core sources for GWT compiler
+    api "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion:sources"// backend sources
+    api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion:sources"      // Box2D core sources
+    api "com.badlogicgames.gdx:gdx-box2d-gwt:$gdxVersion:sources" // Box2D GWT sources
+}
+
+// GWT compiler configuration
+gwt {
+    gwtVersion            = '2.8.2'
+    minHeapSize           = '1024M'
+    maxHeapSize           = '2G'
+
+    // Include both core + html Java sources
+    src                   = files(project(':core').sourceSets.main.java.srcDirs, 'src')
+    modules               = ['com.joust.JoustGame']
+    project.webAppDirName = 'src/main/webapp'
+
+    compiler {
+        strict               = true
+        disableCastChecking  = true
+        disableClassMetadata = true
+        localWorkers         = Runtime.runtime.availableProcessors()
+        sourceLevel          = '1.8'
+    }
+}
+
+// Copy raw assets (images + levels) into webapp/assets without overwriting our custom assets.txt
+task copyAssets(type: Copy) {
+    into 'src/main/webapp/assets'
+    from('../assets/images') {
+        into 'images'
+    }
+    from('../assets/levels') {
+        into 'levels'
+    }
+}
+// Ensure assets are in place before compilation or resource processing
+tasks.named('compileJava')    { dependsOn copyAssets }
+tasks.named('compileGwt')      { dependsOn copyAssets }
+tasks.named('processResources'){ dependsOn copyAssets }
+
+// Clean up legacy and deployment directories
+tasks.clean.doFirst {
+    delete 'war'
+    delete 'docs'
+}
+
+// Assemble production-ready HTML5 site
+task dist(type: Copy) {
+    group       = 'build'
+    description = 'Compile GWT + bundle with webapp into build/dist'
+    dependsOn clean, compileGwt
+
+    doFirst {
+        delete "${buildDir}/dist"
+    }
+
+    // 1) compiled HTML+JS
+    from 'build/gwt/out/html'
+    into 'build/dist'
+
+    // 2) static entrypoint + assets (including our hand-written assets.txt)
+    from('src/main/webapp') {
+        include 'index.html'
+        include 'assets/**'
+    }
+}
+
+// Prepare docs/ folder for GitHub Pages deployment
+task copyToDocs(type: Copy) {
+    group       = 'deployment'
+    description = 'Mirror build/dist into docs/ for GitHub Pages'
+    dependsOn dist
+    from 'build/dist'
+    into 'docs'
+}
+
+// Create a separate task to copy assets.txt explicitly
+task copyAssetsTxt(type: Copy) {
+    group       = 'deployment'
+    description = 'Copy assets.txt to docs/assets/'
+    from 'src/main/webapp/assets/assets.txt'
+    into '../docs/assets'
+    doLast {
+        println "Explicitly copied assets.txt to docs/assets/"
+    }
+}
+
+// Make copyToDocs depend on copyAssetsTxt
+tasks.named('copyToDocs') { finalizedBy copyAssetsTxt }
+
+// GWT SuperDev mode for rapid dev testing
+task superDev(type: JavaExec) {
+    group       = 'gwt'
+    description = 'Launch GWT SuperDev mode'
+    main        = 'com.google.gwt.dev.codeserver.CodeServer'
+    classpath   = configurations.gwt + sourceSets.main.runtimeClasspath
+    args        = [
+        '-src', 'src',
+        '-modules', 'com.joust.JoustGame',
+        '-bindAddress', '127.0.0.1',
+        '-port', '9876'
+    ]
+}

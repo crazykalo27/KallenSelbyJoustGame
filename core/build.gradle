@@ -1,0 +1,46 @@
+apply plugin: "java-library"
+
+eclipse.project.name = appName + "-core"
+
+dependencies {
+    api "com.badlogicgames.gdx:gdx:$gdxVersion"
+
+    // Optional for GWT compatibility
+    compileOnly "com.google.gwt:gwt-user:2.8.2"
+    compileOnly "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
+
+    testImplementation 'junit:junit:4.13.2'
+}
+
+// Ensure UTF-8 encoding
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+sourceSets {
+    main {
+        java.srcDirs = ['src/']
+        resources.srcDirs = ['../assets']
+    }
+    test {
+        java.srcDirs = ['test/']
+    }
+}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allJava
+    archiveClassifier.set('sources')
+}
+
+task javadocJar(type: Jar) {
+    from javadoc.destinationDir
+    archiveClassifier.set('javadoc')
+}
+
+jar {
+    archiveBaseName.set(appName)
+    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+}
