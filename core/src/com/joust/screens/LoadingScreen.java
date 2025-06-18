@@ -30,7 +30,11 @@ public class LoadingScreen implements Screen {
         this.batch = new SpriteBatch();
         this.shapeRenderer = new ShapeRenderer();
         
-        this.font = new BitmapFont();
+        this.font = new BitmapFont(
+            Gdx.files.internal("fonts/font.fnt"),
+            Gdx.files.internal("fonts/font.png"),
+            false
+        );
         this.font.getData().setScale(2.0f);
         this.font.setColor(Color.WHITE);
         

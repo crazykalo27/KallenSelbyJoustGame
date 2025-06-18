@@ -37,19 +37,35 @@ public class CharacterScreen implements Screen {
         this.batch = new SpriteBatch();
         this.assetManager = GameAssetManager.getInstance();
         
-        this.titleFont = new BitmapFont();
+        this.titleFont = new BitmapFont(
+            Gdx.files.internal("fonts/font.fnt"),
+            Gdx.files.internal("fonts/font.png"),
+            false
+        );
         this.titleFont.getData().setScale(4.0f);
         this.titleFont.setColor(Color.YELLOW);
         
-        this.headerFont = new BitmapFont();
+        this.headerFont = new BitmapFont(
+            Gdx.files.internal("fonts/font.fnt"),
+            Gdx.files.internal("fonts/font.png"),
+            false
+        );
         this.headerFont.getData().setScale(2.5f);
         this.headerFont.setColor(Color.CYAN);
         
-        this.bodyFont = new BitmapFont();
+        this.bodyFont = new BitmapFont(
+            Gdx.files.internal("fonts/font.fnt"),
+            Gdx.files.internal("fonts/font.png"),
+            false
+        );
         this.bodyFont.getData().setScale(1.8f);
         this.bodyFont.setColor(Color.WHITE);
         
-        this.backFont = new BitmapFont();
+        this.backFont = new BitmapFont(
+            Gdx.files.internal("fonts/font.fnt"),
+            Gdx.files.internal("fonts/font.png"),
+            false
+        );
         this.backFont.getData().setScale(1.8f);
         this.backFont.setColor(Color.LIME);
     }

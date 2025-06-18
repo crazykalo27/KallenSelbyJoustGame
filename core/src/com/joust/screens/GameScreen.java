@@ -81,8 +81,16 @@ public class GameScreen implements Screen {
         viewport = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
         
         batch = new SpriteBatch();
-        font = new BitmapFont();
-        largeFont = new BitmapFont();
+        font = new BitmapFont(
+            Gdx.files.internal("fonts/font.fnt"),
+            Gdx.files.internal("fonts/font.png"),
+            false
+        );
+        largeFont = new BitmapFont(
+            Gdx.files.internal("fonts/font.fnt"),
+            Gdx.files.internal("fonts/font.png"),
+            false
+        );
         largeFont.getData().setScale(2.0f); // For large text like titles
         
         // Initialize managers
@@ -598,11 +606,19 @@ public class GameScreen implements Screen {
         inputManager = new InputManager();
         
         // Initialize fonts
-        font = new BitmapFont(); // Default font
+        font = new BitmapFont(
+            Gdx.files.internal("fonts/font.fnt"),
+            Gdx.files.internal("fonts/font.png"),
+            false
+        ); // Custom font
         font.getData().setScale(1.5f);
         font.setColor(Color.WHITE);
         
-        largeFont = new BitmapFont();
+        largeFont = new BitmapFont(
+            Gdx.files.internal("fonts/font.fnt"),
+            Gdx.files.internal("fonts/font.png"),
+            false
+        );
         largeFont.getData().setScale(3f);
         largeFont.setColor(Color.WHITE);
         
