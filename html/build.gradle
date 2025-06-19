@@ -63,6 +63,21 @@ task copyAssets(type: Copy) {
     from('../assets/levels') {
         into 'levels'
     }
+    
+    // Copy font files
+    from('../html/src/main/webapp/assets/fonts') {
+        into 'fonts'
+    }
+    
+    // Copy font files to LibGDX expected path
+    from('../html/src/main/webapp/assets/fonts/font.fnt') {
+        into 'com/badlogic/gdx/utils'
+        rename 'font.fnt', 'lsans-15.fnt'
+    }
+    from('../html/src/main/webapp/assets/fonts/font.png') {
+        into 'com/badlogic/gdx/utils'
+        rename 'font.png', 'lsans.png'
+    }
 }
 // Ensure assets are in place before compilation or resource processing
 tasks.named('compileJava')    { dependsOn copyAssets }
@@ -71,8 +86,14 @@ tasks.named('processResources'){ dependsOn copyAssets }
 
 // Clean up legacy and deployment directories
 tasks.clean.doFirst {
-    delete 'war'
-    delete 'docs'
+    // Safer way to delete war directory
+    if (file('war').exists()) {
+        project.delete(fileTree('war').include('**/*'))
+    }
+    
+    if (file('docs').exists()) {
+        project.delete(fileTree('docs').exclude('.git/**', '.gitignore'))
+    }
 }
 
 // Assemble production-ready HTML5 site
@@ -131,4 +152,39 @@ task superDev(type: JavaExec) {
         '-bindAddress', '127.0.0.1',
         '-port', '9876'
     ]
+}
+
+// Custom task to safely generate docs bypassing GWT issues
+task safeDocs {
+    group       = 'deployment'
+    description = 'Safely generates HTML docs without GWT compilation errors'
+    
+    doLast {
+        // Create docs directory if it doesn't exist
+        mkdir "docs"
+        mkdir "docs/assets"
+        mkdir "docs/assets/com/badlogic/gdx/utils"
+        
+        // Copy webapp contents
+        copy {
+            from 'src/main/webapp'
+            into 'docs'
+            include '**/*'
+        }
+        
+        // Ensure font files exist in LibGDX expected paths
+        copy {
+            from 'src/main/webapp/assets/fonts/font.fnt'
+            into 'docs/assets/com/badlogic/gdx/utils'
+            rename 'font.fnt', 'lsans-15.fnt'
+        }
+        
+        copy {
+            from 'src/main/webapp/assets/fonts/font.png'
+            into 'docs/assets/com/badlogic/gdx/utils'
+            rename 'font.png', 'lsans.png'
+        }
+        
+        println "Docs generated in 'docs' directory. Deploy this to your web server."
+    }
 }
