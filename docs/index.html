@@ -75,7 +75,6 @@
     var debugLog = document.getElementById('debug');
     
     function log(message) {
-      console.log('[DEBUG] ' + message);
       var logEntry = document.createElement('div');
       logEntry.className = 'debug-log';
       logEntry.textContent = new Date().toLocaleTimeString() + ': ' + message;
@@ -89,25 +88,10 @@
       status.textContent = 'Game Error: ' + message;
     };
     
-    // Override console methods to capture GWT output
-    var originalLog = console.log;
-    var originalError = console.error;
-    var originalWarn = console.warn;
-    
-    console.log = function() {
-      originalLog.apply(console, arguments);
-      log('LOG: ' + Array.prototype.slice.call(arguments).join(' '));
-    };
-    
-    console.error = function() {
-      originalError.apply(console, arguments);
-      log('ERROR: ' + Array.prototype.slice.call(arguments).join(' '));
-    };
-    
-    console.warn = function() {
-      originalWarn.apply(console, arguments);
-      log('WARN: ' + Array.prototype.slice.call(arguments).join(' '));
-    };
+    // Simple error capturing without recursion
+    window.addEventListener('error', function(e) {
+      log('JS ERROR: ' + e.message + ' at ' + e.filename + ':' + e.lineno);
+    });
     
     log('Page initialized');
     status.textContent = 'Loading GWT module...';
