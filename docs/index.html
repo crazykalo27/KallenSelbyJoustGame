@@ -5,9 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Joust Game</title>
   
-  <!-- Use relative base URL for assets -->
-  <base href="./">
-  
   <style>
     body {
       margin: 0;
@@ -15,6 +12,7 @@
       background: #000;
       color: #fff;
       font-family: Arial, sans-serif;
+      font-size: 14px;
     }
     #loading {
       position: absolute;
@@ -36,14 +34,66 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
+    #debug {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      background: rgba(0,0,0,0.8);
+      padding: 10px;
+      border: 1px solid #333;
+      font-family: monospace;
+      font-size: 12px;
+      max-width: 500px;
+    }
   </style>
-
-  <script src="com.joust.JoustGame/com.joust.JoustGame.nocache.js"></script>
 </head>
 <body>
+  <div id="debug">
+    <h3>Debug Info:</h3>
+    <p>Base URL: <span id="baseUrl"></span></p>
+    <p>Current Location: <span id="currentLocation"></span></p>
+    <p>Script Path: <span id="scriptPath"></span></p>
+    <div id="loadStatus"></div>
+  </div>
+  
   <div id="loading">
     <h1>Loading Joust</h1>
     <div class="spinner"></div>
+    <p id="status">Initializing...</p>
   </div>
+
+  <script type="text/javascript">
+    // Debug information
+    document.getElementById('baseUrl').textContent = document.baseURI;
+    document.getElementById('currentLocation').textContent = window.location.href;
+    document.getElementById('scriptPath').textContent = './com.joust.JoustGame/com.joust.JoustGame.nocache.js';
+    
+    // Track script loading
+    var status = document.getElementById('status');
+    var loadStatus = document.getElementById('loadStatus');
+    
+    status.textContent = 'Loading GWT script...';
+    
+    function onScriptLoad() {
+      status.textContent = 'GWT script loaded successfully!';
+      loadStatus.innerHTML += '<p style="color: green;">✓ nocache.js loaded</p>';
+    }
+    
+    function onScriptError() {
+      status.textContent = 'Failed to load GWT script';
+      loadStatus.innerHTML += '<p style="color: red;">✗ nocache.js failed to load</p>';
+      loadStatus.innerHTML += '<p>Try these URLs manually:</p>';
+      loadStatus.innerHTML += '<p><a href="./com.joust.JoustGame/com.joust.JoustGame.nocache.js" target="_blank">nocache.js</a></p>';
+      loadStatus.innerHTML += '<p><a href="./com.joust.JoustGame/6D08E884C3A5CEF2B457C3D1A9E6FB67.cache.js" target="_blank">safari cache.js</a></p>';
+    }
+    
+    // Create and load the script
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = './com.joust.JoustGame/com.joust.JoustGame.nocache.js';
+    script.onload = onScriptLoad;
+    script.onerror = onScriptError;
+    document.head.appendChild(script);
+  </script>
 </body>
 </html>
