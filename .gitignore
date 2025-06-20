@@ -3,4 +3,11 @@ html/build/gwt/cache/
 html/war/
 **/gwt-unitCache/
 **/gwt-unitCache-*
-*.cache.js
+
+# Ignore cache files from build directories but allow them in docs for deployment
+**/build/**/*.cache.js
+**/war/**/*.cache.js
+html/src/main/webapp/html/*.cache.js
+
+# Allow cache.js files in docs directory for GitHub Pages deployment
+!docs/**/*.cache.js
