@@ -40,6 +40,22 @@
       border-radius: 10px;
       margin-top: 20px;
     }
+    #debug {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      background: rgba(0,0,0,0.8);
+      padding: 10px;
+      border: 1px solid #333;
+      font-family: monospace;
+      font-size: 10px;
+      max-width: 400px;
+      max-height: 200px;
+      overflow-y: scroll;
+    }
+    .debug-log {
+      margin: 2px 0;
+    }
   </style>
 </head>
 <body>
@@ -49,29 +65,86 @@
     <p id="status">Initializing...</p>
   </div>
 
+  <div id="debug">
+    <div class="debug-log">Debug Log:</div>
+  </div>
+
   <script type="text/javascript">
     var status = document.getElementById('status');
     var loading = document.getElementById('loading');
+    var debugLog = document.getElementById('debug');
     
-    status.textContent = 'Loading game files...';
+    function log(message) {
+      console.log('[DEBUG] ' + message);
+      var logEntry = document.createElement('div');
+      logEntry.className = 'debug-log';
+      logEntry.textContent = new Date().toLocaleTimeString() + ': ' + message;
+      debugLog.appendChild(logEntry);
+      debugLog.scrollTop = debugLog.scrollHeight;
+    }
+    
+    // Global error handler for the game
+    window.handleGameError = function(message) {
+      log('GAME ERROR: ' + message);
+      status.textContent = 'Game Error: ' + message;
+    };
+    
+    // Override console methods to capture GWT output
+    var originalLog = console.log;
+    var originalError = console.error;
+    var originalWarn = console.warn;
+    
+    console.log = function() {
+      originalLog.apply(console, arguments);
+      log('LOG: ' + Array.prototype.slice.call(arguments).join(' '));
+    };
+    
+    console.error = function() {
+      originalError.apply(console, arguments);
+      log('ERROR: ' + Array.prototype.slice.call(arguments).join(' '));
+    };
+    
+    console.warn = function() {
+      originalWarn.apply(console, arguments);
+      log('WARN: ' + Array.prototype.slice.call(arguments).join(' '));
+    };
+    
+    log('Page initialized');
+    status.textContent = 'Loading GWT module...';
     
     function onScriptLoad() {
-      status.textContent = 'Game loaded successfully!';
-      // The GWT module will handle hiding the loading screen
+      log('GWT nocache.js loaded successfully');
+      status.textContent = 'GWT module loaded, initializing game...';
     }
     
     function onScriptError() {
+      log('Failed to load GWT nocache.js');
       loading.innerHTML = '<h1>Failed to Load Game</h1>' +
         '<div class="error">' +
-        '<p>Sorry, the game failed to load. This could be due to:</p>' +
-        '<ul>' +
-        '<li>Network connectivity issues</li>' +
-        '<li>Browser compatibility problems</li>' +
-        '<li>Server issues</li>' +
-        '</ul>' +
-        '<p>Please try refreshing the page or try again later.</p>' +
+        '<p>The GWT module failed to load. Check the debug log below.</p>' +
         '</div>';
     }
+    
+    // Track GWT module loading progress
+    var checkInterval = setInterval(function() {
+      if (window.com_joust_JoustGame) {
+        log('GWT module object found');
+        clearInterval(checkInterval);
+      } else if (window.__gwtModuleFunction) {
+        log('GWT module function found');
+      }
+    }, 1000);
+    
+    // Timeout after 30 seconds
+    setTimeout(function() {
+      if (status.textContent.includes('Initializing') || status.textContent.includes('Loading')) {
+        log('TIMEOUT: Game failed to initialize within 30 seconds');
+        status.textContent = 'Game initialization timeout - check debug log';
+        clearInterval(checkInterval);
+      }
+    }, 30000);
+    
+    log('Creating script element');
     
     // Create and load the main GWT script
     var script = document.createElement('script');
@@ -80,6 +153,8 @@
     script.onload = onScriptLoad;
     script.onerror = onScriptError;
     document.head.appendChild(script);
+    
+    log('Script element added to head');
   </script>
 </body>
 </html>
