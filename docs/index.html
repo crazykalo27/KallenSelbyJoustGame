@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Joust Game</title>
+  <title>Joust Game v2.1</title>
   
   <style>
     body {
@@ -60,13 +60,13 @@
 </head>
 <body>
   <div id="loading">
-    <h1>Loading Joust</h1>
+    <h1>Loading Joust v2.1</h1>
     <div class="spinner"></div>
     <p id="status">Initializing...</p>
   </div>
 
   <div id="debug">
-    <div class="debug-log">Debug Log:</div>
+    <div class="debug-log">Debug Log v2.1:</div>
   </div>
 
   <script type="text/javascript">
@@ -85,7 +85,7 @@
     // Global error handler for the game
     window.handleGameError = function(message) {
       log('GAME ERROR: ' + message);
-      status.textContent = 'Game Error: ' + message;
+      if (status) status.textContent = 'Game Error: ' + message;
     };
     
     // Simple error capturing without recursion
@@ -93,20 +93,22 @@
       log('JS ERROR: ' + e.message + ' at ' + e.filename + ':' + e.lineno);
     });
     
-    log('Page initialized');
-    status.textContent = 'Loading GWT module...';
+    log('Page initialized - Version 2.1');
+    if (status) status.textContent = 'Loading GWT module...';
     
     function onScriptLoad() {
       log('GWT nocache.js loaded successfully');
-      status.textContent = 'GWT module loaded, initializing game...';
+      if (status) status.textContent = 'GWT module loaded, initializing game...';
     }
     
     function onScriptError() {
       log('Failed to load GWT nocache.js');
-      loading.innerHTML = '<h1>Failed to Load Game</h1>' +
-        '<div class="error">' +
-        '<p>The GWT module failed to load. Check the debug log below.</p>' +
-        '</div>';
+      if (loading) {
+        loading.innerHTML = '<h1>Failed to Load Game</h1>' +
+          '<div class="error">' +
+          '<p>The GWT module failed to load. Check the debug log below.</p>' +
+          '</div>';
+      }
     }
     
     // Track GWT module loading progress
@@ -119,16 +121,17 @@
       }
     }, 1000);
     
-    // Timeout after 30 seconds
+    // Timeout after 30 seconds - with null checks
     setTimeout(function() {
-      if (status.textContent.includes('Initializing') || status.textContent.includes('Loading')) {
+      if (status && status.textContent && 
+          (status.textContent.includes('Initializing') || status.textContent.includes('Loading'))) {
         log('TIMEOUT: Game failed to initialize within 30 seconds');
         status.textContent = 'Game initialization timeout - check debug log';
         clearInterval(checkInterval);
       }
     }, 30000);
     
-    log('Creating script element');
+    log('Creating script element for /html/ directory');
     
     // Create and load the main GWT script
     var script = document.createElement('script');
@@ -138,7 +141,7 @@
     script.onerror = onScriptError;
     document.head.appendChild(script);
     
-    log('Script element added to head');
+    log('Script element added to head: ' + script.src);
   </script>
 </body>
 </html>
