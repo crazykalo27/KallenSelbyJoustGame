@@ -25,6 +25,14 @@ ext {
     gdxVersion = findProperty('gdxVersion') ?: '1.9.14'
 }
 
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java', '../core/src']
+        }
+    }
+}
+
 dependencies {
     implementation project(':core')
     api "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"         // GWT backend runtime
@@ -32,64 +40,44 @@ dependencies {
     api "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion:sources"// backend sources
     api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion:sources"      // Box2D core sources
     api "com.badlogicgames.gdx:gdx-box2d-gwt:$gdxVersion:sources" // Box2D GWT sources
+    api project(':core').sourceSets.main.allJava
 }
 
 // GWT compiler configuration
 gwt {
-    gwtVersion            = '2.8.2'
-    minHeapSize           = '1024M'
-    maxHeapSize           = '2G'
-
-    // Include both core + html Java sources
-    src                   = files(project(':core').sourceSets.main.java.srcDirs, 'src')
-    modules               = ['com.joust.JoustGame']
-    project.webAppDirName = 'src/main/webapp'
-
+    gwtVersion = '2.8.2'
+    maxHeapSize = '2G'
+    minHeapSize = '1G'
+    
+    src = files(project(':core').sourceSets.main.java.srcDirs, 'src')
+    modules = ['com.joust.JoustGame']
+    
     compiler {
-        strict               = true
-        disableCastChecking  = true
+        strict = true
         disableClassMetadata = true
-        localWorkers         = Runtime.runtime.availableProcessors()
-        sourceLevel          = '1.8'
+        disableCastChecking = true
+        style = 'OBF'
+    }
+}
+
+// Clean task
+clean {
+    doFirst {
+        delete "${buildDir}/dist"
+        delete "${buildDir}/gwt"
+        delete "${buildDir}/classes"
+        delete "${buildDir}/generated"
+        delete "${buildDir}/resources"
+        delete "${buildDir}/tmp"
+        delete "${buildDir}/war"
     }
 }
 
 // Unified asset copying task
 task copyAssets(type: Copy) {
-    description = 'Copies all game assets to the webapp directory'
-    
-    // Base game assets
-    from('../assets') {
-        exclude 'assets.txt'  // We'll use our custom one
-    }
+    description = 'Copies assets to the webapp directory'
+    from('../assets')
     into 'src/main/webapp/assets'
-    
-    // Custom assets.txt (preserve existing)
-    from('src/main/webapp/assets') {
-        include 'assets.txt'
-    }
-    into 'src/main/webapp/assets'
-    
-    // Handle fonts for both locations
-    doLast {
-        // Standard location
-        copy {
-            from 'src/main/webapp/assets/fonts'
-            into 'src/main/webapp/assets/fonts'
-        }
-        
-        // LibGDX expected location
-        copy {
-            from 'src/main/webapp/assets/fonts/font.fnt'
-            into 'src/main/webapp/assets/com/badlogic/gdx/utils'
-            rename 'font.fnt', 'lsans-15.fnt'
-        }
-        copy {
-            from 'src/main/webapp/assets/fonts/font.png'
-            into 'src/main/webapp/assets/com/badlogic/gdx/utils'
-            rename 'font.png', 'lsans.png'
-        }
-    }
 }
 
 // Ensure assets are copied before any compilation
@@ -97,29 +85,38 @@ tasks.named('compileJava') { dependsOn copyAssets }
 tasks.named('compileGwt') { dependsOn copyAssets }
 tasks.named('processResources') { dependsOn copyAssets }
 
-// Clean task
-clean {
-    delete 'war'
-    delete "${buildDir}/dist"
-    delete 'src/main/webapp/assets'  // Clean copied assets
-}
-
 // Production build task
 task dist(type: Copy) {
     description = 'Assembles the production HTML5 build'
-    dependsOn clean, compileGwt
+    dependsOn compileGwt
     
-    from('build/gwt/out/html') {
+    doFirst {
+        file("${buildDir}/dist").mkdirs()
+        println "Creating dist directory: ${buildDir}/dist"
+        println "Looking for GWT output in: ${buildDir}/gwt/out"
+        
+        // List what's actually in the GWT output directory
+        fileTree("${buildDir}/gwt/out").visit { element ->
+            println "Found: ${element.relativePath}"
+        }
+    }
+    
+    from("${buildDir}/gwt/out") {
+        include '**/*'
         into '.'
     }
     from('src/main/webapp') {
         include '**/*'
+        exclude '**/*.gwt.xml'
     }
     into "${buildDir}/dist"
     
     doLast {
         println "HTML5 build assembled in build/dist"
-        println "Remember to check that assets.txt is properly configured"
+        println "Contents:"
+        fileTree("${buildDir}/dist").visit { element ->
+            println "  ${element.relativePath}"
+        }
     }
 }
 
@@ -135,3 +132,6 @@ task superDev(type: JavaExec) {
         '-port', '9876'
     ]
 }
+
+compileGwt.dependsOn copyAssets
+dist.dependsOn compileGwt

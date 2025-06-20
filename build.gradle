@@ -56,12 +56,11 @@ project(':core') {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-// Enhanced clean task
+// Enhanced clean task - only clean build directories, not docs
 clean {
     group = 'build'
-    description = 'Cleans the entire project including docs and build directories'
+    description = 'Cleans build directories but preserves docs'
     
-    delete 'docs'
     delete 'build'
     delete 'html/build'
     delete 'core/build'
@@ -70,130 +69,109 @@ clean {
     delete 'html/.gwt'
 }
 
-// Clean docs directory while preserving git files
-task cleanDocs {
-    group = "deployment"
-    description = "Cleans the docs directory while preserving git files"
-    
-    doLast {
-        delete fileTree('docs') {
-            exclude '.git/**'
-            exclude '.gitignore'
-        }
-        println "Cleaned docs directory (preserved git files)"
+// Create necessary directories
+task createDirectories {
+    description = 'Creates necessary directories for the build'
+    doFirst {
+        mkdir "docs"
+        mkdir "docs/assets"
+        mkdir "html/build"
+        mkdir "html/build/dist"
+        mkdir "html/src/main/webapp/assets"
+    }
+}
+
+task cleanAssets {
+    description = 'Cleans asset directories'
+    doFirst {
+        delete "html/src/main/webapp/assets"
     }
 }
 
 // Prepare assets task
-task prepareAssets {
-    group = "deployment"
-    description = "Prepares all assets in the correct order"
-    
+task prepareAssets(dependsOn: [cleanAssets, createDirectories]) {
+    description = 'Prepares assets for deployment'
     doLast {
-        // Create required directories
-        mkdir "docs"
-        mkdir "docs/assets"
-        mkdir "docs/assets/com/badlogic/gdx/utils"
-        mkdir "docs/assets/fonts"
-        println "Created necessary directories"
-        
-        // First, preserve our custom assets.txt
-        copy {
-            from 'html/src/main/webapp/assets'
-            into 'docs/assets'
-            include 'assets.txt'
-        }
-        println "Preserved custom assets.txt"
-        
-        // Copy all game assets except assets.txt
+        // Copy game assets
         copy {
             from 'assets'
-            into 'docs/assets'
-            exclude 'assets.txt'
+            into 'html/src/main/webapp/assets'
         }
         println "Copied game assets"
         
-        // Handle fonts in both locations
+        // Copy fonts to both standard and LibGDX locations
         copy {
-            from 'html/src/main/webapp/assets/fonts/font.fnt'
-            into 'docs/assets/fonts'
+            from 'assets/fonts'
+            into 'html/src/main/webapp/assets/fonts'
         }
         copy {
-            from 'html/src/main/webapp/assets/fonts/font.png'
-            into 'docs/assets/fonts'
-        }
-        copy {
-            from 'html/src/main/webapp/assets/fonts/font.fnt'
-            into 'docs/assets/com/badlogic/gdx/utils'
-            rename 'font.fnt', 'lsans-15.fnt'
-        }
-        copy {
-            from 'html/src/main/webapp/assets/fonts/font.png'
-            into 'docs/assets/com/badlogic/gdx/utils'
-            rename 'font.png', 'lsans.png'
+            from 'assets/fonts'
+            into 'html/src/main/webapp/assets/com/badlogic/gdx/graphics/g2d/freetype/files'
         }
         println "Copied fonts to both standard and LibGDX locations"
     }
 }
 
 // Deploy to docs directory
-task docsDeploy {
-    group = "deployment"
-    description = "Deploys the HTML build to docs directory"
-    
-    dependsOn clean, ':html:dist', cleanDocs, prepareAssets
-    
+task docsDeploy(dependsOn: ':html:dist') {
+    description = 'Deploys the game to the docs directory'
+    doFirst {
+        // Ensure docs directory exists
+        mkdir "docs"
+        mkdir "docs/assets"
+    }
     doLast {
-        // Copy the compiled HTML/JS
+        // Clear existing docs content but keep directory
+        delete fileTree('docs') {
+            exclude '.git*'
+        }
+        
+        // Copy new content
         copy {
             from 'html/build/dist'
             into 'docs'
         }
-        println "Copied compiled HTML/JS to docs/"
         
-        println """
-        =====================================
-        Deployment to docs/ completed!
+        // Copy assets
+        copy {
+            from 'assets'
+            into 'docs/assets'
+        }
         
-        Verified:
-        ✓ Custom assets.txt preserved
-        ✓ All game assets copied
-        ✓ Fonts in standard location
-        ✓ Fonts in LibGDX location
-        ✓ Compiled HTML/JS deployed
-        =====================================
-        """
+        // Copy fonts to both locations
+        copy {
+            from 'assets/fonts'
+            into 'docs/assets/fonts'
+        }
+        copy {
+            from 'assets/fonts'
+            into 'docs/assets/com/badlogic/gdx/graphics/g2d/freetype/files'
+        }
+        
+        println "Deployed to docs directory"
     }
 }
 
-// Make docsDeploy the default deployment task
-task fullDeploy(dependsOn: docsDeploy) {
-    group = 'deployment'
-    description = 'Performs a full clean, compile and deploy'
-    
+// Clean deployment task - removes docs first
+task cleanDeploy {
+    description = 'Completely removes docs directory for fresh deployment'
+    doFirst {
+        delete 'docs'
+    }
+}
+
+// Full deployment with clean docs
+task fullCleanDeploy(dependsOn: [cleanDeploy, clean, prepareAssets, docsDeploy]) {
+    description = 'Performs a full clean deployment including docs removal'
     doLast {
-        println """
-        =====================================
-        Full deployment completed successfully!
-        
-        Build locations:
-        - Development build: html/build/dist/
-        - Production build: docs/
-        
-        Completed steps:
-        ✓ Cleaned project
-        ✓ Compiled GWT code
-        ✓ Preserved custom assets.txt
-        ✓ Copied all game assets
-        ✓ Handled fonts in both locations
-        ✓ Deployed to docs/
-        
-        Next steps:
-        1. Test the game locally
-        2. Verify assets.txt configuration
-        3. Check font rendering
-        4. Commit and push docs/ directory
-        =====================================
-        """
+        println "Full clean deployment completed"
+    }
+}
+
+// Make fullDeploy NOT delete docs directory
+task fullDeploy(dependsOn: [clean, prepareAssets, docsDeploy]) {
+    description = 'Performs a full deployment preserving existing docs'
+    doLast {
+        println "Full deployment completed"
     }
 } 
