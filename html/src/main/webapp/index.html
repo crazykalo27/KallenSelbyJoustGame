@@ -2,24 +2,48 @@
 <html>
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Joust Game</title>
-  <!-- Base URL for asset loading -->
-  <base href="http://localhost:8000/">
-
-  <!-- Optional debug logging (kept minimal) -->
-  <script>
-    (function() {
-      const orig = XMLHttpRequest.prototype.open;
-      XMLHttpRequest.prototype.open = function(method, url, ...rest) {
-        console.log("[XHR] open called with URL →", url);
-        return orig.call(this, method, url, ...rest);
-      };
-    })();
-  </script>
+  
+  <!-- Use relative base URL for assets -->
+  <base href="./">
+  
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #000;
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
+    #loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+    .spinner {
+      width: 40px;
+      height: 40px;
+      margin: 20px auto;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #3498db;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
 
   <script src="html.nocache.js"></script>
 </head>
 <body>
-  <h1>Loading Joust…</h1>
+  <div id="loading">
+    <h1>Loading Joust</h1>
+    <div class="spinner"></div>
+  </div>
 </body>
 </html>

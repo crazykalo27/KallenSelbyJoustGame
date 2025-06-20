@@ -54,137 +54,84 @@ gwt {
     }
 }
 
-// Copy raw assets (images + levels) into webapp/assets without overwriting our custom assets.txt
+// Unified asset copying task
 task copyAssets(type: Copy) {
+    description = 'Copies all game assets to the webapp directory'
+    
+    // Base game assets
+    from('../assets') {
+        exclude 'assets.txt'  // We'll use our custom one
+    }
     into 'src/main/webapp/assets'
-    from('../assets/images') {
-        into 'images'
-    }
-    from('../assets/levels') {
-        into 'levels'
-    }
     
-    // Copy font files
-    from('../html/src/main/webapp/assets/fonts') {
-        into 'fonts'
+    // Custom assets.txt (preserve existing)
+    from('src/main/webapp/assets') {
+        include 'assets.txt'
     }
+    into 'src/main/webapp/assets'
     
-    // Copy font files to LibGDX expected path
-    from('../html/src/main/webapp/assets/fonts/font.fnt') {
-        into 'com/badlogic/gdx/utils'
-        rename 'font.fnt', 'lsans-15.fnt'
-    }
-    from('../html/src/main/webapp/assets/fonts/font.png') {
-        into 'com/badlogic/gdx/utils'
-        rename 'font.png', 'lsans.png'
-    }
-}
-// Ensure assets are in place before compilation or resource processing
-tasks.named('compileJava')    { dependsOn copyAssets }
-tasks.named('compileGwt')      { dependsOn copyAssets }
-tasks.named('processResources'){ dependsOn copyAssets }
-
-// Clean up legacy and deployment directories
-tasks.clean.doFirst {
-    // Safer way to delete war directory
-    if (file('war').exists()) {
-        project.delete(fileTree('war').include('**/*'))
-    }
-    
-    if (file('docs').exists()) {
-        project.delete(fileTree('docs').exclude('.git/**', '.gitignore'))
-    }
-}
-
-// Assemble production-ready HTML5 site
-task dist(type: Copy) {
-    group       = 'build'
-    description = 'Compile GWT + bundle with webapp into build/dist'
-    dependsOn clean, compileGwt
-
-    doFirst {
-        delete "${buildDir}/dist"
-    }
-
-    // 1) compiled HTML+JS
-    from 'build/gwt/out/html'
-    into 'build/dist'
-
-    // 2) static entrypoint + assets (including our hand-written assets.txt)
-    from('src/main/webapp') {
-        include 'index.html'
-        include 'assets/**'
-    }
-}
-
-// Prepare docs/ folder for GitHub Pages deployment
-task copyToDocs(type: Copy) {
-    group       = 'deployment'
-    description = 'Mirror build/dist into docs/ for GitHub Pages'
-    dependsOn dist
-    from 'build/dist'
-    into 'docs'
-}
-
-// Create a separate task to copy assets.txt explicitly
-task copyAssetsTxt(type: Copy) {
-    group       = 'deployment'
-    description = 'Copy assets.txt to docs/assets/'
-    from 'src/main/webapp/assets/assets.txt'
-    into '../docs/assets'
+    // Handle fonts for both locations
     doLast {
-        println "Explicitly copied assets.txt to docs/assets/"
+        // Standard location
+        copy {
+            from 'src/main/webapp/assets/fonts'
+            into 'src/main/webapp/assets/fonts'
+        }
+        
+        // LibGDX expected location
+        copy {
+            from 'src/main/webapp/assets/fonts/font.fnt'
+            into 'src/main/webapp/assets/com/badlogic/gdx/utils'
+            rename 'font.fnt', 'lsans-15.fnt'
+        }
+        copy {
+            from 'src/main/webapp/assets/fonts/font.png'
+            into 'src/main/webapp/assets/com/badlogic/gdx/utils'
+            rename 'font.png', 'lsans.png'
+        }
     }
 }
 
-// Make copyToDocs depend on copyAssetsTxt
-tasks.named('copyToDocs') { finalizedBy copyAssetsTxt }
+// Ensure assets are copied before any compilation
+tasks.named('compileJava') { dependsOn copyAssets }
+tasks.named('compileGwt') { dependsOn copyAssets }
+tasks.named('processResources') { dependsOn copyAssets }
 
-// GWT SuperDev mode for rapid dev testing
+// Clean task
+clean {
+    delete 'war'
+    delete "${buildDir}/dist"
+    delete 'src/main/webapp/assets'  // Clean copied assets
+}
+
+// Production build task
+task dist(type: Copy) {
+    description = 'Assembles the production HTML5 build'
+    dependsOn clean, compileGwt
+    
+    from('build/gwt/out/html') {
+        into '.'
+    }
+    from('src/main/webapp') {
+        include '**/*'
+    }
+    into "${buildDir}/dist"
+    
+    doLast {
+        println "HTML5 build assembled in build/dist"
+        println "Remember to check that assets.txt is properly configured"
+    }
+}
+
+// Development mode
 task superDev(type: JavaExec) {
-    group       = 'gwt'
-    description = 'Launch GWT SuperDev mode'
-    main        = 'com.google.gwt.dev.codeserver.CodeServer'
-    classpath   = configurations.gwt + sourceSets.main.runtimeClasspath
-    args        = [
+    description = 'Runs GWT SuperDev mode for rapid development'
+    main = 'com.google.gwt.dev.codeserver.CodeServer'
+    classpath = configurations.gwt + sourceSets.main.runtimeClasspath
+    args = [
         '-src', 'src',
         '-modules', 'com.joust.JoustGame',
         '-bindAddress', '127.0.0.1',
         '-port', '9876'
     ]
-}
-
-// Custom task to safely generate docs bypassing GWT issues
-task safeDocs {
-    group       = 'deployment'
-    description = 'Safely generates HTML docs without GWT compilation errors'
-    
-    doLast {
-        // Create docs directory if it doesn't exist
-        mkdir "docs"
-        mkdir "docs/assets"
-        mkdir "docs/assets/com/badlogic/gdx/utils"
-        
-        // Copy webapp contents
-        copy {
-            from 'src/main/webapp'
-            into 'docs'
-            include '**/*'
-        }
-        
-        // Ensure font files exist in LibGDX expected paths
-        copy {
-            from 'src/main/webapp/assets/fonts/font.fnt'
-            into 'docs/assets/com/badlogic/gdx/utils'
-            rename 'font.fnt', 'lsans-15.fnt'
-        }
-        
-        copy {
-            from 'src/main/webapp/assets/fonts/font.png'
-            into 'docs/assets/com/badlogic/gdx/utils'
-            rename 'font.png', 'lsans.png'
-        }
-        
-        println "Docs generated in 'docs' directory. Deploy this to your web server."
-    }
 }

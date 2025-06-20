@@ -29,8 +29,7 @@ d:levels/6level.txt:levels/6level.txt:0:TXT:0
 d:levels/7level.txt:levels/7level.txt:0:TXT:0
 d:levels/8level.txt:levels/8level.txt:0:TXT:0
 d:levels/9level.txt:levels/9level.txt:0:TXT:0
-d:fonts/font.fnt:fonts/font.fnt:0:TXT:0
+f:fonts/font.fnt:fonts/font.fnt:0:FNT:0
 i:fonts/font.png:fonts/font.png:0:PNG:0
-d:com/badlogic/gdx/utils/lsans-15.fnt:fonts/font.fnt:0:TXT:0
-i:com/badlogic/gdx/utils/lsans.png:fonts/font.png:0:PNG:0
-
+f:com/badlogic/gdx/utils/lsans-15.fnt:com/badlogic/gdx/utils/lsans-15.fnt:0:FNT:0
+i:com/badlogic/gdx/utils/lsans.png:com/badlogic/gdx/utils/lsans.png:0:PNG:0 
