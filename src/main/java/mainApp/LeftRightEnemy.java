@@ -24,7 +24,7 @@ public class LeftRightEnemy extends Enemy {
 		this.setHasGravity(false);
 		this.ticks = 0;
 		this.waitNum = r.nextInt(50) + 40; // generates 40-89
-		this.setSpeed(this.getSpeed()*.6);
+		this.setSpeed(this.getSpeed()); // Removed speed reduction for smoother enemy movement
 
 	}
 

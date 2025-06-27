@@ -278,7 +278,7 @@ public class GameComponent extends JComponent implements KeyListener {
 			hero.collidewith(closestPlatform);
 		}
 
-		int bounceStrength = 99999999;
+		int bounceStrength = 25; // Reduced for more natural collision response
 
 		for (int e = 0; e < this.enemies.size(); e++) {
 			Enemy enemy = this.enemies.get(e);

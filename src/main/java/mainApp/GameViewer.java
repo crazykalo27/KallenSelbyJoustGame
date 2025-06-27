@@ -23,7 +23,7 @@ import javax.swing.Timer;
 
 public class GameViewer {
 	
-	public static final int DELAY=40;
+	public static final int DELAY=16; // ~60 FPS for smooth gameplay
 	
 	public void viewerMain() {
 		final String frameTitle = "CSSE220 Final Project - Joust";

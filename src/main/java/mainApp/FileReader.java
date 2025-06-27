@@ -194,7 +194,7 @@ public class FileReader {
 					platforms.add(temp);
 					
 				} else if (change.get(i).get(j).equals(FileReader.HERO_STRING)) {
-					Hero temp = new Hero(x,y,1,FileReader.HERO_FILE);
+					Hero temp = new Hero(x,y,3.5,FileReader.HERO_FILE); // Increased for much more responsive movement
 					ans.add(temp);
 					heroLoc = ans.indexOf(temp);
 					player.add(temp);
@@ -204,17 +204,17 @@ public class FileReader {
 					if(tutorial) {
 						temp = new LeftRightEnemy(x,y,0,FileReader.GHOST_FILE);
 					} else {
-						temp = new LeftRightEnemy(x,y,4,FileReader.GHOST_FILE);
+						temp = new LeftRightEnemy(x,y,5.5,FileReader.GHOST_FILE); // Increased for more dynamic gameplay
 					}
 					ans.add(temp);
 					bad.add(temp);
 				}
 				else if (change.get(i).get(j).equals(FileReader.KOOPA_STRING)) {
-					RandomMoveEnemy temp = new RandomMoveEnemy(x,y,2,FileReader.KOOPA_FILE);
+					RandomMoveEnemy temp = new RandomMoveEnemy(x,y,3,FileReader.KOOPA_FILE); // Increased for more challenging gameplay
 					ans.add(temp);
 					bad.add(temp);
 				}else if (change.get(i).get(j).equals(FileReader.TRACKER_STRING)) {
-					RandomMoveEnemy placeHolder = new RandomMoveEnemy(x,y,2,FileReader.KOOPA_FILE);
+					RandomMoveEnemy placeHolder = new RandomMoveEnemy(x,y,3,FileReader.KOOPA_FILE); // Increased for consistency
 					ans.add(placeHolder);
 					bad.add(placeHolder);
 					loc = ans.indexOf(placeHolder);
@@ -248,7 +248,7 @@ public class FileReader {
 			RandomMoveEnemy placeHolder = (RandomMoveEnemy) ans.get(loc);
 			double x = placeHolder.getXCent();
 			double y = placeHolder.getYCent();
-			Tracker temp = new Tracker(x,y,2.0, (Hero)ans.get(heroLoc), FileReader.TRACKER_ENEMY_FILE);
+			Tracker temp = new Tracker(x,y,3.5, (Hero)ans.get(heroLoc), FileReader.TRACKER_ENEMY_FILE); // Increased for more engaging tracking
 			ans.set(loc, temp);
 			bad.set(locb, temp);
 			

@@ -17,9 +17,9 @@ import javax.imageio.ImageIO;
  */
 public class MoveableObject extends GameObject {
 
-	private static final double DEFAULT_MAX_SPEED = 10;
-	public static final double GRAVITY_STRENGTH = .5;
-	private static final double FRICTION_STRENGTH = .5;
+	private static final double DEFAULT_MAX_SPEED = 18; // Increased for smoother movement
+	public static final double GRAVITY_STRENGTH = 0.8; // Increased for more responsive jumps
+	private static final double FRICTION_STRENGTH = 0.25; // Reduced for snappier movement
 	
 	private double xVelocity;
 	private double yVelocity;

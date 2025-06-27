@@ -48,7 +48,7 @@ public class Hero extends MoveableObject {
 			this.addXVelocity(-this.speed);
 		}
 		if (this.upKeyHeld) {
-			this.addYVelocity(-8);
+			this.addYVelocity(-12); // Increased for more responsive flying
 		}
 		super.update();
 	}
