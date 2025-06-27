@@ -23,7 +23,7 @@ public class LeftRightEnemy extends Enemy {
 		super(xCent, yCent, speed, name);
 		this.setHasGravity(false);
 		this.ticks = 0;
-		this.waitNum = r.nextInt(40, 90);
+		this.waitNum = r.nextInt(50) + 40; // generates 40-89
 		this.setSpeed(this.getSpeed()*.6);
 
 	}
@@ -43,7 +43,7 @@ public class LeftRightEnemy extends Enemy {
 			//System.out.println("updated " + waitNum);
 			super.setSpeed(super.getSpeed() * -1);
 			ticks = 0;
-			waitNum = r.nextInt(50, 100);
+			waitNum = r.nextInt(50) + 50; // generates 50-99
 		}
 
 		super.update();
