@@ -63,10 +63,18 @@ class GameObject {
         const rect1 = this.getBoundingBox();
         const rect2 = other.getBoundingBox();
         
-        return rect1.x < rect2.x + rect2.width &&
+        const isOverlapping = rect1.x < rect2.x + rect2.width &&
                rect1.x + rect1.width > rect2.x &&
                rect1.y < rect2.y + rect2.height &&
                rect1.y + rect1.height > rect2.y;
+        
+        // Debug: Log critical overlaps only
+        if (this.constructor.name === 'Hero' && other.constructor.name === 'Platform' && isOverlapping && this.firstCollision !== true) {
+            console.log(`First collision detected: Hero overlaps Platform`);
+            this.firstCollision = true;
+        }
+        
+        return isOverlapping;
     }
 
     markForRemoval() {

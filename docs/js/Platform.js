@@ -4,16 +4,16 @@
 class Platform extends GameObject {
     constructor(xCord, yCord, type) {
         super(xCord, yCord);
-        this.isLava = false;
-        this.isIce = false;
-        this.isSlime = false;
-        this.isCool = false;
+        this._isLava = false;
+        this._isIce = false;
+        this._isSlime = false;
+        this._isCool = false;
         this.name = "";
         this.imageCache = new Map();
         
         this.setName(type);
         
-        if (this.isLava) {
+        if (this._isLava) {
             this.setHeight(this.getHeight() * 0.6);
         }
     }
@@ -25,19 +25,19 @@ class Platform extends GameObject {
                 break;
             case 1:
                 this.name = "Lava";
-                this.isLava = true;
+                this._isLava = true;
                 break;
             case 2:
                 this.name = "Ice";
-                this.isIce = true;
+                this._isIce = true;
                 break;
             case 3:
                 this.name = "Slime";
-                this.isSlime = true;
+                this._isSlime = true;
                 break;
             case 4:
                 this.name = "Health";
-                this.isCool = true;
+                this._isCool = true;
                 break;
         }
     }
@@ -84,34 +84,39 @@ class Platform extends GameObject {
     }
 
     getColorForType() {
-        if (this.isLava) return '#ff4444';
-        if (this.isIce) return '#44ddff';
-        if (this.isSlime) return '#44ff44';
-        if (this.isCool) return '#ffdd44';
+        if (this._isLava) return '#ff4444';
+        if (this._isIce) return '#44ddff';
+        if (this._isSlime) return '#44ff44';
+        if (this._isCool) return '#ffdd44';
         return '#888888'; // Default gray
     }
 
     isLava() {
-        return this.isLava;
+        return this._isLava === true;
     }
 
     setLava(isLava) {
-        this.isLava = isLava;
+        this._isLava = isLava;
     }
 
     isIce() {
-        return this.isIce;
+        return this._isIce === true;
     }
 
     isSlime() {
-        return this.isSlime;
+        return this._isSlime === true;
     }
 
     isCool() {
-        return this.isCool;
+        return this._isCool === true;
     }
 
     setCool(isCool) {
-        this.isCool = isCool;
+        this._isCool = isCool;
+    }
+    
+    // Alternative method name to match Java version
+    SetCool(isCool) {
+        this._isCool = isCool;
     }
 } 

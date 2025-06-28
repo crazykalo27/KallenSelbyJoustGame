@@ -64,7 +64,7 @@ class GameEngine {
                 if (this.hero) this.hero.setUpKeyHeld(true);
                 break;
             case 'KeyN':
-                this.newGame();
+                this.newGame(); // Always restart from beginning
                 break;
             case 'KeyU':
                 if (this.levelNum < GameEngine.NUM_LEVELS - 1) {
@@ -97,6 +97,7 @@ class GameEngine {
     }
 
     async newGame() {
+        console.log(`=== STARTING NEW GAME ===`);
         this.levelNum = 0;
         this.points = 0;
         this.pointsLoss = 0;
@@ -104,11 +105,14 @@ class GameEngine {
         this.gameOver = false;
         this.tutorial = true;
         
+        console.log(`New game state: Level ${this.levelNum}, Lives ${this.lives}, Tutorial ${this.tutorial}`);
         await this.loadLevel(0);
         this.updateUI();
+        console.log(`=== NEW GAME COMPLETE ===`);
     }
 
     async loadLevel(levelNumber) {
+        console.log(`=== LOADING LEVEL ${levelNumber} ===`);
         this.levelNum = levelNumber;
         
         // Set tutorial mode for level 0
@@ -120,18 +124,34 @@ class GameEngine {
         this.enemies = [];
         this.platforms = [];
         this.eggs = [];
+        console.log(`Arrays cleared - about to load level data`);
         
         // Load level data
         const levelData = await this.levelLoader.loadLevel(levelNumber + "level");
+        console.log(`Level data received:`, levelData);
         
         if (levelData.objects.length > 0) {
             this.gameObjects = levelData.objects;
             this.enemies = levelData.enemies;
             this.platforms = levelData.platforms;
             this.hero = levelData.hero;
+            
+            // Debug: Log level loading info
+            console.log(`Level ${levelNumber} loaded:`);
+            console.log(`  Total objects: ${this.gameObjects.length}`);
+            console.log(`  Platforms: ${this.platforms.length}`);
+            console.log(`  Enemies: ${this.enemies.length}`);
+            console.log(`  Eggs: ${this.eggs.length}`);
+            if (this.hero) {
+                console.log(`  Hero at: (${this.hero.getXCent()}, ${this.hero.getYCent()})`);
+                console.log(`  Hero previous pos: (${this.hero.getPreviousXPos()}, ${this.hero.getPreviousYPos()})`);
+            }
+        } else {
+            console.log(`ERROR: Level ${levelNumber} failed to load - no objects found!`);
         }
         
         this.updateUI();
+        console.log(`=== LEVEL ${levelNumber} LOADING COMPLETE ===`);
     }
 
     start() {
@@ -177,12 +197,16 @@ class GameEngine {
         // Handle collisions
         this.handleCollisions();
 
-        // Check win condition
-        if (this.enemies.length === 0 && this.eggs.length === 0) {
+        // Check win condition - but only if we're not on the tutorial level AND the level has actually loaded
+        if (this.gameObjects.length > 0 && this.enemies.length === 0 && this.eggs.length === 0) {
+            console.log(`WIN CONDITION TRIGGERED: Level ${this.levelNum}, Enemies: ${this.enemies.length}, Eggs: ${this.eggs.length}`);
             if (this.levelNum < GameEngine.NUM_LEVELS - 1) {
+                console.log(`Advancing to level ${this.levelNum + 1}`);
                 this.tutorial = false;
                 this.pointsLoss = 0;
                 this.loadLevel(this.levelNum + 1);
+            } else {
+                console.log(`Game completed! Max level reached.`);
             }
         }
 
@@ -239,9 +263,31 @@ class GameEngine {
 
         // Hero-Platform collisions
         const heroCollidingPlatforms = [];
-        for (const platform of this.platforms) {
+        
+        // Debug: Log platforms array state
+        if (this.platforms.length === 0) {
+            console.warn(`No platforms in array during collision check`);
+            return;
+        }
+        
+        for (let i = 0; i < this.platforms.length; i++) {
+            const platform = this.platforms[i];
+            
+            // Validate platform object
+            if (!platform) {
+                console.error(`NULL platform at index ${i}`);
+                continue;
+            }
+            
+            if (!(platform instanceof Platform)) {
+                console.error(`ERROR: Non-Platform object at index ${i}:`, typeof platform, platform.constructor?.name, platform);
+                continue;
+            }
+            
             if (this.hero.overlaps(platform)) {
+                // Platform effect handling - exactly matching Java order
                 if (platform.isLava()) {
+                    console.log(`Hero hit lava platform - respawning`);
                     this.respawn();
                     return;
                 }
@@ -253,21 +299,21 @@ class GameEngine {
                 }
                 if (platform.isCool()) {
                     platform.setName(0);
-                    platform.setCool(false);
+                    platform.SetCool(false);
                     this.lives++;
                     this.updateUI();
                 }
                 heroCollidingPlatforms.push(platform);
             }
 
-            // Enemy-Platform collisions
+            // Enemy-Platform collisions - only for valid platforms
             for (const enemy of this.enemies) {
                 if (enemy.overlaps(platform)) {
                     enemy.collidewith(platform);
                 }
             }
 
-            // Egg-Platform collisions
+            // Egg-Platform collisions - only for valid platforms
             for (const egg of this.eggs) {
                 if (egg.overlaps(platform)) {
                     if (platform.isLava()) {
@@ -280,10 +326,11 @@ class GameEngine {
             }
         }
 
-        // Handle hero-platform collision
+        // Handle hero-platform collision - exactly matching Java collision logic
         if (heroCollidingPlatforms.length > 0) {
+            // Find closest platform using same logic as Java
             let closestPlatform = heroCollidingPlatforms[0];
-            let shortestDistance = Infinity;
+            let shortestDistance = Number.MAX_VALUE;
             
             for (const platform of heroCollidingPlatforms) {
                 const distance = platform.getDistance(this.hero.getXCent(), this.hero.getYCent());
@@ -293,6 +340,7 @@ class GameEngine {
                 }
             }
             
+            // Apply collision with closest platform
             this.hero.collidewith(closestPlatform);
         }
 
@@ -333,10 +381,10 @@ class GameEngine {
         if (this.lives <= 0) {
             this.tutorial = false;
             this.gameOver = true;
-        } else {
-            this.pointsLoss = 0;
-            this.loadLevel(this.levelNum);
-        }
+                 } else {
+             this.pointsLoss = 0;
+             this.loadLevel(this.levelNum); // Respawn on current level
+         }
         
         this.updateUI();
     }

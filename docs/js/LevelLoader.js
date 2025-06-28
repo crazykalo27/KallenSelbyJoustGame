@@ -31,14 +31,21 @@ class LevelLoader {
     }
 
     async loadLevel(levelName) {
+        console.log(`LevelLoader: Attempting to load ${levelName}.txt`);
         try {
             const response = await fetch(`levels/${levelName}.txt`);
+            console.log(`LevelLoader: Fetch response status: ${response.status}`);
             if (!response.ok) {
                 throw new Error(`Failed to load level: ${levelName}`);
             }
             
             const levelData = await response.text();
-            return this.parseLevel(levelData);
+            console.log(`LevelLoader: Level data loaded, length: ${levelData.length}`);
+            console.log(`LevelLoader: First few lines:`, levelData.split('\n').slice(0, 3));
+            
+            const result = this.parseLevel(levelData);
+            console.log(`LevelLoader: Parse result:`, result);
+            return result;
         } catch (error) {
             console.error("Error loading level:", error);
             return { objects: [], enemies: [], platforms: [], hero: null };
@@ -46,7 +53,8 @@ class LevelLoader {
     }
 
     parseLevel(levelData) {
-        const lines = levelData.trim().split('\n');
+        // Remove carriage returns and split into lines - matches Java Scanner behavior
+        const lines = levelData.replace(/\r/g, '').trim().split('\n');
         const objects = [];
         this.enemies = [];
         this.platforms = [];
@@ -54,13 +62,26 @@ class LevelLoader {
         
         let trackerPlaceholder = null;
         let trackerIndex = -1;
+        
+        console.log(`Parsing level with ${lines.length} lines`);
 
         for (let i = 0; i < lines.length; i++) {
             const line = lines[i];
             for (let j = 0; j < line.length; j++) {
                 const char = line[j];
+                
+                // Skip empty characters and whitespace - matches Java logic
+                if (char === '' || char === ' ') {
+                    continue;
+                }
+                
                 const x = j * LevelLoader.COORDINATE_SCALE + LevelLoader.COORDINATE_SCALE / 2;
                 const y = i * LevelLoader.COORDINATE_SCALE + LevelLoader.COORDINATE_SCALE / 2;
+                
+                // Debug: Log coordinate calculation for hero and key platforms
+                if (char === 'h' || char === 'b') {
+                    console.log(`Char '${char}' at grid (${i}, ${j}) -> world position (${x}, ${y})`);
+                }
 
                 const gameObject = this.createGameObject(char, x, y);
                 if (gameObject) {
@@ -69,8 +90,10 @@ class LevelLoader {
                     // Track special objects
                     if (gameObject instanceof Hero) {
                         this.hero = gameObject;
+                        console.log(`Hero created and assigned`);
                     } else if (gameObject instanceof Enemy) {
                         this.enemies.push(gameObject);
+                        console.log(`Enemy added: ${gameObject.constructor.name}`);
                         
                         // Handle tracker placeholder
                         if (char === LevelLoader.TRACKER_STRING) {
@@ -79,6 +102,8 @@ class LevelLoader {
                         }
                     } else if (gameObject instanceof Platform) {
                         this.platforms.push(gameObject);
+                    } else {
+                        console.warn(`Unknown object type created:`, gameObject);
                     }
                 }
             }
@@ -89,7 +114,7 @@ class LevelLoader {
             const tracker = new Tracker(
                 trackerPlaceholder.getXCent(),
                 trackerPlaceholder.getYCent(),
-                3.5,
+                3.5, // Matches original Java exactly
                 this.hero,
                 LevelLoader.TRACKER_ENEMY_FILE
             );
@@ -116,14 +141,14 @@ class LevelLoader {
                 return new Platform(x, y, 0);
                 
             case LevelLoader.HERO_STRING:
-                return new Hero(x, y, 3.5, LevelLoader.HERO_FILE);
+                return new Hero(x, y, 3.0, LevelLoader.HERO_FILE); // Slightly reduced for better control
                 
             case LevelLoader.GHOST_STRING:
-                const ghostSpeed = this.tutorial ? 0 : 5.5;
+                const ghostSpeed = this.tutorial ? 0 : 5.5; // Matches original Java exactly
                 return new LeftRightEnemy(x, y, ghostSpeed, LevelLoader.GHOST_FILE);
                 
             case LevelLoader.KOOPA_STRING:
-                return new RandomMoveEnemy(x, y, 3, LevelLoader.KOOPA_FILE);
+                return new RandomMoveEnemy(x, y, 3, LevelLoader.KOOPA_FILE); // Matches original Java exactly
                 
             case LevelLoader.TRACKER_STRING:
                 // Create placeholder - will be replaced with actual tracker later
@@ -142,7 +167,7 @@ class LevelLoader {
                 return new Platform(x, y, 4);
                 
             default:
-                console.warn(`Unknown character in level: ${char}`);
+                console.warn(`Unknown character in level: '${char}' (char code: ${char.charCodeAt(0)})`);
                 return null;
         }
     }

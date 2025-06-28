@@ -16,6 +16,7 @@ class MoveableObject extends GameObject {
         this.previousXPos = xCent;
         this.previousYPos = yCent;
         this.imageCache = new Map(); // Cache for loaded images
+        this.frameCount = 0; // Debug counter
     }
 
     drawOn(ctx) {
@@ -84,6 +85,14 @@ class MoveableObject extends GameObject {
 
         if (this.hasFriction) {
             this.addXVelocity(-Math.sign(this.getXVelocity()) * MoveableObject.FRICTION_STRENGTH);
+        }
+        
+        // Debug: Track movement for the first few frames only
+        if (this.constructor.name === 'Hero' && this.frameCount < 20) {
+            this.frameCount++;
+            if (this.frameCount <= 5 || this.frameCount % 5 === 0) {
+                console.log(`Frame ${this.frameCount}: Hero at (${this.getXCent().toFixed(1)}, ${this.getYCent().toFixed(1)}), velocity: (${this.getXVelocity().toFixed(1)}, ${this.getYVelocity().toFixed(1)}), prevPos: (${this.getPreviousXPos().toFixed(1)}, ${this.getPreviousYPos().toFixed(1)})`);
+            }
         }
     }
 

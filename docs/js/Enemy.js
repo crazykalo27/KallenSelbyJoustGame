@@ -29,14 +29,14 @@ class Enemy extends MoveableObject {
         const rectH = this.getBoundingBox();
         const rectO = other.getBoundingBox();
         
-        // Calculate overlap
-        const overlapLeft = Math.max(rectH.x, rectO.x);
-        const overlapRight = Math.min(rectH.x + rectH.width, rectO.x + rectO.width);
-        const overlapTop = Math.max(rectH.y, rectO.y);
-        const overlapBottom = Math.min(rectH.y + rectH.height, rectO.y + rectO.height);
+        // Calculate intersection exactly like Java's createIntersection
+        const intersectionLeft = Math.max(rectH.x, rectO.x);
+        const intersectionRight = Math.min(rectH.x + rectH.width, rectO.x + rectO.width);
+        const intersectionTop = Math.max(rectH.y, rectO.y);
+        const intersectionBottom = Math.min(rectH.y + rectH.height, rectO.y + rectO.height);
         
-        const overlapWidth = overlapRight - overlapLeft;
-        const overlapHeight = overlapBottom - overlapTop;
+        const overlapWidth = intersectionRight - intersectionLeft;
+        const overlapHeight = intersectionBottom - intersectionTop;
 
         if (Math.abs(previousYDist) === Math.abs(previousXDist)) {
             return;
@@ -69,7 +69,7 @@ class LeftRightEnemy extends Enemy {
     update() {
         this.updatePreviousPosition();
         
-        // Move left or right
+        // Move left or right - matches original Java behavior
         this.addXVelocity(this.speed * this.direction);
         
         super.update();
@@ -100,7 +100,7 @@ class RandomMoveEnemy extends Enemy {
             this.moveTimer = 0;
         }
         
-        // Move in current direction
+        // Move in current direction - matches original Java behavior  
         this.addXVelocity(Math.cos(this.moveDirection) * this.speed);
         this.addYVelocity(Math.sin(this.moveDirection) * this.speed * 0.5);
         
