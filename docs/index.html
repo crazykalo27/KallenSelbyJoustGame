@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joust Game - JavaScript Edition</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="game-header">
+            <h1>Joust Game</h1>
+            <div class="game-info">
+                <span id="score">Points: 0</span>
+                <span id="lives">Lives: 4</span>
+                <span id="level">Level: 0</span>
+            </div>
+        </div>
+        
+        <canvas id="gameCanvas" width="800" height="850"></canvas>
+        
+        <div class="game-controls">
+            <div class="instructions">
+                <h3>Controls:</h3>
+                <p><strong>Arrow Keys:</strong> Move and fly</p>
+                <p><strong>N:</strong> New game / Restart</p>
+                <p><strong>U/D:</strong> Skip levels (debug)</p>
+            </div>
+            
+            <div class="tutorial-info">
+                <h3>How to Play:</h3>
+                <p>• Use arrow keys to fly around</p>
+                <p>• Defeat enemies by being higher during collisions</p>
+                <p>• Collect health boxes for extra lives</p>
+                <p>• Avoid lava platforms</p>
+                <p>• Clear all enemies to advance</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Scripts -->
+    <script src="js/GameObject.js"></script>
+    <script src="js/MoveableObject.js"></script>
+    <script src="js/Hero.js"></script>
+    <script src="js/Enemy.js"></script>
+    <script src="js/Platform.js"></script>
+    <script src="js/Egg.js"></script>
+    <script src="js/LevelLoader.js"></script>
+    <script src="js/GameEngine.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html> 
