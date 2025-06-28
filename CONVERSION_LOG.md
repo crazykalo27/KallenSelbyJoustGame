@@ -21,10 +21,86 @@ Converting Java Swing-based Joust game to JavaScript/HTML5 for web browser compa
 
 **Current Status**: Platform collision detection should now work - hero should stop when hitting platforms instead of passing through
 
-### 1.1. **Hero Speed Adjustment (2024-06-28)**
-**Issue**: Hero movement speed slightly too fast for optimal gameplay
-**Fix**: Reduced hero speed from 3.5 to 3.0 for better control and gameplay feel
-**Status**: ✅ Complete
+### 1.1. **Major Speed Reduction & Ghost Behavior Fix (2024-06-28)**
+**Issue**: All game entities moving too fast, ghost enemy not behaving like original Java version
+**Root Cause**: 
+- All speeds were too fast for comfortable gameplay
+- JavaScript LeftRightEnemy was completely different from Java implementation
+- Ghost should float (no gravity) and move in timed patterns, not simple left-right
+
+**Fixes Applied**:
+- **Speed Reductions** (all reduced to 1/3 of original):
+  - Hero: 3.0 → 1.0
+  - Ghost: 5.5 → 1.8  
+  - Koopa: 3.0 → 1.0
+  - Tracker: 3.5 → 1.2
+- **Ghost Behavior Fix**:
+  - Added `setHasGravity(false)` - ghosts now float
+  - Implemented timed direction changes (40-89 ticks initially, 50-99 after)
+  - Added Y-velocity changes when switching direction
+  - Used squared speed for movement (matches Java exactly)
+  - Direction reversal by negating speed
+
+**Status**: ✅ Complete - All entities should move at comfortable speeds, ghost should behave like original
+
+### 1.2. **Major Enemy Behavior & Egg Physics Fixes (2024-06-28)**
+**Issue**: Koopa enemies, Tracker enemies, and Egg physics not matching original Java behavior
+**Root Cause**: 
+- Koopa (RandomMoveEnemy) was moving in random circles instead of jumping and changing direction on wall hits
+- Tracker was using normalized movement instead of distance-based velocity (no slowdown when closer)
+- Tracker had gravity when it should float
+- Egg wasn't affected by gravity
+- Player speed still too fast
+
+**Fixes Applied**:
+- **Player Speed**: Further reduced from 1.0 to 0.5 for optimal control
+- **Koopa Behavior** (matches Java exactly):
+  - Added gravity (falls naturally)
+  - Random jumping with 2% chance per frame (`addYVelocity(-20)`)
+  - Horizontal movement in current direction
+  - Direction reversal on wall collision
+  - Speed multiplier of 1.5x applied in constructor
+- **Tracker Behavior** (matches Java exactly):
+  - Removed gravity (floats)
+  - Distance-based movement: velocity = distance * -0.03 (creates natural slowdown)
+  - Minimum speed multiplier when velocity < 2
+  - Set size to 50x50 pixels (matches Java)
+- **Egg Physics** (matches Java exactly):
+  - Changed from GameObject to MoveableObject
+  - Added gravity (eggs fall and rest on platforms)
+  - Standard collision physics
+  - Size set to 20x20 pixels
+
+**Status**: ✅ Complete - All entities should now behave exactly like original Java version
+
+### 1.3. **Physics Fine-Tuning for Better Control (2024-06-28)**
+**Issue**: Upward thrust too strong for gentle control, gravity slightly too strong
+**Root Cause**: Original Java values (-12 thrust, 0.8 gravity) felt too aggressive for precise control
+
+**Fixes Applied**:
+- **Upward Velocity**: Reduced from -12 to -6, then to -3 (75% total reduction for very gentle lift)
+- **Upward Speed Cap**: Added custom cap of 8 (vs default 18) for maximum upward velocity
+- **Gravity Strength**: Reduced from 0.8 to 0.6 (25% reduction for more floaty feel)
+
+**Expected Result**: Very precise, controllable flying with limited top speed - gentle acceleration and capped velocity
+**Status**: ✅ Complete - Hero should now have much more controllable flying physics
+
+### 1.4. **Final Movement Fine-Tuning (2024-06-28)**
+**Issue**: Koopa jumps too high/fast, player upward force still slightly too much, no horizontal speed cap
+**Fixes Applied**:
+- **Player Upward Force**: Reduced from -3 to -2 (even gentler)
+- **Player Horizontal Speed Cap**: Added cap of 10 (vs default 18) for left/right movement
+- **Koopa Jump Force**: Reduced from -20 to -12 (40% reduction)
+- **Koopa Speed Multiplier**: Reduced from 1.5x to 1.2x for better control
+
+**Status**: ✅ Complete - All movement should now feel perfectly balanced
+
+### 1.5. **Gravity Fine-Tuning (2024-06-28)**
+**Issue**: Gravity still slightly too strong for comfortable gameplay
+**Fix Applied**:
+- **Gravity Strength**: Reduced from 0.6 to 0.5 (final gentle adjustment)
+
+**Status**: ✅ Complete - Perfect gravity balance achieved
 
 ### 2. **Previous Critical Collision System Bug (Fixed)**
 **Issue**: `platform.isLava is not a function` error breaking collision detection
