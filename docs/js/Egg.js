@@ -1,18 +1,26 @@
 /**
- * Egg class - spawned when enemies die
+ * Egg class - spawned when enemies die (matches Java implementation)
  */
-class Egg extends GameObject {
+class Egg extends MoveableObject {
     constructor(xCent, yCent, containedEnemy, imageName) {
-        super(xCent, yCent);
+        super(xCent, yCent, imageName);
         this.containedEnemy = containedEnemy;
-        this.imageName = imageName;
-        this.imageCache = new Map();
         this.respawnTimer = 0;
         this.respawnDelay = 420; // 7 seconds at 60fps
+        this.imageCache = new Map(); // For image caching
+        
+        // Eggs are affected by gravity and don't move on their own (matches Java)
+        this.setHasGravity(true);
+        this.setXVelocity(0);
+        this.setYVelocity(0);
+        
+        // Set egg size (matches Java)
+        this.setWidth(20);
+        this.setHeight(20);
     }
 
     update() {
-        super.update();
+        super.update(); // This will handle gravity and physics
         this.respawnTimer++;
         
         // Mark for removal when timer expires (will be handled by game engine)
@@ -22,7 +30,7 @@ class Egg extends GameObject {
     }
 
     drawOn(ctx) {
-        const fileName = this.imageName + ".png";
+        const fileName = this.getName() + ".PNG";
         
         if (this.imageCache.has(fileName)) {
             const img = this.imageCache.get(fileName);
@@ -75,29 +83,33 @@ class Egg extends GameObject {
     }
 
     collidewith(other) {
-        // Basic collision for platforms - eggs should bounce/rest on them
-        if (other instanceof Platform) {
-            const previousXDist = other.getXCent() - this.xCent;
-            const previousYDist = other.getYCent() - this.yCent;
-            
-            const rectH = this.getBoundingBox();
-            const rectO = other.getBoundingBox();
-            
-            // Calculate overlap
-            const overlapLeft = Math.max(rectH.x, rectO.x);
-            const overlapRight = Math.min(rectH.x + rectH.width, rectO.x + rectO.width);
-            const overlapTop = Math.max(rectH.y, rectO.y);
-            const overlapBottom = Math.min(rectH.y + rectH.height, rectO.y + rectO.height);
-            
-            const overlapWidth = overlapRight - overlapLeft;
-            const overlapHeight = overlapBottom - overlapTop;
+        // Use standard MoveableObject collision logic (matches Java)
+        const previousXDist = other.getXCent() - this.getPreviousXPos();
+        const previousYDist = other.getYCent() - this.getPreviousYPos();
+        
+        const rectH = this.getBoundingBox();
+        const rectO = other.getBoundingBox();
+        
+        // Calculate intersection exactly like Java's createIntersection
+        const intersectionLeft = Math.max(rectH.x, rectO.x);
+        const intersectionRight = Math.min(rectH.x + rectH.width, rectO.x + rectO.width);
+        const intersectionTop = Math.max(rectH.y, rectO.y);
+        const intersectionBottom = Math.min(rectH.y + rectH.height, rectO.y + rectO.height);
+        
+        const overlapWidth = intersectionRight - intersectionLeft;
+        const overlapHeight = intersectionBottom - intersectionTop;
 
-            if (Math.abs(previousYDist) < Math.abs(previousXDist)) {
-                const direction = Math.sign(other.getXCent() - this.getXCent());
-                this.setXCent(this.getXCent() - direction * overlapWidth);
-            } else {
-                this.setYCent(this.getYCent() - Math.sign(previousYDist) * overlapHeight);
-            }
+        if (Math.abs(previousYDist) === Math.abs(previousXDist)) {
+            return;
+        } else if (Math.abs(previousYDist) < Math.abs(previousXDist)) {
+            this.setXVelocity(0);
+            const direction = Math.sign(other.getXCent() - this.getXCent());
+            this.move(-direction * overlapWidth, 0);
+            this.updatePreviousPosition();
+        } else {
+            this.move(0, -Math.sign(previousYDist) * overlapHeight);
+            this.setYVelocity(0);
+            this.updatePreviousPosition();
         }
     }
 } 

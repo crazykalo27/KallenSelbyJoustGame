@@ -3,7 +3,7 @@
  */
 class MoveableObject extends GameObject {
     static DEFAULT_MAX_SPEED = 18;
-    static GRAVITY_STRENGTH = 0.8;
+    static GRAVITY_STRENGTH = 0.5; // Further reduced for even gentler gravity feel
     static FRICTION_STRENGTH = 0.25;
 
     constructor(xCent, yCent, name) {

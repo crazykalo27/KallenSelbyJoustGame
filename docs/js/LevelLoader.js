@@ -114,7 +114,7 @@ class LevelLoader {
             const tracker = new Tracker(
                 trackerPlaceholder.getXCent(),
                 trackerPlaceholder.getYCent(),
-                3.5, // Matches original Java exactly
+                1.2, // Reduced to 1/3 of original (3.5/3 ≈ 1.2)
                 this.hero,
                 LevelLoader.TRACKER_ENEMY_FILE
             );
@@ -141,18 +141,18 @@ class LevelLoader {
                 return new Platform(x, y, 0);
                 
             case LevelLoader.HERO_STRING:
-                return new Hero(x, y, 3.0, LevelLoader.HERO_FILE); // Slightly reduced for better control
+                return new Hero(x, y, 0.5, LevelLoader.HERO_FILE); // Further reduced for better control
                 
             case LevelLoader.GHOST_STRING:
-                const ghostSpeed = this.tutorial ? 0 : 5.5; // Matches original Java exactly
+                const ghostSpeed = this.tutorial ? 0 : 1.8; // Reduced to 1/3 of original (5.5/3 ≈ 1.8)
                 return new LeftRightEnemy(x, y, ghostSpeed, LevelLoader.GHOST_FILE);
                 
             case LevelLoader.KOOPA_STRING:
-                return new RandomMoveEnemy(x, y, 3, LevelLoader.KOOPA_FILE); // Matches original Java exactly
+                return new RandomMoveEnemy(x, y, 1.0, LevelLoader.KOOPA_FILE); // Reduced to 1/3 of original (3.0/3 = 1.0)
                 
             case LevelLoader.TRACKER_STRING:
                 // Create placeholder - will be replaced with actual tracker later
-                return new RandomMoveEnemy(x, y, 3, LevelLoader.KOOPA_FILE);
+                return new RandomMoveEnemy(x, y, 1.0, LevelLoader.KOOPA_FILE);
                 
             case LevelLoader.LAVA_STRING:
                 return new Platform(x, y, 1);

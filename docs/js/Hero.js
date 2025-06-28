@@ -26,7 +26,7 @@ class Hero extends MoveableObject {
             this.addXVelocity(-this.speed);
         }
         if (this.upKeyHeld) {
-            this.addYVelocity(-12); // Matches original Java value
+            this.addYVelocity(-2); // Further reduced for very gentle, precise control
         }
         
         // Debug: Log hero position occasionally 
@@ -49,6 +49,24 @@ class Hero extends MoveableObject {
 
     setUpKeyHeld(state) {
         this.upKeyHeld = state;
+    }
+
+    // Override velocity setters to cap hero speeds lower than default
+    setYVelocity(yVelocity) {
+        const maxUpwardSpeed = 8; // Much lower cap for upward movement
+        const maxDownwardSpeed = 18; // Keep normal cap for falling/gravity
+        
+        if (yVelocity < 0) { // Moving up
+            this.yVelocity = Math.max(-maxUpwardSpeed, yVelocity);
+        } else { // Moving down  
+            this.yVelocity = Math.min(maxDownwardSpeed, yVelocity);
+        }
+    }
+
+    // Override setXVelocity to cap horizontal speed lower than default
+    setXVelocity(xVelocity) {
+        const maxHorizontalSpeed = 10; // Lower cap for horizontal movement
+        this.xVelocity = Math.sign(xVelocity) * Math.min(maxHorizontalSpeed, Math.abs(xVelocity));
     }
 
     collidewith(other) {
