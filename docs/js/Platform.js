@@ -43,18 +43,24 @@ class Platform extends GameObject {
     }
 
     drawOn(ctx) {
-        const fileName = "Plat" + this.name + ".PNG";
+        const fileName = "Plat" + this.name + ".png"; // Fixed: lowercase extension for GitHub compatibility
         
         if (this.imageCache.has(fileName)) {
             const img = this.imageCache.get(fileName);
-            if (img.complete) {
-                ctx.drawImage(
-                    img,
-                    this.xCent - this.width / 2,
-                    this.yCent - this.height / 2,
-                    this.width,
-                    this.height
-                );
+            if (img.complete && !img.src.includes('404')) {
+                try {
+                    ctx.drawImage(
+                        img,
+                        this.xCent - this.width / 2,
+                        this.yCent - this.height / 2,
+                        this.width,
+                        this.height
+                    );
+                    return; // Successfully drew image
+                } catch (error) {
+                    // Image is broken, fall through to colored rectangle
+                    console.warn(`Failed to draw platform image ${fileName}, using fallback color`);
+                }
             }
         } else {
             // Load image if not cached
@@ -62,25 +68,30 @@ class Platform extends GameObject {
             img.onload = () => {
                 this.imageCache.set(fileName, img);
             };
+            img.onerror = () => {
+                // Mark as failed so we don't keep trying
+                console.warn(`Failed to load platform image: ${fileName}`);
+                this.imageCache.set(fileName, { complete: true, failed: true });
+            };
             img.src = `images/${fileName}`;
             this.imageCache.set(fileName, img);
-            
-            // Draw a colored rectangle as fallback while loading
-            ctx.fillStyle = this.getColorForType();
-            ctx.fillRect(
-                this.xCent - this.width / 2,
-                this.yCent - this.height / 2,
-                this.width,
-                this.height
-            );
-            ctx.strokeStyle = 'black';
-            ctx.strokeRect(
-                this.xCent - this.width / 2,
-                this.yCent - this.height / 2,
-                this.width,
-                this.height
-            );
         }
+        
+        // Draw colored rectangle as fallback
+        ctx.fillStyle = this.getColorForType();
+        ctx.fillRect(
+            this.xCent - this.width / 2,
+            this.yCent - this.height / 2,
+            this.width,
+            this.height
+        );
+        ctx.strokeStyle = 'black';
+        ctx.strokeRect(
+            this.xCent - this.width / 2,
+            this.yCent - this.height / 2,
+            this.width,
+            this.height
+        );
     }
 
     getColorForType() {

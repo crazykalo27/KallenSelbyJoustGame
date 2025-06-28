@@ -30,7 +30,7 @@ class Egg extends MoveableObject {
     }
 
     drawOn(ctx) {
-        const fileName = this.getName() + ".PNG";
+        const fileName = this.getName() + ".png"; // Fixed: lowercase extension for GitHub compatibility
         
         if (this.imageCache.has(fileName)) {
             const img = this.imageCache.get(fileName);

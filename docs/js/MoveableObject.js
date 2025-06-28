@@ -22,7 +22,7 @@ class MoveableObject extends GameObject {
     drawOn(ctx) {
         // Draw sprite based on direction
         const imageName = this.name + (this.getDir() ? "Left" : "Right");
-        const imageKey = imageName + ".PNG";
+        const imageKey = imageName + ".PNG"; // Keep .PNG for character sprites
         
         if (this.imageCache.has(imageKey)) {
             const img = this.imageCache.get(imageKey);

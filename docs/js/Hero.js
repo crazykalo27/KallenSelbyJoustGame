@@ -73,9 +73,14 @@ class Hero extends MoveableObject {
         const previousXDist = other.getXCent() - this.getPreviousXPos();
         const previousYDist = other.getYCent() - this.getPreviousYPos();
         
-        console.log(`COLLISION: Hero at (${this.getXCent().toFixed(1)}, ${this.getYCent().toFixed(1)}) previous (${this.getPreviousXPos().toFixed(1)}, ${this.getPreviousYPos().toFixed(1)})`);
-        console.log(`  Platform at (${other.getXCent().toFixed(1)}, ${other.getYCent().toFixed(1)})`);
-        console.log(`  Previous distances: X=${previousXDist.toFixed(1)}, Y=${previousYDist.toFixed(1)}`);
+        // Reduced logging to prevent spam - only log significant collisions
+        if (this.lastCollisionLog === undefined) this.lastCollisionLog = 0;
+        const shouldLog = Date.now() - this.lastCollisionLog > 1000; // Only log once per second
+        
+        if (shouldLog) {
+            console.log(`COLLISION: Hero at (${this.getXCent().toFixed(1)}, ${this.getYCent().toFixed(1)}) with platform`);
+            this.lastCollisionLog = Date.now();
+        }
         
         const rectH = this.getBoundingBox();
         const rectO = other.getBoundingBox();
@@ -88,27 +93,20 @@ class Hero extends MoveableObject {
         
         const overlapWidth = intersectionRight - intersectionLeft;
         const overlapHeight = intersectionBottom - intersectionTop;
-        
-        console.log(`  Overlap: W=${overlapWidth.toFixed(1)}, H=${overlapHeight.toFixed(1)}`);
 
         // Collision resolution logic - exactly matching Java Hero.collidewith
         if (Math.abs(previousYDist) === Math.abs(previousXDist)) {
-            console.log(`  DIAGONAL case - no resolution`);
             return;
         } else if (Math.abs(previousYDist) < Math.abs(previousXDist)) {
-            console.log(`  HORIZONTAL collision - stopping X velocity, moving horizontally`);
             this.setXVelocity(0);
             const direction = Math.sign(other.getXCent() - this.getXCent());
             this.move(-direction * overlapWidth, 0);
             this.updatePreviousPosition();
         } else {
-            console.log(`  VERTICAL collision - stopping Y velocity, moving vertically`);
             this.move(0, -Math.sign(previousYDist) * overlapHeight);
             this.setYVelocity(0);
             this.updatePreviousPosition();
         }
-        
-        console.log(`  After collision: Hero at (${this.getXCent().toFixed(1)}, ${this.getYCent().toFixed(1)}), velocity (${this.getXVelocity().toFixed(1)}, ${this.getYVelocity().toFixed(1)})`);
     }
 
     // Joust mechanics: 0 = Enemy higher (player dies), 1 = Even (bounce), 2 = Player wins
