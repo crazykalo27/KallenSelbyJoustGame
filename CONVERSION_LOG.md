@@ -153,6 +153,38 @@ Converting Java Swing-based Joust game to JavaScript/HTML5 for web browser compa
 **Issue**: Windows line endings breaking level parsing
 **Fix**: Strip \r characters in LevelLoader
 
+## Platform Loading Fix - December 2024
+
+### Issue
+- Game was failing on GitHub Pages with "Cannot read properties of undefined (reading 'includes')" error at Platform.js:50
+- Platform images not loading due to file extension case mismatches
+- PlatTruss.png, PlatIce.png, PlatLava.png returning 404 errors
+
+### Root Cause
+1. File extension case mismatch: Code was looking for `.png` but actual files have mixed cases (`.PNG` and `.png`)
+2. Missing null checks when accessing image objects from cache
+3. Recent commit "missing try fix" introduced debugging code but didn't fix the core file extension issue
+
+### Solution
+1. **Fixed file extension mapping**: Created explicit switch statement to map each platform type to its correct filename:
+   - Truss → PlatTruss.PNG
+   - Lava → PlatLava.PNG  
+   - Ice → PlatIce.PNG
+   - Slime → PlatSlime.png
+   - Health → PlatHealth.png
+
+2. **Added null safety checks**: Added `img &&` checks before accessing image properties to prevent undefined errors
+
+3. **Maintained fallback rendering**: Kept colored rectangle fallbacks for when images fail to load
+
+### Files Modified
+- `docs/js/Platform.js`: Fixed file extension mapping and added null safety
+
+### Status
+- ✅ File extension mismatches resolved
+- ✅ Null safety checks added
+- 🔄 Ready for testing on GitHub Pages
+
 ## Technical Implementation
 
 ### Physics System

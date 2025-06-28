@@ -43,55 +43,101 @@ class Platform extends GameObject {
     }
 
     drawOn(ctx) {
-        const fileName = "Plat" + this.name + ".png"; // Fixed: lowercase extension for GitHub compatibility
+        // Use correct file extensions based on actual files
+        let fileName;
+        switch (this.name) {
+            case "Truss":
+                fileName = "PlatTruss.PNG";
+                break;
+            case "Lava":
+                fileName = "PlatLava.PNG";
+                break;
+            case "Ice":
+                fileName = "PlatIce.PNG";
+                break;
+            case "Slime":
+                fileName = "PlatSlime.png";
+                break;
+            case "Health":
+                fileName = "PlatHealth.png";
+                break;
+            default:
+                fileName = "Plat" + this.name + ".png";
+        }
+        
+        // Debug: Track which images are causing problems
+        if (!this.debugLogged) {
+            console.log(`DEBUG: Platform ${this.name} trying to load ${fileName}`);
+            this.debugLogged = true;
+        }
+        
+        let useImage = false;
         
         if (this.imageCache.has(fileName)) {
             const img = this.imageCache.get(fileName);
-            if (img.complete && !img.src.includes('404')) {
-                try {
-                    ctx.drawImage(
-                        img,
-                        this.xCent - this.width / 2,
-                        this.yCent - this.height / 2,
-                        this.width,
-                        this.height
-                    );
-                    return; // Successfully drew image
-                } catch (error) {
-                    // Image is broken, fall through to colored rectangle
-                    console.warn(`Failed to draw platform image ${fileName}, using fallback color`);
+            
+            // Check if it's a failed image marker
+            if (img && img.failed) {
+                // Skip drawing image, use fallback
+                console.log(`DEBUG: Skipping failed image ${fileName}`);
+            } else if (img && img.complete) {
+                // Check if the image is actually valid
+                if (img.naturalWidth && img.naturalWidth > 0) {
+                    try {
+                        ctx.drawImage(
+                            img,
+                            this.xCent - this.width / 2,
+                            this.yCent - this.height / 2,
+                            this.width,
+                            this.height
+                        );
+                        useImage = true;
+                    } catch (error) {
+                        console.error(`ERROR: Failed to draw ${fileName}:`, error.message);
+                        // Mark as failed
+                        this.imageCache.set(fileName, { complete: true, failed: true });
+                    }
+                } else {
+                    console.log(`DEBUG: Image ${fileName} loaded but has no dimensions, marking as failed`);
+                    this.imageCache.set(fileName, { complete: true, failed: true });
                 }
             }
         } else {
             // Load image if not cached
+            console.log(`DEBUG: Loading image ${fileName}`);
             const img = new Image();
+            
             img.onload = () => {
+                console.log(`DEBUG: Successfully loaded ${fileName}`);
                 this.imageCache.set(fileName, img);
             };
+            
             img.onerror = () => {
-                // Mark as failed so we don't keep trying
-                console.warn(`Failed to load platform image: ${fileName}`);
+                console.error(`ERROR: Failed to load ${fileName}`);
                 this.imageCache.set(fileName, { complete: true, failed: true });
             };
+            
             img.src = `images/${fileName}`;
             this.imageCache.set(fileName, img);
         }
         
-        // Draw colored rectangle as fallback
-        ctx.fillStyle = this.getColorForType();
-        ctx.fillRect(
-            this.xCent - this.width / 2,
-            this.yCent - this.height / 2,
-            this.width,
-            this.height
-        );
-        ctx.strokeStyle = 'black';
-        ctx.strokeRect(
-            this.xCent - this.width / 2,
-            this.yCent - this.height / 2,
-            this.width,
-            this.height
-        );
+        // Always draw fallback rectangle if image didn't work
+        if (!useImage) {
+            ctx.fillStyle = this.getColorForType();
+            ctx.fillRect(
+                this.xCent - this.width / 2,
+                this.yCent - this.height / 2,
+                this.width,
+                this.height
+            );
+            ctx.strokeStyle = 'black';
+            ctx.strokeRect(
+                this.xCent - this.width / 2,
+                this.yCent - this.height / 2,
+                this.width,
+                this.height
+            );
+        }
     }
 
     getColorForType() {
