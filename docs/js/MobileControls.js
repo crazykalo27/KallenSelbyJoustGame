@@ -20,8 +20,9 @@ class MobileControls {
         const joystick = document.getElementById('mobileJoystick');
         const joystickHandle = document.getElementById('joystickHandle');
         const upButton = document.getElementById('mobileUpButton');
+        const restartButton = document.getElementById('mobileRestartButton');
         
-        if (!joystick || !joystickHandle || !upButton) {
+        if (!joystick || !joystickHandle || !upButton || !restartButton) {
             console.log('Mobile controls not found - likely on desktop');
             return;
         }
@@ -45,6 +46,11 @@ class MobileControls {
         upButton.addEventListener('touchend', (e) => this.handleUpButtonEnd(e), { passive: false });
         upButton.addEventListener('touchcancel', (e) => this.handleUpButtonEnd(e), { passive: false });
 
+        // Restart button touch events
+        restartButton.addEventListener('touchstart', (e) => this.handleRestartButtonStart(e), { passive: false });
+        restartButton.addEventListener('touchend', (e) => this.handleRestartButtonEnd(e), { passive: false });
+        restartButton.addEventListener('touchcancel', (e) => this.handleRestartButtonEnd(e), { passive: false });
+
         // Mouse events for testing on desktop (optional)
         joystick.addEventListener('mousedown', (e) => this.handleJoystickMouseStart(e));
         document.addEventListener('mousemove', (e) => this.handleJoystickMouseMove(e));
@@ -52,6 +58,9 @@ class MobileControls {
         
         upButton.addEventListener('mousedown', (e) => this.handleUpButtonMouseStart(e));
         upButton.addEventListener('mouseup', (e) => this.handleUpButtonMouseEnd(e));
+        
+        restartButton.addEventListener('mousedown', (e) => this.handleRestartButtonMouseStart(e));
+        restartButton.addEventListener('mouseup', (e) => this.handleRestartButtonMouseEnd(e));
     }
 
     updateJoystickCenter() {
@@ -198,6 +207,40 @@ class MobileControls {
         this.upButtonPressed = false;
         if (this.gameEngine && this.gameEngine.hero) {
             this.gameEngine.hero.setUpKeyHeld(false);
+        }
+    }
+
+    // Restart Button Touch Events
+    handleRestartButtonStart(e) {
+        e.preventDefault();
+        // Visual feedback
+        e.target.style.transform = 'scale(0.9)';
+    }
+
+    handleRestartButtonEnd(e) {
+        e.preventDefault();
+        // Reset visual feedback
+        e.target.style.transform = 'scale(1)';
+        // Restart the game
+        if (this.gameEngine) {
+            this.gameEngine.newGame();
+        }
+    }
+
+    // Mouse Events for Restart Button (Desktop Testing)
+    handleRestartButtonMouseStart(e) {
+        e.preventDefault();
+        // Visual feedback
+        e.target.style.transform = 'scale(0.9)';
+    }
+
+    handleRestartButtonMouseEnd(e) {
+        e.preventDefault();
+        // Reset visual feedback
+        e.target.style.transform = 'scale(1)';
+        // Restart the game
+        if (this.gameEngine) {
+            this.gameEngine.newGame();
         }
     }
 } 

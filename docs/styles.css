@@ -156,6 +156,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 15px;
 }
 
 .mobile-button {
@@ -176,6 +177,10 @@ body {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
+}
+
+.mobile-restart-button {
+    background: linear-gradient(135deg, #4ecdc4, #44b09e);
 }
 
 .mobile-button:active {
