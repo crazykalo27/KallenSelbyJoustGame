@@ -232,6 +232,38 @@ Converting Java Swing-based Joust game to JavaScript/HTML5 for web browser compa
 - ✅ Console spam eliminated
 - ✅ Deployed to GitHub Pages
 
+## Koopa Ground Detection - December 2024
+
+### Issue
+- Koopa enemies (RandomMoveEnemy) could jump while in mid-air
+- Made gameplay unrealistic and unpredictable
+- No ground collision detection for enemy jumping behavior
+
+### Solution
+1. **Added ground detection method**: `isOnGround()` checks if enemy is touching a platform below
+2. **Modified jumping logic**: Koopas can only jump when `isGrounded` is true  
+3. **Integrated with GameEngine**: Platforms array provided to RandomMoveEnemy instances
+4. **Coverage for all scenarios**:
+   - Initial level loading
+   - Enemy updates during gameplay
+   - Egg respawning into new enemies
+
+### Technical Implementation
+- **Ground detection**: Creates small test rectangle 1 pixel below enemy bottom edge
+- **Platform overlap check**: Uses bounding box intersection to detect ground contact
+- **Performance optimized**: Only checks platforms when attempting to jump
+- **Maintains existing behavior**: Horizontal movement and collision responses unchanged
+
+### Files Modified
+- `docs/js/Enemy.js`: Added ground detection to RandomMoveEnemy class
+- `docs/js/GameEngine.js`: Integrated platform provision in update loop, level loading, and egg respawning
+
+### Status
+- ✅ Ground detection implemented
+- ✅ Koopas only jump when grounded
+- ✅ Integrated with all game systems
+- �� Ready for testing
+
 ## Technical Implementation
 
 ### Physics System

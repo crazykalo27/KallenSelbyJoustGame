@@ -136,6 +136,13 @@ class GameEngine {
             this.platforms = levelData.platforms;
             this.hero = levelData.hero;
             
+            // Provide platforms to RandomMoveEnemy instances for ground detection
+            for (const enemy of this.enemies) {
+                if (enemy instanceof RandomMoveEnemy) {
+                    enemy.setPlatforms(this.platforms);
+                }
+            }
+            
             // Debug: Log level loading info
             console.log(`Level ${levelNumber} loaded:`);
             console.log(`  Total objects: ${this.gameObjects.length}`);
@@ -174,6 +181,13 @@ class GameEngine {
 
     update() {
         if (this.gameOver) return;
+
+        // Provide platforms to RandomMoveEnemy instances for ground detection
+        for (const enemy of this.enemies) {
+            if (enemy instanceof RandomMoveEnemy) {
+                enemy.setPlatforms(this.platforms);
+            }
+        }
 
         // Update all game objects
         const objectsToRemove = [];
@@ -248,6 +262,11 @@ class GameEngine {
         const newEnemy = egg.getContainedEnemy().getCopy();
         newEnemy.setXCent(egg.getXCent());
         newEnemy.setYCent(egg.getYCent() - newEnemy.getHeight() / 2);
+        
+        // If it's a RandomMoveEnemy (Koopa), provide platforms for ground detection
+        if (newEnemy instanceof RandomMoveEnemy) {
+            newEnemy.setPlatforms(this.platforms);
+        }
         
         this.gameObjects.push(newEnemy);
         this.enemies.push(newEnemy);

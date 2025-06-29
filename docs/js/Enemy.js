@@ -108,14 +108,58 @@ class RandomMoveEnemy extends Enemy {
         this.setHasGravity(true); // Koopas are affected by gravity
         this.setSpeed(this.getSpeed() * 1.2); // Reduced speed multiplier for better control
         this.direction = 1; // 1 for right, -1 for left
+        this.isGrounded = false; // Track if enemy is on ground
+    }
+
+    /**
+     * Check if the enemy is touching the ground (a platform below it)
+     */
+    isOnGround(platforms) {
+        if (!platforms || platforms.length === 0) return false;
+        
+        // Create a small test rectangle slightly below the enemy
+        const testY = this.getYCent() + this.getHeight() / 2 + 1; // 1 pixel below bottom edge
+        const testRect = {
+            x: this.getXCent() - this.getWidth() / 2,
+            y: testY,
+            width: this.getWidth(),
+            height: 2 // Small height for ground detection
+        };
+        
+        // Check if this test rectangle overlaps with any platform
+        for (const platform of platforms) {
+            if (!platform) continue;
+            
+            const platformRect = platform.getBoundingBox();
+            
+            // Check for overlap between test rectangle and platform
+            if (testRect.x < platformRect.x + platformRect.width &&
+                testRect.x + testRect.width > platformRect.x &&
+                testRect.y < platformRect.y + platformRect.height &&
+                testRect.y + testRect.height > platformRect.y) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
+    /**
+     * Set the platforms array for ground detection
+     */
+    setPlatforms(platforms) {
+        this.platforms = platforms;
     }
 
     update() {
         this.updatePreviousPosition();
         
-        // Random jump with 2% chance each frame (reduced jump strength)
+        // Update grounded status
+        this.isGrounded = this.isOnGround(this.platforms);
+        
+        // Random jump with 2% chance each frame, but ONLY if grounded
         const randomValue = Math.random();
-        if (randomValue < 0.02) {
+        if (randomValue < 0.02 && this.isGrounded) {
             this.addYVelocity(-12); // Reduced jump strength for better gameplay
         }
         
