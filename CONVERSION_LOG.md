@@ -824,4 +824,70 @@ if (!enemy.isRespawnedEnemy()) {
 - **⚖️ Fair Scoring**: No more infinite point farming from respawned enemies
 - **🎮 Balanced Gameplay**: Players must seek out original enemies for points
 - **📈 Strategic Depth**: Creates decision-making about when to collect vs. avoid eggs
-- **✨ Professional Polish**: Clear, prominent creator recognition 
+- **✨ Professional Polish**: Clear, prominent creator recognition
+
+## Comprehensive Point System Overhaul - December 2024
+
+### Overview
+Completely redesigned the scoring system for balanced, strategic gameplay with fair point distribution.
+
+### New Point System
+
+#### Point Values:
+- **Enemy Kill**: 500 points (reduced from 750)
+- **Egg Collection**: 500 points 
+- **Level Completion**: 1000 points (new bonus)
+- **Respawned Enemy Kill**: 0 points
+- **Respawned Enemy Egg**: 0 points (new restriction)
+
+#### Death Penalty:
+- **Loss**: Only points gained during current level attempt
+- **Preserved**: Points from previous completed levels
+
+### Implementation Details
+
+#### 1. Point Constants Update (docs/js/GameEngine.js)
+- `POINTS_FOR_ENEMY_KILL`: 750 → 500
+- `POINTS_FOR_LEVEL_COMPLETION`: 1000 (new)
+- Added `pointsThisLevelAttempt` tracking
+
+#### 2. Egg Point Restrictions (docs/js/Egg.js)
+- Added `fromRespawnedEnemy` property to track egg origin
+- Eggs from respawned enemies award 0 points when collected
+- Maintains point fairness throughout respawn cycles
+
+#### 3. Level Attempt Tracking (docs/js/GameEngine.js)
+- `pointsThisLevelAttempt` resets on each level start
+- Tracks all points gained during current level attempt
+- Used for death penalty calculation
+
+#### 4. Level Completion Bonus (docs/js/GameEngine.js)
+- 1000 points awarded when all enemies and eggs are cleared
+- Encourages full level completion over partial progress
+- Added to both total points and level attempt tracking
+
+#### 5. Death Penalty System (docs/js/GameEngine.js)
+- Death only removes points from current level attempt
+- Prevents total score reset while maintaining challenge
+- Preserves progress from successfully completed levels
+
+### Strategic Impact
+
+#### Point Economy:
+- **Original Enemy**: 500 + 500 (egg) = 1000 total points
+- **Respawned Enemy**: 0 + 0 (egg) = 0 total points  
+- **Level Completion**: 1000 bonus points
+- **Death Cost**: Only current level attempt points
+
+#### Gameplay Strategies:
+- **Risk vs. Reward**: Hunt originals for points, avoid respawned for safety
+- **Completion Focus**: 1000-point bonus encourages full level clearing
+- **Death Management**: Strategic play to preserve multi-level progress
+- **Egg Decisions**: Collect original enemy eggs, avoid respawned enemy eggs
+
+### Result
+- **⚖️ Balanced Economy**: Fair point distribution prevents exploitation
+- **🎯 Strategic Depth**: Multiple viable approaches to scoring
+- **🏆 Completion Incentive**: Large bonus for finishing levels completely
+- **💰 Progress Protection**: Death doesn't erase all previous achievements
+- **🧠 Tactical Decisions**: Players must think about risk vs. reward constantly 

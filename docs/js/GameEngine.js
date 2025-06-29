@@ -2,8 +2,9 @@
  * Main game engine - handles game logic, collision detection, and rendering
  */
 class GameEngine {
-    static POINTS_FOR_ENEMY_KILL = 750;
+    static POINTS_FOR_ENEMY_KILL = 500;
     static POINTS_FOR_EGG = 500;
+    static POINTS_FOR_LEVEL_COMPLETION = 1000;
     static NUM_LEVELS = 12;
     static DELAY = 16; // ~60 FPS
 
@@ -23,6 +24,7 @@ class GameEngine {
         this.lives = 4;
         this.gameOver = false;
         this.tutorial = true;
+        this.pointsThisLevelAttempt = 0;
         this.pointsLoss = 0;
 
         // Input handling
@@ -114,6 +116,9 @@ class GameEngine {
     async loadLevel(levelNumber) {
         console.log(`=== LOADING LEVEL ${levelNumber} ===`);
         this.levelNum = levelNumber;
+        
+        // Reset points for this level attempt
+        this.pointsThisLevelAttempt = 0;
         
         // Set tutorial mode for level 0
         this.tutorial = (levelNumber === 0);
@@ -214,14 +219,19 @@ class GameEngine {
         // Check win condition - but only if we're not on the tutorial level AND the level has actually loaded
         if (this.gameObjects.length > 0 && this.enemies.length === 0 && this.eggs.length === 0) {
             console.log(`WIN CONDITION TRIGGERED: Level ${this.levelNum}, Enemies: ${this.enemies.length}, Eggs: ${this.eggs.length}`);
+            
+            // Award level completion bonus
+            this.points += GameEngine.POINTS_FOR_LEVEL_COMPLETION;
+            this.pointsThisLevelAttempt += GameEngine.POINTS_FOR_LEVEL_COMPLETION;
+            
             if (this.levelNum < GameEngine.NUM_LEVELS - 1) {
                 console.log(`Advancing to level ${this.levelNum + 1}`);
                 this.tutorial = false;
-                this.pointsLoss = 0;
                 this.loadLevel(this.levelNum + 1);
             } else {
                 console.log(`Game completed! Max level reached.`);
             }
+            this.updateUI();
         }
 
         // Update eggs and check for respawn
@@ -249,7 +259,7 @@ class GameEngine {
         // Only award points for original enemies, not respawned ones
         if (!enemy.isRespawnedEnemy()) {
             this.points += GameEngine.POINTS_FOR_ENEMY_KILL;
-            this.pointsLoss += GameEngine.POINTS_FOR_ENEMY_KILL;
+            this.pointsThisLevelAttempt += GameEngine.POINTS_FOR_ENEMY_KILL;
         }
         
         this.updateUI();
@@ -388,25 +398,29 @@ class GameEngine {
             if (egg.overlaps(this.hero)) {
                 this.removeGameObject(egg);
                 this.eggs = this.eggs.filter(e => e !== egg);
-                this.pointsLoss += GameEngine.POINTS_FOR_EGG;
-                this.points += GameEngine.POINTS_FOR_EGG;
+                
+                // Only award points for eggs from original enemies, not respawned ones
+                if (!egg.isFromRespawnedEnemy()) {
+                    this.points += GameEngine.POINTS_FOR_EGG;
+                    this.pointsThisLevelAttempt += GameEngine.POINTS_FOR_EGG;
+                }
+                
                 this.updateUI();
             }
         }
     }
 
     respawn() {
-        // Lose points equal to enemies on screen
-        this.points -= this.pointsLoss;
+        // Lose points equal to what was gained on this level attempt
+        this.points -= this.pointsThisLevelAttempt;
         this.lives--;
         
         if (this.lives <= 0) {
             this.tutorial = false;
             this.gameOver = true;
-                 } else {
-             this.pointsLoss = 0;
-             this.loadLevel(this.levelNum); // Respawn on current level
-         }
+        } else {
+            this.loadLevel(this.levelNum); // Respawn on current level (this will reset pointsThisLevelAttempt)
+        }
         
         this.updateUI();
     }

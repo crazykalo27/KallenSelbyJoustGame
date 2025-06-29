@@ -8,6 +8,7 @@ class Egg extends MoveableObject {
         this.respawnTimer = 0;
         this.respawnDelay = 120; // 2 seconds at 60fps (reduced from 3 seconds)
         this.imageCache = new Map(); // For image caching
+        this.fromRespawnedEnemy = containedEnemy.isRespawnedEnemy(); // Track if egg came from respawned enemy
         
         // Eggs are affected by gravity and don't move on their own (matches Java)
         this.setHasGravity(true);
@@ -72,6 +73,10 @@ class Egg extends MoveableObject {
 
     getContainedEnemy() {
         return this.containedEnemy;
+    }
+
+    isFromRespawnedEnemy() {
+        return this.fromRespawnedEnemy;
     }
 
     getRemainingTime() {
