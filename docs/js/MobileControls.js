@@ -23,7 +23,7 @@ class MobileControls {
         const joystick = document.getElementById('mobileJoystick');
         const joystickHandle = document.getElementById('joystickHandle');
         const upButton = document.getElementById('mobileUpButton');
-        const restartButton = document.getElementById('mobileRestartButton');
+        const restartButton = document.getElementById('mobileRestartButtonTop');
         
         if (!joystick || !joystickHandle || !upButton || !restartButton) {
             console.log('Mobile controls not found - likely on desktop');
@@ -290,7 +290,7 @@ class MobileControls {
         // Find the touch that started on the restart button
         for (let i = 0; i < e.touches.length; i++) {
             const touch = e.touches[i];
-            const restartButtonElement = document.getElementById('mobileRestartButton');
+            const restartButtonElement = document.getElementById('mobileRestartButtonTop');
             const rect = restartButtonElement.getBoundingClientRect();
             
             // Check if this touch started within the restart button area
@@ -298,7 +298,7 @@ class MobileControls {
                 touch.clientY >= rect.top && touch.clientY <= rect.bottom) {
                 this.restartButtonTouchId = touch.identifier;
                 // Visual feedback
-                e.target.style.transform = 'scale(0.9)';
+                restartButtonElement.style.transform = 'scale(0.95)';
                 break;
             }
         }
@@ -321,7 +321,7 @@ class MobileControls {
         if (ourTouchEnded) {
             this.restartButtonTouchId = null;
             // Reset visual feedback
-            const restartButton = document.getElementById('mobileRestartButton');
+            const restartButton = document.getElementById('mobileRestartButtonTop');
             if (restartButton) {
                 restartButton.style.transform = 'scale(1)';
             }
@@ -336,7 +336,7 @@ class MobileControls {
     handleRestartButtonMouseStart(e) {
         e.preventDefault();
         // Visual feedback
-        e.target.style.transform = 'scale(0.9)';
+        e.target.style.transform = 'scale(0.95)';
     }
 
     handleRestartButtonMouseEnd(e) {

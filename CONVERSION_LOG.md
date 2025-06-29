@@ -686,4 +686,52 @@ Enhanced user interface with version display, mobile fullscreen experience, and 
 - **🎮 No Scrolling**: Eliminates scrollbars for immersive gameplay
 - **🏷️ Version Tracking**: Clear version identification for users
 - **⚡ Faster Action**: Eggs respawn even quicker for intense gameplay
-- **📐 Optimized Layout**: Better space utilization on all devices 
+- **📐 Optimized Layout**: Better space utilization on all devices
+
+## Mobile Layout Fixes & Restart Button Redesign - December 2024
+
+### Overview
+Fixed mobile layout issues with cut-off controls and redesigned restart button for better usability.
+
+### Problem Identified
+- Mobile controls were cut off at bottom of screen on some devices
+- Circular restart button took up too much space in limited mobile real estate
+- Canvas height was too large, leaving insufficient space for controls
+
+### Changes Made
+
+#### 1. Improved Mobile Layout Spacing (docs/styles.css)
+- **Canvas Height**: Reduced from 60vh to 50vh for better control visibility
+- **Layout Method**: Changed from `justify-content: space-between` to `flex-start`
+- **Control Sizing**: Reduced joystick (100px → 90px) and buttons (80px → 70px)
+- **Spacing**: Optimized margins and padding for tighter, more efficient layout
+
+#### 2. Horizontal Restart Button (docs/index.html, docs/styles.css)
+- **Position**: Moved from bottom controls to header area above game
+- **Design**: Changed from circular to horizontal button (200px × 35px)
+- **Style**: Teal gradient with rounded corners and clear "↻ Restart Game" text
+- **Visibility**: Hidden on desktop, only shown on mobile devices
+
+#### 3. Control Layout Optimization (docs/styles.css)
+- **Container**: Removed background and adjusted padding for cleaner look
+- **Spacing**: `justify-content: space-around` for better control distribution
+- **Height**: Fixed minimum height (120px) ensures controls don't get compressed
+- **Responsive**: All elements scale appropriately across different mobile screen sizes
+
+#### 4. JavaScript Integration (docs/js/MobileControls.js)
+- Updated touch handlers to work with new horizontal restart button
+- Maintained all existing multi-touch functionality
+- Updated element ID references for new button location
+
+### Technical Implementation
+- Flexbox layout with optimized space distribution
+- Canvas height capped at 50vh to guarantee control visibility
+- All touch areas properly sized for thumb accessibility
+- Visual feedback maintained for all button interactions
+
+### Result
+- **✅ No Cut-off**: All controls now visible on any mobile screen size
+- **✅ Better UX**: Horizontal restart button is easier to tap and more intuitive
+- **✅ Optimized Space**: More efficient use of limited mobile screen real estate
+- **✅ Consistent Fit**: Layout adapts properly to various mobile device sizes
+- **✅ Improved Access**: Restart button positioned for easy reach without interfering with gameplay 

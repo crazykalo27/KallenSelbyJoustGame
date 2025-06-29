@@ -205,6 +205,30 @@ body {
     font-weight: bold;
 }
 
+/* Mobile restart button - horizontal style, hidden by default */
+.mobile-restart-button-top {
+    display: none;
+    width: 200px;
+    height: 35px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #4ecdc4, #44b09e);
+    border: 2px solid #ffd700;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    margin: 10px auto;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.mobile-restart-button-top:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
     body {
@@ -216,7 +240,7 @@ body {
     }
     
     .game-container {
-        padding: 5px;
+        padding: 8px;
         margin: 0;
         border-radius: 0;
         width: 100vw;
@@ -225,47 +249,80 @@ body {
         max-height: 100vh;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
+        justify-content: flex-start;
         box-shadow: none;
         overflow: hidden;
     }
     
     .game-header {
-        margin-bottom: 5px;
+        margin-bottom: 8px;
         flex-shrink: 0;
     }
     
     .game-header h1 {
-        font-size: 1.8em;
-        margin-bottom: 5px;
+        font-size: 1.6em;
+        margin-bottom: 8px;
     }
     
     .game-info {
         flex-direction: row;
         gap: 10px;
         padding: 5px;
-        font-size: 0.9em;
+        font-size: 0.85em;
+        margin-bottom: 5px;
     }
     
     .game-controls {
         display: none;
     }
     
+    /* Show horizontal restart button on mobile */
+    .mobile-restart-button-top {
+        display: block;
+    }
+    
     #gameCanvas {
         width: 100%;
         height: auto;
         max-width: 100%;
-        max-height: 60vh;
+        max-height: 50vh;
         flex-shrink: 1;
         border-radius: 5px;
+        margin-bottom: 10px;
     }
     
     /* Show mobile controls only on mobile devices */
     .mobile-controls {
         display: flex;
         flex-shrink: 0;
-        margin: 5px 0;
-        padding: 10px;
+        margin: 0;
+        padding: 8px;
+        background: none;
+        justify-content: space-around;
+        align-items: center;
+        height: auto;
+        min-height: 120px;
+    }
+    
+    /* Adjust joystick and button sizes for better fit */
+    .joystick-base {
+        width: 90px;
+        height: 90px;
+    }
+    
+    .joystick-handle {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .mobile-button {
+        width: 70px;
+        height: 70px;
+        font-size: 20px;
+    }
+    
+    .mobile-button span {
+        font-size: 24px;
     }
 }
 
