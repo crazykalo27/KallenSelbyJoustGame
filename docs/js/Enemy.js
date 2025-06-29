@@ -58,37 +58,46 @@ class Enemy extends MoveableObject {
 }
 
 /**
- * Left-Right moving enemy (Ghost type) - matches Java implementation exactly
+ * Left-Right moving enemy (Ghost type) - Updated with 8-directional movement
  */
 class LeftRightEnemy extends Enemy {
     constructor(xCent, yCent, speed, name) {
         super(xCent, yCent, speed, name);
         this.setHasGravity(false); // Ghosts float - no gravity
         this.ticks = 0;
-        this.waitNum = Math.floor(Math.random() * 50) + 40; // generates 40-89
+        this.waitNum = Math.floor(Math.random() * 240) + 60; // 1-5 seconds at 60fps (60-300 ticks)
+        this.currentDirection = this.getRandomDirection8();
+    }
+
+    getRandomDirection8() {
+        // 8 directions: N, NE, E, SE, S, SW, W, NW
+        const directions = [
+            { x: 0, y: -1 },    // North
+            { x: 1, y: -1 },    // Northeast  
+            { x: 1, y: 0 },     // East
+            { x: 1, y: 1 },     // Southeast
+            { x: 0, y: 1 },     // South
+            { x: -1, y: 1 },    // Southwest
+            { x: -1, y: 0 },    // West
+            { x: -1, y: -1 }    // Northwest
+        ];
+        return directions[Math.floor(Math.random() * 8)];
     }
 
     update() {
         this.updatePreviousPosition();
         
-        // Set X velocity using squared speed (matches Java exactly)
-        const speedSquared = Math.pow(this.getSpeed(), 2) * Math.sign(this.getSpeed());
-        this.setXVelocity(speedSquared);
+        // Move in current direction
+        this.setXVelocity(this.getSpeed() * this.currentDirection.x);
+        this.setYVelocity(this.getSpeed() * this.currentDirection.y);
         
         this.ticks++;
         
-        // Change direction on timer (matches Java exactly)
-        if (this.ticks === this.waitNum) {
-            let diry = -1;
-            if (Math.random() > 0.5) {
-                diry *= -1;
-            }
-            this.setYVelocity(this.getSpeed() * diry);
-            
-            // Reverse speed to change direction
-            this.setSpeed(this.getSpeed() * -1);
+        // Change direction on timer (1-5 seconds)
+        if (this.ticks >= this.waitNum) {
+            this.currentDirection = this.getRandomDirection8();
             this.ticks = 0;
-            this.waitNum = Math.floor(Math.random() * 50) + 50; // generates 50-99
+            this.waitNum = Math.floor(Math.random() * 240) + 60; // 1-5 seconds at 60fps
         }
         
         super.update();
@@ -100,7 +109,7 @@ class LeftRightEnemy extends Enemy {
 }
 
 /**
- * Random movement enemy (Koopa type) - matches Java implementation exactly
+ * Random movement enemy (Koopa type) - Updated with less turning and timed jumping
  */
 class RandomMoveEnemy extends Enemy {
     constructor(xCent, yCent, speed, name) {
@@ -109,30 +118,26 @@ class RandomMoveEnemy extends Enemy {
         this.setSpeed(this.getSpeed() * 1.2); // Reduced speed multiplier for better control
         this.direction = 1; // 1 for right, -1 for left
         this.isGrounded = false; // Track if enemy is on ground
+        this.jumpTimer = 0;
+        this.nextJumpTime = Math.floor(Math.random() * 240); // 0-4 seconds at 60fps (0-240 ticks)
     }
 
     /**
-     * Check if the enemy is touching the ground (a platform below it)
+     * Check if the enemy is on the ground by testing collision with platforms
      */
     isOnGround(platforms) {
         if (!platforms || platforms.length === 0) return false;
         
-        // Create a small test rectangle slightly below the enemy
-        const testY = this.getYCent() + this.getHeight() / 2 + 1; // 1 pixel below bottom edge
+        // Create a test position slightly below current position
         const testRect = {
             x: this.getXCent() - this.getWidth() / 2,
-            y: testY,
+            y: this.getYCent() - this.getHeight() / 2 + 2, // Test 2 pixels below
             width: this.getWidth(),
-            height: 2 // Small height for ground detection
+            height: this.getHeight()
         };
         
-        // Check if this test rectangle overlaps with any platform
         for (const platform of platforms) {
-            if (!platform) continue;
-            
             const platformRect = platform.getBoundingBox();
-            
-            // Check for overlap between test rectangle and platform
             if (testRect.x < platformRect.x + platformRect.width &&
                 testRect.x + testRect.width > platformRect.x &&
                 testRect.y < platformRect.y + platformRect.height &&
@@ -140,7 +145,6 @@ class RandomMoveEnemy extends Enemy {
                 return true;
             }
         }
-        
         return false;
     }
 
@@ -157,10 +161,12 @@ class RandomMoveEnemy extends Enemy {
         // Update grounded status
         this.isGrounded = this.isOnGround(this.platforms);
         
-        // Random jump with 2% chance each frame, but ONLY if grounded
-        const randomValue = Math.random();
-        if (randomValue < 0.02 && this.isGrounded) {
-            this.addYVelocity(-12); // Reduced jump strength for better gameplay
+        // Timed jumping system (0-4 seconds)
+        this.jumpTimer++;
+        if (this.jumpTimer >= this.nextJumpTime && this.isGrounded) {
+            this.addYVelocity(-12); // Jump strength
+            this.jumpTimer = 0;
+            this.nextJumpTime = Math.floor(Math.random() * 240); // Next jump in 0-4 seconds
         }
         
         // Move horizontally in current direction
@@ -182,9 +188,12 @@ class RandomMoveEnemy extends Enemy {
         const overlapWidth = intersectionRight - intersectionLeft;
         const overlapHeight = intersectionBottom - intersectionTop;
         
-        // Change direction on horizontal collision (wall hit)
+        // Only change direction on horizontal collision (wall hit) - reduced frequency
         if (overlapHeight >= overlapWidth) {
-            this.direction *= -1; // Reverse direction
+            // Only change direction 75% of the time (reduced from 100%)
+            if (Math.random() < 0.75) {
+                this.direction *= -1; // Reverse direction
+            }
             const direction = Math.sign(other.getXCent() - this.getXCent());
             this.move(-direction * overlapWidth, 0);
             this.setXVelocity(0);

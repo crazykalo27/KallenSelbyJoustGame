@@ -542,4 +542,39 @@ Added a restart button to the mobile controls for easier game management on touc
 - **🖱️ Desktop Testing**: Mouse events for development testing
 
 ### Result
-Mobile players now have quick access to restart the game without needing to use keyboard shortcuts, providing a complete mobile gaming experience. 
+Mobile players now have quick access to restart the game without needing to use keyboard shortcuts, providing a complete mobile gaming experience.
+
+## Gameplay Balance Improvements - December 2024
+
+### Overview
+Enhanced gameplay balance by adjusting player movement speed and enemy AI behaviors for better game feel.
+
+### Changes Made
+
+#### 1. Player Movement Speed Reduction (docs/js/Hero.js)
+- Reduced horizontal movement speed cap by 25% (from 10 to 7.5)
+- Provides better control precision and balanced gameplay
+
+#### 2. Ghost Enemy Behavior Update (docs/js/Enemy.js - LeftRightEnemy)
+- **Previous**: Simple left-right movement with occasional Y velocity changes
+- **New**: 8-directional movement (N, NE, E, SE, S, SW, W, NW)
+- **Timing**: Hold each direction for 1-5 seconds (60-300 ticks at 60fps)
+- **Result**: More dynamic and unpredictable ghost movement patterns
+
+#### 3. Koopa Enemy Behavior Update (docs/js/Enemy.js - RandomMoveEnemy)
+- **Jump System**: Changed from 2% random chance per frame to timed intervals
+- **Jump Timing**: Now jumps every 0-4 seconds (0-240 ticks at 60fps)
+- **Direction Changes**: Reduced frequency - only change direction 75% of the time when hitting walls
+- **Result**: More predictable jumping with less erratic turning behavior
+
+### Technical Implementation
+- Maintained 60fps game loop timing for all calculations
+- Used tick-based timing systems for consistent behavior across devices
+- Preserved existing collision detection and physics systems
+- All changes maintain compatibility with mobile controls
+
+### Gameplay Impact
+- **Player Control**: More precise movement with reduced speed
+- **Ghost Challenge**: Increased unpredictability with 8-directional movement
+- **Koopa Behavior**: More natural jumping patterns and less chaotic movement
+- **Overall Balance**: Better skill-based gameplay with improved enemy AI 

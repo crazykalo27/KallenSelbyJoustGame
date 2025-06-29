@@ -60,7 +60,7 @@ class Hero extends MoveableObject {
 
     // Override setXVelocity to cap horizontal speed lower than default
     setXVelocity(xVelocity) {
-        const maxHorizontalSpeed = 10; // Lower cap for horizontal movement
+        const maxHorizontalSpeed = 7.5; // Reduced by 25% from 10 for better control
         this.xVelocity = Math.sign(xVelocity) * Math.min(maxHorizontalSpeed, Math.abs(xVelocity));
     }
 
