@@ -240,7 +240,7 @@ body {
     }
     
     .game-container {
-        padding: 8px;
+        padding: 2px;
         margin: 0;
         border-radius: 0;
         width: 100vw;
@@ -255,21 +255,22 @@ body {
     }
     
     .game-header {
-        margin-bottom: 8px;
+        margin-bottom: 4px;
         flex-shrink: 0;
+        padding: 0 2px;
     }
     
     .game-header h1 {
-        font-size: 1.6em;
-        margin-bottom: 8px;
+        font-size: 1.4em;
+        margin-bottom: 4px;
     }
     
     .game-info {
         flex-direction: row;
-        gap: 10px;
-        padding: 5px;
-        font-size: 0.85em;
-        margin-bottom: 5px;
+        gap: 8px;
+        padding: 3px;
+        font-size: 0.8em;
+        margin-bottom: 3px;
     }
     
     .game-controls {
@@ -279,16 +280,22 @@ body {
     /* Show horizontal restart button on mobile */
     .mobile-restart-button-top {
         display: block !important; /* Override the !important from desktop */
+        width: 180px;
+        height: 30px;
+        font-size: 12px;
+        margin: 5px auto;
     }
     
     #gameCanvas {
-        width: 100%;
+        width: calc(100vw + 4px); /* Slightly wider than viewport */
         height: auto;
-        max-width: 100%;
-        max-height: 50vh;
+        max-width: calc(100vw + 4px);
+        max-height: 55vh;
         flex-shrink: 1;
-        border-radius: 5px;
-        margin-bottom: 10px;
+        border-radius: 0;
+        border: 1px solid #ffd700; /* Thinner border */
+        margin: -2px; /* Negative margin to overlap container */
+        transform: scale(1.02); /* Slight zoom for better visibility */
     }
     
     /* Show mobile controls only on mobile devices */
@@ -296,54 +303,54 @@ body {
         display: flex;
         flex-shrink: 0;
         margin: 0;
-        padding: 8px;
+        padding: 4px 2px;
         background: none;
         justify-content: space-around;
         align-items: center;
         height: auto;
-        min-height: 120px;
+        min-height: 110px;
     }
     
     /* Adjust joystick and button sizes for better fit */
     .joystick-base {
-        width: 90px;
-        height: 90px;
+        width: 85px;
+        height: 85px;
     }
     
     .joystick-handle {
-        width: 36px;
-        height: 36px;
+        width: 34px;
+        height: 34px;
     }
     
     .mobile-button {
-        width: 70px;
-        height: 70px;
-        font-size: 20px;
+        width: 65px;
+        height: 65px;
+        font-size: 18px;
     }
     
     /* Make the fly button bigger for easier use */
     #mobileUpButton {
-        width: 85px;
-        height: 85px;
-        font-size: 22px;
+        width: 80px;
+        height: 80px;
+        font-size: 20px;
     }
     
     #mobileUpButton span {
-        font-size: 28px;
+        font-size: 26px;
     }
     
     .mobile-button span {
-        font-size: 24px;
+        font-size: 22px;
     }
     
     /* Mobile creator link adjustments */
     .creator-link {
-        margin-bottom: 10px;
-        padding: 6px 12px;
+        margin-bottom: 6px;
+        padding: 4px 8px;
     }
     
     .creator-link a {
-        font-size: 1.0em;
+        font-size: 0.9em;
     }
 }
 

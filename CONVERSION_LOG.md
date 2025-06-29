@@ -890,4 +890,47 @@ Completely redesigned the scoring system for balanced, strategic gameplay with f
 - **🎯 Strategic Depth**: Multiple viable approaches to scoring
 - **🏆 Completion Incentive**: Large bonus for finishing levels completely
 - **💰 Progress Protection**: Death doesn't erase all previous achievements
-- **🧠 Tactical Decisions**: Players must think about risk vs. reward constantly 
+- **🧠 Tactical Decisions**: Players must think about risk vs. reward constantly
+
+## Mobile Canvas Maximization - December 2024
+
+### Overview
+Maximized mobile game canvas size for better visibility and easier gameplay on small screens.
+
+### Changes Made
+
+#### 1. Expanded Canvas Size (docs/styles.css)
+- **Width**: `calc(100vw + 4px)` - slightly wider than viewport
+- **Height**: Increased to 55vh for more game area
+- **Scaling**: Added `transform: scale(1.02)` for 2% zoom enhancement
+- **Overlap**: Negative margins allow canvas to extend beyond container
+
+#### 2. Reduced UI Overhead
+- **Container Padding**: 8px → 2px for minimal waste
+- **Header Margins**: Reduced by 50% for more game space
+- **Font Sizes**: Slightly smaller to preserve space for canvas
+- **Restart Button**: Smaller (200px → 180px) to save vertical space
+
+#### 3. Optimized Control Layout
+- **Controls Height**: 120px → 110px minimum
+- **Button Sizes**: Reduced slightly but maintained usability
+- **Spacing**: Tighter padding throughout for space efficiency
+- **Border**: Thinner border (3px → 1px) for more game area
+
+#### 4. Canvas Enhancements
+- **Border Radius**: Removed on mobile for maximum area usage
+- **Positioning**: Negative margins allow slight container overflow
+- **Scaling**: 2% transform zoom makes game elements more visible
+
+### Technical Implementation
+- Used `calc()` CSS function for precise width calculations
+- Negative margins strategically placed to allow controlled overflow
+- Transform scaling applied after sizing for additional zoom
+- Maintained touch responsiveness while maximizing game area
+
+### Result
+- **📱 Maximum Visibility**: Game canvas uses every available pixel
+- **🔍 Enhanced Zoom**: 2% scale increase improves element visibility  
+- **📐 Optimized Space**: Minimal UI overhead, maximum game area
+- **🎮 Better Experience**: Easier to see enemies, platforms, and movement
+- **⚡ Maintained Performance**: All optimizations preserve smooth gameplay 
