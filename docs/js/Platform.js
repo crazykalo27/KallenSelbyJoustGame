@@ -65,12 +65,6 @@ class Platform extends GameObject {
                 fileName = "Plat" + this.name + ".png";
         }
         
-        // Debug: Track which images are causing problems
-        if (!this.debugLogged) {
-            console.log(`DEBUG: Platform ${this.name} trying to load ${fileName}`);
-            this.debugLogged = true;
-        }
-        
         let useImage = false;
         
         if (this.imageCache.has(fileName)) {
@@ -79,7 +73,6 @@ class Platform extends GameObject {
             // Check if it's a failed image marker
             if (img && img.failed) {
                 // Skip drawing image, use fallback
-                console.log(`DEBUG: Skipping failed image ${fileName}`);
             } else if (img && img.complete) {
                 // Check if the image is actually valid
                 if (img.naturalWidth && img.naturalWidth > 0) {
@@ -98,17 +91,14 @@ class Platform extends GameObject {
                         this.imageCache.set(fileName, { complete: true, failed: true });
                     }
                 } else {
-                    console.log(`DEBUG: Image ${fileName} loaded but has no dimensions, marking as failed`);
                     this.imageCache.set(fileName, { complete: true, failed: true });
                 }
             }
         } else {
             // Load image if not cached
-            console.log(`DEBUG: Loading image ${fileName}`);
             const img = new Image();
             
             img.onload = () => {
-                console.log(`DEBUG: Successfully loaded ${fileName}`);
                 this.imageCache.set(fileName, img);
             };
             

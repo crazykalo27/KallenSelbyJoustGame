@@ -69,7 +69,6 @@ class MoveableObject extends GameObject {
                         this.drawFallbackSprite(ctx);
                     }
                 } else {
-                    console.log(`DEBUG: Character sprite ${imageKey} loaded but has no dimensions, marking as failed`);
                     this.imageCache.set(imageKey, { complete: true, failed: true });
                     this.drawFallbackSprite(ctx);
                 }
@@ -82,7 +81,6 @@ class MoveableObject extends GameObject {
             };
             
             img.onerror = () => {
-                console.error(`ERROR: Failed to load character sprite ${imageKey}`);
                 this.imageCache.set(imageKey, { complete: true, failed: true });
             };
             
