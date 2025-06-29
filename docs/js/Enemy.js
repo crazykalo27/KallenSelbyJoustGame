@@ -64,6 +64,7 @@ class LeftRightEnemy extends Enemy {
     constructor(xCent, yCent, speed, name) {
         super(xCent, yCent, speed, name);
         this.setHasGravity(false); // Ghosts float - no gravity
+        this.setSpeed(this.getSpeed() * 1.3); // Increase speed to be faster than player (7.5 * 1.3 ≈ 9.75)
         this.ticks = 0;
         this.waitNum = Math.floor(Math.random() * 120) + 30; // 0.5-2.5 seconds at 60fps (30-150 ticks)
         this.currentDirection = this.getRandomDirection8();

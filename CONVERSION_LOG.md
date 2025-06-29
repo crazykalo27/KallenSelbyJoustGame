@@ -731,7 +731,47 @@ Fixed mobile layout issues with cut-off controls and redesigned restart button f
 
 ### Result
 - **✅ No Cut-off**: All controls now visible on any mobile screen size
-- **✅ Better UX**: Horizontal restart button is easier to tap and more intuitive
-- **✅ Optimized Space**: More efficient use of limited mobile screen real estate
+- **✅ Better UX**: Horizontal restart button is much more user-friendly
+- **✅ Optimized Space**: More efficient use of limited mobile real estate
 - **✅ Consistent Fit**: Layout adapts properly to various mobile device sizes
-- **✅ Improved Access**: Restart button positioned for easy reach without interfering with gameplay 
+- **✅ Improved Access**: Restart button positioned for easy reach without interfering with gameplay
+
+## Final Polish Updates - December 2024
+
+### Overview
+Added creator attribution, refined mobile-only restart button, improved ghost challenge, and enhanced fly button usability.
+
+### Changes Made
+
+#### 1. Creator Attribution (docs/index.html, docs/styles.css)
+- Added link to "kallenselby.com" above game title
+- Styled with subtle gray color and hover effects
+- Links to creator's website in new tab
+- Responsive sizing for mobile devices
+
+#### 2. Mobile-Only Restart Button (docs/styles.css)
+- **Desktop**: Added `!important` to ensure button is completely hidden
+- **Mobile**: Override with `!important` to ensure button shows properly
+- **Result**: Button only appears on mobile devices as intended
+
+#### 3. Enhanced Ghost Challenge (docs/js/Enemy.js)
+- **Player Max Speed**: 7.5 (horizontal movement cap)
+- **Ghost Speed**: Increased by 30% to ~9.75 (faster than player)
+- **Result**: Ghosts now pose a greater challenge and can catch up to players
+
+#### 4. Improved Fly Button (docs/styles.css)
+- **Size**: Increased from 70px to 85px (21% larger)
+- **Result**: Much easier to tap accurately during intense gameplay
+
+### Technical Implementation
+- Used CSS `!important` declarations to ensure proper mobile/desktop visibility
+- Speed multiplier applied in ghost constructor for consistent behavior
+- Creator link opens in new tab to maintain game session
+- Responsive typography ensures readability across devices
+
+### Result
+- **🏷️ Creator Credit**: Proper attribution with functional website link
+- **📱 Mobile-Only Button**: Restart button correctly hidden on desktop
+- **⚡ Faster Ghosts**: Increased challenge with ghosts outpacing player
+- **🎮 Better Controls**: Larger fly button for improved mobile gameplay
+- **✨ Professional Polish**: Clean, functional UI with proper attribution 

@@ -207,7 +207,7 @@ body {
 
 /* Mobile restart button - horizontal style, hidden by default */
 .mobile-restart-button-top {
-    display: none;
+    display: none !important; /* Force hidden on desktop */
     width: 200px;
     height: 35px;
     border-radius: 20px;
@@ -278,7 +278,7 @@ body {
     
     /* Show horizontal restart button on mobile */
     .mobile-restart-button-top {
-        display: block;
+        display: block !important; /* Override the !important from desktop */
     }
     
     #gameCanvas {
@@ -346,6 +346,23 @@ body {
     .game-controls {
         display: none;
     }
+}
+
+.creator-link {
+    margin-bottom: 5px;
+}
+
+.creator-link a {
+    color: #cccccc;
+    text-decoration: none;
+    font-size: 0.75em;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+.creator-link a:hover {
+    opacity: 1;
+    color: #ffd700;
 }
 
 .version {
