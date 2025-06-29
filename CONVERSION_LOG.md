@@ -577,4 +577,68 @@ Enhanced gameplay balance by adjusting player movement speed and enemy AI behavi
 - **Player Control**: More precise movement with reduced speed
 - **Ghost Challenge**: Increased unpredictability with 8-directional movement
 - **Koopa Behavior**: More natural jumping patterns and less chaotic movement
-- **Overall Balance**: Better skill-based gameplay with improved enemy AI 
+- **Overall Balance**: Better skill-based gameplay with improved enemy AI
+
+## Egg Respawn Timing Update - December 2024
+
+### Overview
+Reduced egg respawn time to create faster-paced gameplay and quicker enemy regeneration.
+
+### Changes Made
+
+#### 1. Egg Respawn Timer Reduction (docs/js/Egg.js)
+- **Previous**: 7 seconds (420 ticks at 60fps)
+- **New**: 3 seconds (180 ticks at 60fps)
+- **Impact**: 57% faster enemy respawn rate
+
+### Technical Implementation
+- Maintained tick-based timing system for consistent behavior
+- Preserved all existing egg physics and collision logic
+- Change affects all egg types uniformly
+
+### Gameplay Impact
+- **Faster Pace**: Enemies return to action much quicker
+- **Increased Challenge**: Less downtime between enemy waves
+- **Strategic Timing**: Players have shorter windows to collect eggs for points
+- **Dynamic Combat**: More continuous action and engagement
+
+## Mobile Multi-Touch Bug Fix - December 2024
+
+### Overview
+Fixed critical mobile bug where holding the up button interfered with joystick left-right movement.
+
+### Problem Identified
+- Holding up button before using joystick caused touch event interference
+- Joystick would only move right, left movement was blocked
+- Issue caused by improper multi-touch handling between controls
+
+### Solution Implemented
+
+#### 1. Individual Touch Tracking (docs/js/MobileControls.js)
+- **Previous**: Single touch tracking with `currentTouch` variable
+- **New**: Individual touch ID tracking for each control:
+  - `joystickTouchId` - Tracks joystick-specific touches
+  - `upButtonTouchId` - Tracks up button-specific touches  
+  - `restartButtonTouchId` - Tracks restart button-specific touches
+
+#### 2. Touch Area Validation
+- Each control now validates touches started within its own boundary
+- Prevents cross-control touch interference
+- Uses `getBoundingClientRect()` for precise touch area detection
+
+#### 3. Independent Touch Lifecycle
+- Each control handles its own touch start, move, and end events
+- Touch events are processed only for the originating control
+- Multiple simultaneous touches are properly supported
+
+### Technical Implementation
+- Touch identifier (`touch.identifier`) used for precise touch tracking
+- Boundary checking ensures touches are handled by correct controls
+- Proper cleanup prevents lingering touch states
+- Multi-touch support allows simultaneous joystick and button usage
+
+### Result
+- **✅ Fixed**: Up button and joystick now work independently
+- **✅ Multi-Touch**: Can hold up button while using joystick freely
+- **✅ Smooth Control**: No more directional restrictions or interference
+- **✅ Reliable Input**: Consistent touch response across all mobile devices 

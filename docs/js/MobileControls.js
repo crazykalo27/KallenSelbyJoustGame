@@ -10,7 +10,10 @@ class MobileControls {
         this.handleRadius = 20;   // Half of handle width
         this.deadZone = 15;       // Minimum distance before registering input
         
-        this.currentTouch = null;
+        // Track individual touches for each control
+        this.joystickTouchId = null;
+        this.upButtonTouchId = null;
+        this.restartButtonTouchId = null;
         this.upButtonPressed = false;
         
         this.initializeControls();
@@ -75,24 +78,61 @@ class MobileControls {
     // Joystick Touch Events
     handleJoystickStart(e) {
         e.preventDefault();
-        this.joystickActive = true;
-        this.currentTouch = e.touches[0];
-        this.updateJoystickCenter();
+        // Only handle if we don't already have a joystick touch
+        if (this.joystickTouchId !== null) return;
+        
+        // Find the touch that started on the joystick
+        for (let i = 0; i < e.touches.length; i++) {
+            const touch = e.touches[i];
+            const joystickElement = document.getElementById('mobileJoystick');
+            const rect = joystickElement.getBoundingClientRect();
+            
+            // Check if this touch started within the joystick area
+            if (touch.clientX >= rect.left && touch.clientX <= rect.right &&
+                touch.clientY >= rect.top && touch.clientY <= rect.bottom) {
+                this.joystickActive = true;
+                this.joystickTouchId = touch.identifier;
+                this.updateJoystickCenter();
+                this.updateJoystickPosition(touch.clientX, touch.clientY);
+                break;
+            }
+        }
     }
 
     handleJoystickMove(e) {
-        if (!this.joystickActive || !this.currentTouch) return;
+        if (!this.joystickActive || this.joystickTouchId === null) return;
         
         e.preventDefault();
-        const touch = e.touches[0];
-        this.updateJoystickPosition(touch.clientX, touch.clientY);
+        
+        // Find our specific touch
+        for (let i = 0; i < e.touches.length; i++) {
+            const touch = e.touches[i];
+            if (touch.identifier === this.joystickTouchId) {
+                this.updateJoystickPosition(touch.clientX, touch.clientY);
+                break;
+            }
+        }
     }
 
     handleJoystickEnd(e) {
+        if (this.joystickTouchId === null) return;
+        
         e.preventDefault();
-        this.joystickActive = false;
-        this.currentTouch = null;
-        this.resetJoystick();
+        
+        // Check if our touch ended
+        let ourTouchEnded = true;
+        for (let i = 0; i < e.touches.length; i++) {
+            if (e.touches[i].identifier === this.joystickTouchId) {
+                ourTouchEnded = false;
+                break;
+            }
+        }
+        
+        if (ourTouchEnded) {
+            this.joystickActive = false;
+            this.joystickTouchId = null;
+            this.resetJoystick();
+        }
     }
 
     // Mouse Events for Desktop Testing
@@ -179,17 +219,48 @@ class MobileControls {
     // Up Button Touch Events
     handleUpButtonStart(e) {
         e.preventDefault();
-        this.upButtonPressed = true;
-        if (this.gameEngine && this.gameEngine.hero) {
-            this.gameEngine.hero.setUpKeyHeld(true);
+        // Only handle if we don't already have an up button touch
+        if (this.upButtonTouchId !== null) return;
+        
+        // Find the touch that started on the up button
+        for (let i = 0; i < e.touches.length; i++) {
+            const touch = e.touches[i];
+            const upButtonElement = document.getElementById('mobileUpButton');
+            const rect = upButtonElement.getBoundingClientRect();
+            
+            // Check if this touch started within the up button area
+            if (touch.clientX >= rect.left && touch.clientX <= rect.right &&
+                touch.clientY >= rect.top && touch.clientY <= rect.bottom) {
+                this.upButtonTouchId = touch.identifier;
+                this.upButtonPressed = true;
+                if (this.gameEngine && this.gameEngine.hero) {
+                    this.gameEngine.hero.setUpKeyHeld(true);
+                }
+                break;
+            }
         }
     }
 
     handleUpButtonEnd(e) {
+        if (this.upButtonTouchId === null) return;
+        
         e.preventDefault();
-        this.upButtonPressed = false;
-        if (this.gameEngine && this.gameEngine.hero) {
-            this.gameEngine.hero.setUpKeyHeld(false);
+        
+        // Check if our touch ended
+        let ourTouchEnded = true;
+        for (let i = 0; i < e.touches.length; i++) {
+            if (e.touches[i].identifier === this.upButtonTouchId) {
+                ourTouchEnded = false;
+                break;
+            }
+        }
+        
+        if (ourTouchEnded) {
+            this.upButtonTouchId = null;
+            this.upButtonPressed = false;
+            if (this.gameEngine && this.gameEngine.hero) {
+                this.gameEngine.hero.setUpKeyHeld(false);
+            }
         }
     }
 
@@ -213,17 +284,51 @@ class MobileControls {
     // Restart Button Touch Events
     handleRestartButtonStart(e) {
         e.preventDefault();
-        // Visual feedback
-        e.target.style.transform = 'scale(0.9)';
+        // Only handle if we don't already have a restart button touch
+        if (this.restartButtonTouchId !== null) return;
+        
+        // Find the touch that started on the restart button
+        for (let i = 0; i < e.touches.length; i++) {
+            const touch = e.touches[i];
+            const restartButtonElement = document.getElementById('mobileRestartButton');
+            const rect = restartButtonElement.getBoundingClientRect();
+            
+            // Check if this touch started within the restart button area
+            if (touch.clientX >= rect.left && touch.clientX <= rect.right &&
+                touch.clientY >= rect.top && touch.clientY <= rect.bottom) {
+                this.restartButtonTouchId = touch.identifier;
+                // Visual feedback
+                e.target.style.transform = 'scale(0.9)';
+                break;
+            }
+        }
     }
 
     handleRestartButtonEnd(e) {
+        if (this.restartButtonTouchId === null) return;
+        
         e.preventDefault();
-        // Reset visual feedback
-        e.target.style.transform = 'scale(1)';
-        // Restart the game
-        if (this.gameEngine) {
-            this.gameEngine.newGame();
+        
+        // Check if our touch ended
+        let ourTouchEnded = true;
+        for (let i = 0; i < e.touches.length; i++) {
+            if (e.touches[i].identifier === this.restartButtonTouchId) {
+                ourTouchEnded = false;
+                break;
+            }
+        }
+        
+        if (ourTouchEnded) {
+            this.restartButtonTouchId = null;
+            // Reset visual feedback
+            const restartButton = document.getElementById('mobileRestartButton');
+            if (restartButton) {
+                restartButton.style.transform = 'scale(1)';
+            }
+            // Restart the game
+            if (this.gameEngine) {
+                this.gameEngine.newGame();
+            }
         }
     }
 
