@@ -29,12 +29,7 @@ class Hero extends MoveableObject {
             this.addYVelocity(-2); // Further reduced for very gentle, precise control
         }
         
-        // Debug: Log hero position occasionally 
-        if (this.debugCounter === undefined) this.debugCounter = 0;
-        this.debugCounter++;
-        if (this.debugCounter % 120 === 1) { // Every 2 seconds, just once
-            console.log(`Hero position: (${this.getXCent().toFixed(1)}, ${this.getYCent().toFixed(1)}), velocity: (${this.getXVelocity().toFixed(1)}, ${this.getYVelocity().toFixed(1)})`);
-        }
+        // Debug logging removed to prevent console spam
         
         super.update();
     }
@@ -72,15 +67,6 @@ class Hero extends MoveableObject {
     collidewith(other) {
         const previousXDist = other.getXCent() - this.getPreviousXPos();
         const previousYDist = other.getYCent() - this.getPreviousYPos();
-        
-        // Reduced logging to prevent spam - only log significant collisions
-        if (this.lastCollisionLog === undefined) this.lastCollisionLog = 0;
-        const shouldLog = Date.now() - this.lastCollisionLog > 1000; // Only log once per second
-        
-        if (shouldLog) {
-            console.log(`COLLISION: Hero at (${this.getXCent().toFixed(1)}, ${this.getYCent().toFixed(1)}) with platform`);
-            this.lastCollisionLog = Date.now();
-        }
         
         const rectH = this.getBoundingBox();
         const rectO = other.getBoundingBox();

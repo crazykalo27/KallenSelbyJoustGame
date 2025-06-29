@@ -22,18 +22,57 @@ class MoveableObject extends GameObject {
     drawOn(ctx) {
         // Draw sprite based on direction
         const imageName = this.name + (this.getDir() ? "Left" : "Right");
-        const imageKey = imageName + ".PNG"; // Keep .PNG for character sprites
+        
+        // Handle the special case where DigDugLeft.png has lowercase extension
+        let imageKey;
+        if (imageName === "DigDugLeft") {
+            imageKey = imageName + ".png";
+        } else {
+            imageKey = imageName + ".PNG";
+        }
         
         if (this.imageCache.has(imageKey)) {
             const img = this.imageCache.get(imageKey);
-            if (img.complete) {
-                ctx.drawImage(
-                    img,
+            
+            // Check if it's a failed image marker
+            if (img && img.failed) {
+                // Draw fallback rectangle
+                ctx.fillStyle = '#cccccc';
+                ctx.fillRect(
                     this.xCent - this.width / 2,
                     this.yCent - this.height / 2,
                     this.width,
                     this.height
                 );
+                ctx.strokeStyle = 'black';
+                ctx.strokeRect(
+                    this.xCent - this.width / 2,
+                    this.yCent - this.height / 2,
+                    this.width,
+                    this.height
+                );
+            } else if (img && img.complete) {
+                // Check if the image is actually valid
+                if (img.naturalWidth && img.naturalWidth > 0) {
+                    try {
+                        ctx.drawImage(
+                            img,
+                            this.xCent - this.width / 2,
+                            this.yCent - this.height / 2,
+                            this.width,
+                            this.height
+                        );
+                    } catch (error) {
+                        console.error(`ERROR: Failed to draw character sprite ${imageKey}:`, error.message);
+                        // Mark as failed and draw fallback
+                        this.imageCache.set(imageKey, { complete: true, failed: true });
+                        this.drawFallbackSprite(ctx);
+                    }
+                } else {
+                    console.log(`DEBUG: Character sprite ${imageKey} loaded but has no dimensions, marking as failed`);
+                    this.imageCache.set(imageKey, { complete: true, failed: true });
+                    this.drawFallbackSprite(ctx);
+                }
             }
         } else {
             // Load image if not cached
@@ -41,13 +80,40 @@ class MoveableObject extends GameObject {
             img.onload = () => {
                 this.imageCache.set(imageKey, img);
             };
+            
+            img.onerror = () => {
+                console.error(`ERROR: Failed to load character sprite ${imageKey}`);
+                this.imageCache.set(imageKey, { complete: true, failed: true });
+            };
+            
             img.src = `images/${imageKey}`;
             this.imageCache.set(imageKey, img);
+            
+            // Draw fallback while loading
+            this.drawFallbackSprite(ctx);
         }
 
         // Debug: Draw bounding box (uncomment to see)
         // ctx.strokeStyle = 'blue';
         // ctx.strokeRect(this.xCent - this.width/2, this.yCent - this.height/2, this.width, this.height);
+    }
+
+    drawFallbackSprite(ctx) {
+        // Draw a simple colored rectangle as fallback
+        ctx.fillStyle = '#cccccc';
+        ctx.fillRect(
+            this.xCent - this.width / 2,
+            this.yCent - this.height / 2,
+            this.width,
+            this.height
+        );
+        ctx.strokeStyle = 'black';
+        ctx.strokeRect(
+            this.xCent - this.width / 2,
+            this.yCent - this.height / 2,
+            this.width,
+            this.height
+        );
     }
 
     getName() {
@@ -87,13 +153,7 @@ class MoveableObject extends GameObject {
             this.addXVelocity(-Math.sign(this.getXVelocity()) * MoveableObject.FRICTION_STRENGTH);
         }
         
-        // Debug: Track movement for the first few frames only
-        if (this.constructor.name === 'Hero' && this.frameCount < 20) {
-            this.frameCount++;
-            if (this.frameCount <= 5 || this.frameCount % 5 === 0) {
-                console.log(`Frame ${this.frameCount}: Hero at (${this.getXCent().toFixed(1)}, ${this.getYCent().toFixed(1)}), velocity: (${this.getXVelocity().toFixed(1)}, ${this.getYVelocity().toFixed(1)}), prevPos: (${this.getPreviousXPos().toFixed(1)}, ${this.getPreviousYPos().toFixed(1)})`);
-            }
-        }
+        // Debug logging removed to prevent console spam
     }
 
     move(xDisplacement, yDisplacement) {

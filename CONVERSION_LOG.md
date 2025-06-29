@@ -185,6 +185,32 @@ Converting Java Swing-based Joust game to JavaScript/HTML5 for web browser compa
 - ✅ Null safety checks added
 - 🔄 Ready for testing on GitHub Pages
 
+## Character Sprite Loading Fix - December 2024
+
+### Issue
+- After fixing platforms, character sprites began failing with "InvalidStateError: Failed to execute 'drawImage' on 'CanvasRenderingContext2D': The HTMLImageElement provided is in the 'broken' state"
+- `DigDugLeft.PNG` returning 404 errors because actual file is `DigDugLeft.png` (lowercase extension)
+- No error handling for broken character sprite images
+
+### Root Cause
+1. **File extension case mismatch**: Code assumed all character sprites used `.PNG` but `DigDugLeft.png` has lowercase `.png`
+2. **Missing error handling**: No fallback when character images fail to load
+3. **Broken image state**: Attempting to draw failed images caused canvas errors
+
+### Solution
+1. **Added special case handling**: Detect `DigDugLeft` and use `.png` extension while others use `.PNG`
+2. **Enhanced error handling**: Added null checks, failed image markers, and try-catch blocks
+3. **Fallback rendering**: Draw gray rectangle when character sprites fail to load
+4. **Improved caching**: Track failed images to avoid repeated load attempts
+
+### Files Modified
+- `docs/js/MoveableObject.js`: Fixed character sprite loading and added robust error handling
+
+### Status  
+- ✅ Character sprite extension mapping fixed
+- ✅ Error handling and fallbacks added
+- 🔄 Ready for testing on GitHub Pages
+
 ## Technical Implementation
 
 ### Physics System
