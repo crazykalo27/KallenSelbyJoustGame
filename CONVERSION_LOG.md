@@ -933,4 +933,69 @@ Maximized mobile game canvas size for better visibility and easier gameplay on s
 - **🔍 Enhanced Zoom**: 2% scale increase improves element visibility  
 - **📐 Optimized Space**: Minimal UI overhead, maximum game area
 - **🎮 Better Experience**: Easier to see enemies, platforms, and movement
-- **⚡ Maintained Performance**: All optimizations preserve smooth gameplay 
+- **⚡ Maintained Performance**: All optimizations preserve smooth gameplay
+
+## Enemy Collision System & Version 1.5 - December 2024
+
+### Overview
+Added enemy-to-enemy collision detection to prevent enemies from passing through each other, creating more realistic movement and strategic positioning.
+
+### Changes Made
+
+#### 1. Version Update (docs/index.html)
+- Updated game version from v1.2 to v1.5
+- Reflects significant gameplay enhancement milestone
+
+#### 2. Enemy Collision Detection (docs/js/GameEngine.js)
+- Added enemy-to-enemy collision checking in `handleCollisions()` method
+- Implemented `resolveEnemyCollision()` method for collision resolution
+- Collision detection runs after all other collision checks
+
+#### 3. Collision Resolution Logic
+- **No Bouncing**: Enemies stop when they collide, don't bounce off each other
+- **Separation**: Overlapping enemies are moved apart to prevent stuck states
+- **Direction Detection**: Determines whether collision is primarily horizontal or vertical
+- **Velocity Stopping**: Movement is halted in the collision direction
+- **Position Updates**: Previous positions updated to prevent collision loops
+
+### Technical Implementation
+
+#### Collision Detection:
+```javascript
+// Check all unique enemy pairs
+for (let i = 0; i < this.enemies.length; i++) {
+    for (let j = i + 1; j < this.enemies.length; j++) {
+        if (enemy1.overlaps(enemy2)) {
+            this.resolveEnemyCollision(enemy1, enemy2);
+        }
+    }
+}
+```
+
+#### Resolution Strategy:
+- Calculate overlap dimensions (width vs height)
+- Smaller overlap indicates primary collision direction
+- Separate enemies by half the overlap distance
+- Stop movement in collision direction
+- Update previous positions to prevent re-collision
+
+### Gameplay Impact
+
+#### Enhanced Realism:
+- **🚫 No Clipping**: Enemies can no longer pass through each other
+- **📍 Positioning**: Creates more strategic enemy positioning
+- **🎯 Tactical Play**: Players can use enemy positions strategically
+- **⚡ Natural Movement**: More realistic enemy interactions
+
+#### Strategic Depth:
+- **🧠 Crowd Control**: Groups of enemies behave more realistically
+- **🎮 Player Strategy**: Can use enemy collisions for tactical advantage  
+- **📈 Challenge**: Enemies may cluster, creating different challenges
+- **🎯 Skill Development**: Requires adaptation to new enemy behavior patterns
+
+### Result
+- **🔄 Version 1.5**: Major gameplay enhancement milestone reached
+- **🤝 Realistic Collisions**: Enemies interact naturally without clipping
+- **🎮 Enhanced Gameplay**: More strategic and visually appealing enemy movement
+- **⚡ Performance Optimized**: Efficient collision detection with minimal impact
+- **🎯 Balanced Implementation**: Stops movement without disruptive bouncing 

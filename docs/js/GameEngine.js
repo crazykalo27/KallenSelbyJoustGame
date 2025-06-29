@@ -408,6 +408,68 @@ class GameEngine {
                 this.updateUI();
             }
         }
+
+        // Enemy-to-Enemy collisions (prevent passing through each other)
+        for (let i = 0; i < this.enemies.length; i++) {
+            for (let j = i + 1; j < this.enemies.length; j++) {
+                const enemy1 = this.enemies[i];
+                const enemy2 = this.enemies[j];
+                
+                if (enemy1.overlaps(enemy2)) {
+                    this.resolveEnemyCollision(enemy1, enemy2);
+                }
+            }
+        }
+    }
+
+    resolveEnemyCollision(enemy1, enemy2) {
+        // Calculate overlap and separation
+        const rect1 = enemy1.getBoundingBox();
+        const rect2 = enemy2.getBoundingBox();
+        
+        // Calculate intersection
+        const intersectionLeft = Math.max(rect1.x, rect2.x);
+        const intersectionRight = Math.min(rect1.x + rect1.width, rect2.x + rect2.width);
+        const intersectionTop = Math.max(rect1.y, rect2.y);
+        const intersectionBottom = Math.min(rect1.y + rect1.height, rect2.y + rect2.height);
+        
+        const overlapWidth = intersectionRight - intersectionLeft;
+        const overlapHeight = intersectionBottom - intersectionTop;
+        
+        // Determine primary collision direction (smaller overlap indicates collision direction)
+        if (overlapWidth < overlapHeight) {
+            // Horizontal collision - separate horizontally
+            const separation = overlapWidth / 2;
+            const direction = Math.sign(enemy2.getXCent() - enemy1.getXCent());
+            
+            // Move enemies apart
+            enemy1.move(-direction * separation, 0);
+            enemy2.move(direction * separation, 0);
+            
+            // Stop horizontal movement for both enemies
+            enemy1.setXVelocity(0);
+            enemy2.setXVelocity(0);
+            
+            // Update positions to prevent stuck states
+            enemy1.updatePreviousPosition();
+            enemy2.updatePreviousPosition();
+        } else {
+            // Vertical collision - separate vertically  
+            const separation = overlapHeight / 2;
+            const direction = Math.sign(enemy2.getYCent() - enemy1.getYCent());
+            
+            // Move enemies apart
+            enemy1.move(0, -direction * separation);
+            enemy2.move(0, direction * separation);
+            
+            // Stop vertical movement for both enemies
+            enemy1.setYVelocity(0);
+            enemy2.setYVelocity(0);
+            
+            // Update positions to prevent stuck states
+            enemy1.updatePreviousPosition();
+            enemy2.updatePreviousPosition();
+        }
     }
 
     respawn() {
