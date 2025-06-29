@@ -6,7 +6,7 @@ class Egg extends MoveableObject {
         super(xCent, yCent, imageName);
         this.containedEnemy = containedEnemy;
         this.respawnTimer = 0;
-        this.respawnDelay = 180; // 3 seconds at 60fps (reduced from 7 seconds)
+        this.respawnDelay = 120; // 2 seconds at 60fps (reduced from 3 seconds)
         this.imageCache = new Map(); // For image caching
         
         // Eggs are affected by gravity and don't move on their own (matches Java)

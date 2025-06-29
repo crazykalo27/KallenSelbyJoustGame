@@ -641,4 +641,49 @@ Fixed critical mobile bug where holding the up button interfered with joystick l
 - **✅ Fixed**: Up button and joystick now work independently
 - **✅ Multi-Touch**: Can hold up button while using joystick freely
 - **✅ Smooth Control**: No more directional restrictions or interference
-- **✅ Reliable Input**: Consistent touch response across all mobile devices 
+- **✅ Reliable Input**: Consistent touch response across all mobile devices
+
+## UI Improvements & Egg Respawn Update - December 2024
+
+### Overview
+Enhanced user interface with version display, mobile fullscreen experience, and faster egg respawn timing.
+
+### Changes Made
+
+#### 1. Version Number Display (docs/index.html, docs/styles.css)
+- Added version number "v1.2" next to game title
+- Styled with smaller, subtle gray text
+- Positioned consistently across all screen sizes
+
+#### 2. Mobile Fullscreen Experience (docs/styles.css, docs/index.html)
+- **Viewport Optimization**: Added `user-scalable=no` and `maximum-scale=1.0` to prevent zooming
+- **Full Screen Layout**: Game container now uses 100vw x 100vh on mobile
+- **No Scrollbars**: Set `overflow: hidden` on body and container
+- **Flexible Canvas**: Canvas scales to 60vh max-height for optimal fit
+- **Compact Header**: Reduced margins and padding for mobile
+- **Responsive Controls**: Mobile controls positioned for easy access
+
+#### 3. Faster Egg Respawn (docs/js/Egg.js)
+- **Previous**: 3 seconds (180 ticks at 60fps)
+- **New**: 2 seconds (120 ticks at 60fps)
+- **Impact**: 33% faster enemy regeneration
+
+### Technical Implementation
+
+#### Mobile Layout Changes:
+- Flexbox layout with `justify-content: space-between`
+- Canvas height constrained to 60vh for control visibility
+- Eliminated border-radius and shadows on mobile for cleaner look
+- Optimized font sizes for mobile readability
+
+#### UI Enhancements:
+- Version number with subtle opacity and smaller font
+- Responsive design maintains functionality across screen sizes
+- Improved mobile viewport handling prevents unwanted zooming
+
+### Result
+- **📱 Fullscreen Mobile**: Game uses entire screen real estate
+- **🎮 No Scrolling**: Eliminates scrollbars for immersive gameplay
+- **🏷️ Version Tracking**: Clear version identification for users
+- **⚡ Faster Action**: Eggs respawn even quicker for intense gameplay
+- **📐 Optimized Layout**: Better space utilization on all devices 
