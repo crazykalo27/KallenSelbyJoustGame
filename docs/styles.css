@@ -321,6 +321,17 @@ body {
         font-size: 20px;
     }
     
+    /* Make the fly button bigger for easier use */
+    #mobileUpButton {
+        width: 85px;
+        height: 85px;
+        font-size: 22px;
+    }
+    
+    #mobileUpButton span {
+        font-size: 28px;
+    }
+    
     .mobile-button span {
         font-size: 24px;
     }

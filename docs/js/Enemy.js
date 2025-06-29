@@ -65,7 +65,7 @@ class LeftRightEnemy extends Enemy {
         super(xCent, yCent, speed, name);
         this.setHasGravity(false); // Ghosts float - no gravity
         this.ticks = 0;
-        this.waitNum = Math.floor(Math.random() * 240) + 60; // 1-5 seconds at 60fps (60-300 ticks)
+        this.waitNum = Math.floor(Math.random() * 120) + 30; // 0.5-2.5 seconds at 60fps (30-150 ticks)
         this.currentDirection = this.getRandomDirection8();
     }
 
@@ -87,17 +87,20 @@ class LeftRightEnemy extends Enemy {
     update() {
         this.updatePreviousPosition();
         
-        // Move in current direction
-        this.setXVelocity(this.getSpeed() * this.currentDirection.x);
-        this.setYVelocity(this.getSpeed() * this.currentDirection.y);
+        // Calculate speed multiplier for diagonal movement to maintain consistent speed
+        const speedMultiplier = (this.currentDirection.x !== 0 && this.currentDirection.y !== 0) ? 1.4 : 1.0;
+        
+        // Move in current direction with speed compensation
+        this.setXVelocity(this.getSpeed() * this.currentDirection.x * speedMultiplier);
+        this.setYVelocity(this.getSpeed() * this.currentDirection.y * speedMultiplier);
         
         this.ticks++;
         
-        // Change direction on timer (1-5 seconds)
+        // Change direction on timer (0.5-2.5 seconds for more dynamic movement)
         if (this.ticks >= this.waitNum) {
             this.currentDirection = this.getRandomDirection8();
             this.ticks = 0;
-            this.waitNum = Math.floor(Math.random() * 240) + 60; // 1-5 seconds at 60fps
+            this.waitNum = Math.floor(Math.random() * 120) + 30; // 0.5-2.5 seconds at 60fps
         }
         
         super.update();
