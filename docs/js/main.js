@@ -14,6 +14,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Initialize game engine
     const game = new GameEngine(canvas);
     
+    // Initialize mobile controls
+    console.log(`Initializing mobile controls...`);
+    const mobileControls = new MobileControls(game);
+    
     console.log(`Game engine created, starting new game...`);
     // Start new game
     await game.newGame();

@@ -19,6 +19,24 @@
         
         <canvas id="gameCanvas" width="800" height="850"></canvas>
         
+        <!-- Mobile Controls - Only visible on mobile devices -->
+        <div id="mobileControls" class="mobile-controls">
+            <div class="mobile-joystick-container">
+                <div class="mobile-joystick" id="mobileJoystick">
+                    <div class="joystick-base">
+                        <div class="joystick-handle" id="joystickHandle"></div>
+                    </div>
+                    <div class="joystick-label">Move</div>
+                </div>
+            </div>
+            <div class="mobile-button-container">
+                <button class="mobile-button" id="mobileUpButton">
+                    <span>↑</span>
+                    <div class="button-label">Fly</div>
+                </button>
+            </div>
+        </div>
+        
         <div class="game-controls">
             <div class="instructions">
                 <h3>Controls:</h3>
@@ -47,6 +65,7 @@
     <script src="js/Egg.js"></script>
     <script src="js/LevelLoader.js"></script>
     <script src="js/GameEngine.js"></script>
+    <script src="js/MobileControls.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html> 
