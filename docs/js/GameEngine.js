@@ -246,9 +246,11 @@ class GameEngine {
         this.gameObjects.push(egg);
         this.eggs.push(egg);
         
-        // Award points
-        this.points += GameEngine.POINTS_FOR_ENEMY_KILL;
-        this.pointsLoss += GameEngine.POINTS_FOR_ENEMY_KILL;
+        // Only award points for original enemies, not respawned ones
+        if (!enemy.isRespawnedEnemy()) {
+            this.points += GameEngine.POINTS_FOR_ENEMY_KILL;
+            this.pointsLoss += GameEngine.POINTS_FOR_ENEMY_KILL;
+        }
         
         this.updateUI();
     }
@@ -258,8 +260,9 @@ class GameEngine {
         this.removeGameObject(egg);
         this.eggs = this.eggs.filter(e => e !== egg);
         
-        // Create new enemy from egg
+        // Create new enemy from egg and mark as respawned
         const newEnemy = egg.getContainedEnemy().getCopy();
+        newEnemy.setRespawned(true); // Mark as respawned so no points awarded
         newEnemy.setXCent(egg.getXCent());
         newEnemy.setYCent(egg.getYCent() - newEnemy.getHeight() / 2);
         

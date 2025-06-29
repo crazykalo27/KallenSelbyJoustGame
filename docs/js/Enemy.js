@@ -2,9 +2,10 @@
  * Base Enemy class
  */
 class Enemy extends MoveableObject {
-    constructor(xCent, yCent, speed, name) {
+    constructor(xCent, yCent, speed, name, isRespawned = false) {
         super(xCent, yCent, name);
         this.speed = speed;
+        this.isRespawned = isRespawned; // Track if this enemy was respawned from an egg
     }
 
     update() {
@@ -20,6 +21,14 @@ class Enemy extends MoveableObject {
 
     setSpeed(speed) {
         this.speed = speed;
+    }
+
+    isRespawnedEnemy() {
+        return this.isRespawned;
+    }
+
+    setRespawned(respawned) {
+        this.isRespawned = respawned;
     }
 
     collidewith(other) {
@@ -53,7 +62,7 @@ class Enemy extends MoveableObject {
     }
 
     getCopy() {
-        return new Enemy(this.getXCent(), this.getYCent(), this.speed, this.getName());
+        return new Enemy(this.getXCent(), this.getYCent(), this.speed, this.getName(), this.isRespawned);
     }
 }
 
@@ -61,8 +70,8 @@ class Enemy extends MoveableObject {
  * Left-Right moving enemy (Ghost type) - Updated with 8-directional movement
  */
 class LeftRightEnemy extends Enemy {
-    constructor(xCent, yCent, speed, name) {
-        super(xCent, yCent, speed, name);
+    constructor(xCent, yCent, speed, name, isRespawned = false) {
+        super(xCent, yCent, speed, name, isRespawned);
         this.setHasGravity(false); // Ghosts float - no gravity
         this.setSpeed(this.getSpeed() * 1.3); // Increase speed to be faster than player (7.5 * 1.3 ≈ 9.75)
         this.ticks = 0;
@@ -108,7 +117,7 @@ class LeftRightEnemy extends Enemy {
     }
 
     getCopy() {
-        return new LeftRightEnemy(this.getXCent(), this.getYCent(), this.speed, this.getName());
+        return new LeftRightEnemy(this.getXCent(), this.getYCent(), this.speed, this.getName(), this.isRespawned);
     }
 }
 
@@ -116,8 +125,8 @@ class LeftRightEnemy extends Enemy {
  * Random movement enemy (Koopa type) - Updated with less turning and timed jumping
  */
 class RandomMoveEnemy extends Enemy {
-    constructor(xCent, yCent, speed, name) {
-        super(xCent, yCent, speed, name);
+    constructor(xCent, yCent, speed, name, isRespawned = false) {
+        super(xCent, yCent, speed, name, isRespawned);
         this.setHasGravity(true); // Koopas are affected by gravity
         this.setSpeed(this.getSpeed() * 1.2); // Reduced speed multiplier for better control
         this.direction = 1; // 1 for right, -1 for left
@@ -208,7 +217,7 @@ class RandomMoveEnemy extends Enemy {
     }
 
     getCopy() {
-        return new RandomMoveEnemy(this.getXCent(), this.getYCent(), this.speed, this.getName());
+        return new RandomMoveEnemy(this.getXCent(), this.getYCent(), this.speed, this.getName(), this.isRespawned);
     }
 }
 

@@ -774,4 +774,54 @@ Added creator attribution, refined mobile-only restart button, improved ghost ch
 - **📱 Mobile-Only Button**: Restart button correctly hidden on desktop
 - **⚡ Faster Ghosts**: Increased challenge with ghosts outpacing player
 - **🎮 Better Controls**: Larger fly button for improved mobile gameplay
-- **✨ Professional Polish**: Clean, functional UI with proper attribution 
+- **✨ Professional Polish**: Clean, functional UI with proper attribution
+
+## Enhanced Creator Attribution & Point System Fix - December 2024
+
+### Overview
+Made creator attribution much more prominent and implemented fair scoring system for respawned enemies.
+
+### Changes Made
+
+#### 1. Enhanced Creator Link Visibility (docs/styles.css, docs/index.html)
+- **Previous**: Small, gray, subtle text
+- **New**: Golden highlighted box with border and background
+- **Styling**: 
+  - Golden background highlight with subtle border
+  - Larger, bold font (1.1em on desktop, 1.0em on mobile)
+  - Hover effects with scale animation
+  - Text shadow for better visibility
+- **Result**: Creator attribution now clearly visible and prominent
+
+#### 2. Respawned Enemy Point System (docs/js/Enemy.js, docs/js/GameEngine.js)
+- **Problem**: Players could farm infinite points by repeatedly killing respawned enemies
+- **Solution**: Added tracking system for enemy origin
+- **Implementation**:
+  - Added `isRespawned` property to Enemy base class
+  - Modified all enemy constructors to accept respawned flag
+  - Updated `getCopy()` methods to preserve respawned status
+  - Modified `removeDeadEnemy()` to only award points for original enemies
+  - Updated `replaceEgg()` to mark new enemies as respawned
+
+### Technical Implementation
+
+#### Enemy Tracking System:
+- Base Enemy class now includes `isRespawnedEnemy()` and `setRespawned()` methods
+- All enemy subclasses (LeftRightEnemy, RandomMoveEnemy, Tracker) support respawned flag
+- Enemy copies preserve their respawned status through `getCopy()` methods
+
+#### Point Award Logic:
+```javascript
+// Only award points for original enemies
+if (!enemy.isRespawnedEnemy()) {
+    this.points += GameEngine.POINTS_FOR_ENEMY_KILL;
+    this.pointsLoss += GameEngine.POINTS_FOR_ENEMY_KILL;
+}
+```
+
+### Result
+- **🏆 Prominent Attribution**: Creator link now impossible to miss
+- **⚖️ Fair Scoring**: No more infinite point farming from respawned enemies
+- **🎮 Balanced Gameplay**: Players must seek out original enemies for points
+- **📈 Strategic Depth**: Creates decision-making about when to collect vs. avoid eggs
+- **✨ Professional Polish**: Clear, prominent creator recognition 
