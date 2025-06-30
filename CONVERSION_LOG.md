@@ -998,4 +998,31 @@ for (let i = 0; i < this.enemies.length; i++) {
 - **🤝 Realistic Collisions**: Enemies interact naturally without clipping
 - **🎮 Enhanced Gameplay**: More strategic and visually appealing enemy movement
 - **⚡ Performance Optimized**: Efficient collision detection with minimal impact
-- **🎯 Balanced Implementation**: Stops movement without disruptive bouncing 
+- **🎯 Balanced Implementation**: Stops movement without disruptive bouncing
+
+## Debug Controls Hidden - December 2024
+
+### Overview
+Removed debug level skip instructions from player-visible text while maintaining functionality for development.
+
+### Changes Made
+
+#### 1. Instructions Cleanup (docs/index.html)
+- Removed "U/D: Skip levels (debug)" from desktop controls display
+- Streamlined visible controls to essential gameplay commands only
+
+#### 2. Tutorial Text Update (docs/js/GameEngine.js)  
+- Removed mention of debug keys from in-game tutorial
+- Simplified restart instruction text
+- Maintains clean, player-focused instruction set
+
+#### 3. Functionality Preserved
+- U/D level skip keys still functional in code
+- Debug features remain available for development/testing
+- No impact on actual game mechanics or debug capabilities
+
+### Result
+- **🎮 Clean UI**: Players see only essential game controls
+- **🔧 Debug Intact**: Development features still accessible
+- **📚 Focused Instructions**: Clear, concise player guidance
+- **🎯 Professional Polish**: Hidden debug features for cleaner experience 

@@ -523,7 +523,7 @@ class GameEngine {
         this.ctx.fillText('Kill all enemies to move', 75, 525);
         this.ctx.fillText('to the next level!', 75, 550);
 
-        this.ctx.fillText('Press \'N\' to quick restart!', 75, 600);
+        this.ctx.fillText('Press \'N\' to restart!', 75, 600);
 
         this.ctx.fillText('Watch out for blocks', 450, 675);
         this.ctx.fillText('with special properties!', 450, 700);
