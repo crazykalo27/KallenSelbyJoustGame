@@ -75,8 +75,9 @@ class LeftRightEnemy extends Enemy {
         this.setHasGravity(false); // Ghosts float - no gravity
         this.setSpeed(this.getSpeed() * 1.3); // Increase speed to be faster than player (7.5 * 1.3 ≈ 9.75)
         this.ticks = 0;
-        this.waitNum = Math.floor(Math.random() * 120) + 30; // 0.5-2.5 seconds at 60fps (30-150 ticks)
+        this.waitNum = Math.floor(Math.random() * 120) + 60; // Start with 1-3 seconds delay to prevent immediate corner phasing
         this.currentDirection = this.getRandomDirection8();
+        this.hasStarted = false; // Track if movement has started
     }
 
     getRandomDirection8() {
@@ -96,6 +97,17 @@ class LeftRightEnemy extends Enemy {
 
     update() {
         this.updatePreviousPosition();
+        
+        // Only start moving after initial delay to prevent corner phasing
+        if (!this.hasStarted) {
+            this.ticks++;
+            if (this.ticks >= this.waitNum) {
+                this.hasStarted = true;
+                this.ticks = 0;
+                this.waitNum = Math.floor(Math.random() * 120) + 30; // Normal timing after startup
+            }
+            return; // Don't move during startup delay
+        }
         
         // Calculate speed multiplier for diagonal movement to maintain consistent speed
         const speedMultiplier = (this.currentDirection.x !== 0 && this.currentDirection.y !== 0) ? 1.4 : 1.0;

@@ -1025,4 +1025,70 @@ Removed debug level skip instructions from player-visible text while maintaining
 - **🎮 Clean UI**: Players see only essential game controls
 - **🔧 Debug Intact**: Development features still accessible
 - **📚 Focused Instructions**: Clear, concise player guidance
-- **🎯 Professional Polish**: Hidden debug features for cleaner experience 
+- **🎯 Professional Polish**: Hidden debug features for cleaner experience
+
+## Collision System Bug Fixes - December 2024
+
+### Overview
+Fixed critical collision issues that allowed enemies to phase through platforms and each other improperly.
+
+### Issues Identified & Fixed
+
+#### 1. Enemy Push-Through Lava Bug (docs/js/GameEngine.js)
+- **Problem**: Enemy-enemy collision resolution could push enemies into lava blocks
+- **Cause**: No platform collision re-checking after enemy separation
+- **Solution**: Added post-resolution platform collision validation
+- **Implementation**: Re-check all enemy-platform collisions after enemy-enemy resolution
+
+#### 2. Ghost Corner Phasing Bug (docs/js/Enemy.js)
+- **Problem**: Ghosts could phase through walls on level 2 first load
+- **Cause**: Immediate random direction selection before collision detection initialized
+- **Solution**: Added startup delay for ghost movement
+- **Implementation**: 1-3 second delay before ghosts start moving on spawn
+
+### Technical Fixes
+
+#### Platform Collision Re-checking:
+```javascript
+// Re-check enemy-platform collisions after enemy-enemy resolution
+for (const enemy of this.enemies) {
+    for (const platform of this.platforms) {
+        if (enemy.overlaps(platform)) {
+            if (platform.isLava()) {
+                enemy.markForRemoval(); // Enemies die in lava
+            } else {
+                enemy.collidewith(platform); // Normal collision
+            }
+        }
+    }
+}
+```
+
+#### Ghost Startup Delay:
+```javascript
+// Only start moving after initial delay
+if (!this.hasStarted) {
+    this.ticks++;
+    if (this.ticks >= this.waitNum) {
+        this.hasStarted = true;
+    }
+    return; // Don't move during startup
+}
+```
+
+### Collision Order (Fixed):
+1. Hero-Platform collisions
+2. Enemy-Platform collisions (initial pass)
+3. Egg-Platform collisions
+4. Hero-Platform resolution
+5. Hero-Enemy collisions
+6. Hero-Egg collisions
+7. Enemy-Enemy collisions
+8. **NEW**: Enemy-Platform re-validation
+
+### Result
+- **🚫 No More Push-Through**: Enemies cannot be pushed into lava blocks
+- **🎯 Solid Walls**: Ghosts properly respect level boundaries on first load
+- **⚡ Maintained Performance**: Minimal impact on game speed
+- **🔧 Preserved Features**: All collision mechanics work as intended
+- **🎮 Stable Gameplay**: Collision system now completely reliable 

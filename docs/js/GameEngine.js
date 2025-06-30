@@ -420,6 +420,22 @@ class GameEngine {
                 }
             }
         }
+
+        // Re-check enemy-platform collisions after enemy-enemy resolution
+        // This prevents enemies from being pushed into lava blocks
+        for (const enemy of this.enemies) {
+            for (const platform of this.platforms) {
+                if (enemy.overlaps(platform)) {
+                    // Handle lava collision for enemies
+                    if (platform.isLava()) {
+                        enemy.markForRemoval();
+                    } else {
+                        // Apply platform collision for non-lava platforms
+                        enemy.collidewith(platform);
+                    }
+                }
+            }
+        }
     }
 
     resolveEnemyCollision(enemy1, enemy2) {
